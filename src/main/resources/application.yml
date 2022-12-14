@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/db?currentSchema=public
+    username: user
+    password: pass
+    driverClassName: org.postgresql.Driver
+
+logging:
+  level:
+    root: DEBUG
