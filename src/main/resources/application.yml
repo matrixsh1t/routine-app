@@ -4,7 +4,11 @@ spring:
     username: user
     password: pass
     driverClassName: org.postgresql.Driver
+  freemarker:
+    expose-request-attributes: true
 
 logging:
   level:
     root: DEBUG
+
+
