@@ -8,22 +8,32 @@
 </head>
 <body>
 <div class="container">
-    <div class="row">
-        <div class="col-9"></div>
-        <#list tasks as t>
-            <div class="list-group">
-                <a href="#" class="list-group-item list-group-item-action">
-                    <div class="d-flex w-100 justify-content-between">
-                        <h5 class="mb-1">${t.task}</h5>
-                        <small class="text-muted">${t.dateCreate}</small>
-                    </div>
-                    <p class="mb-1">${t.comment}</p>
-                    <small class="text-muted">And some muted small print.</small>
-                </a>
-            </div>
+    <h2>User CRUD operation with Freemarker Template</h2>
+    <a href="/create" class="btn btn-primary" role="button">Create New Task</a>
+    <table class="table">
+        <thead >
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Task</th>
+            <th scope="col">Comment</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <#list tasks as task>
+            <tr>
+                <th scope="row">${task.taskId}</th>
+                <td>${task.task}</td>
+                <td>${task.comment}</td>
+<#--                <td><a href="/update/${user.id}" class="btn btn-warning" role="button">-->
+<#--                        Update</a></td>-->
+<#--                <td><a href="/delete/${user.id}" class="btn btn-danger" role="button">-->
+<#--                        Delete</a></td>-->
+            </tr>
         </#list>
-    </div>
-</div>
+        </tbody>
+    </table>
 </div>
 </body>
 </html>

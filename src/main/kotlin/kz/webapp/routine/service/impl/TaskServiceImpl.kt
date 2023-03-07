@@ -8,7 +8,7 @@ import kz.webapp.routine.service.TaskService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
+
 
 @Service
 class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
@@ -19,17 +19,11 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
         return taskRepo.findAll()
     }
 
-    override fun addTask(addTaskDto: AddTaskDto): TaskEntity {
+    override fun addTask(addTaskDto: AddTaskDto): String {
         val addTaskEntity = TaskEntity(
-            taskId = null,
+            taskId = 0,
             task = addTaskDto.task,
-            comment = addTaskDto.comment,
-            status = addTaskDto.status,
-            week = addTaskDto.week,
-            city = addTaskDto.city,
-            dateCreate = LocalDateTime.now(),
-            dateDue = LocalDateTime.now(),
-            dateClose = null,
+            comment = addTaskDto.comment
         )
         try {
             taskRepo.save(addTaskEntity)
@@ -40,6 +34,19 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
             logger.error(e.message)
             throw (TaskException(msg))
         }
-        return addTaskEntity
+        return "-------------------"
+    }
+    override fun addTask1(entity: TaskEntity): TaskEntity {
+        val entity = entity
+        try {
+            taskRepo!!.save(entity)
+            logger.info("Successfully created new task with ID ${entity.taskId}")
+        } catch(e: TaskException) {
+            val msg = "Failed to create task id ${entity.taskId}"
+            logger.error(msg)
+            logger.error(e.message)
+            throw (TaskException(msg))
+        }
+        return entity
     }
 }
