@@ -1,5 +1,6 @@
 package kz.webapp.routine.service.impl
 
+import jakarta.persistence.EntityNotFoundException
 import kz.webapp.routine.exception.TaskException
 import kz.webapp.routine.model.dto.AddTaskDto
 import kz.webapp.routine.model.entity.TaskEntity
@@ -19,13 +20,14 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
         return taskRepo.findAll()
     }
 
-    override fun addTask(addTaskDto: AddTaskDto): String {
+    override fun addTask(addTaskDto: AddTaskDto) {
         val addTaskEntity = TaskEntity(
             taskId = 0,
             task = addTaskDto.task,
             comment = addTaskDto.comment
         )
         try {
+//            if (taskRepo.findById(addTaskDto.taskId == null))
             taskRepo.save(addTaskEntity)
             logger.info("Successfully created new task with ID ${addTaskEntity.taskId}")
         } catch(e: TaskException) {
@@ -34,19 +36,16 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
             logger.error(e.message)
             throw (TaskException(msg))
         }
-        return "-------------------"
     }
-    override fun addTask1(entity: TaskEntity): TaskEntity {
-        val entity = entity
-        try {
-            taskRepo!!.save(entity)
-            logger.info("Successfully created new task with ID ${entity.taskId}")
-        } catch(e: TaskException) {
-            val msg = "Failed to create task id ${entity.taskId}"
-            logger.error(msg)
-            logger.error(e.message)
-            throw (TaskException(msg))
+
+    @Throws(EntityNotFoundException::class)
+    override fun deleteUserById(id: Int) {
+        val task = taskRepo.findById(id)
+        if (task.isPresent) {
+            taskRepo.deleteById(id)
+            logger.info("The task with ID $id was successfully deleted")
+        } else {
+            throw EntityNotFoundException("no task found")
         }
-        return entity
     }
 }
