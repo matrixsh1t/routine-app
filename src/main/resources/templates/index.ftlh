@@ -26,8 +26,8 @@
 <#--                <th scope="row">${task.taskId}</th>-->
                 <td>${task.task}</td>
                 <td>${task.comment}</td>
-<#--                <td><a href="/update/${user.id}" class="btn btn-warning" role="button">-->
-<#--                        Update</a></td>-->
+                <td><a href="/update/${task.taskId}" class="btn btn-warning" role="button">
+                        Update</a></td>
                 <td><a href="/delete/${task.taskId}" class="btn btn-danger" role="button">
                         Delete</a></td>
             </tr>

@@ -22,8 +22,9 @@ class MainController(
     }
     @GetMapping("/create")
     fun saveTaskPage(model: Model): String {
-        val addTaskDto = AddTaskDto("","")
+        val addTaskDto = AddTaskDto(0,"","")
         model.addAttribute("addTaskDto", addTaskDto)
+        model.addAttribute("isUpdate", false)
         return "create"
     }
 
@@ -40,4 +41,18 @@ class MainController(
         return "redirect:/"
     }
 
+    @GetMapping("/update/{id}")
+    @Throws(EntityNotFoundException::class)
+    fun updateTask(model: Model, @PathVariable("id") id: Int): String {
+        val task = taskService.findTaskById(id)
+        model.addAttribute("addTaskDto", task)
+        model.addAttribute("isUpdate", true)
+        return "create"
+    }
+    @PostMapping("/update/{id}")
+    fun createUser(@ModelAttribute("addTaskDto") addTaskDto: AddTaskDto, @PathVariable("id") id: Int): String {
+        addTaskDto.taskId = id
+        taskService.addTask(addTaskDto)
+        return "redirect:/"
+    }
 }

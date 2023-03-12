@@ -9,6 +9,7 @@ import kz.webapp.routine.service.TaskService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
+import java.util.*
 
 
 @Service
@@ -27,10 +28,12 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
             comment = addTaskDto.comment
         )
         try {
-//            if (taskRepo.findById(addTaskDto.taskId == null))
-            taskRepo.save(addTaskEntity)
-            logger.info("Successfully created new task with ID ${addTaskEntity.taskId}")
-        } catch(e: TaskException) {
+            if (taskRepo.findById(addTaskDto.taskId).isEmpty) {
+                taskRepo.save(addTaskEntity)
+                logger.info("Successfully created new task with ID ${addTaskEntity.taskId}")
+            }
+        }
+        catch(e: TaskException) {
             val msg = "Failed to create task id ${addTaskEntity.taskId}"
             logger.error(msg)
             logger.error(e.message)
@@ -47,5 +50,8 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
         } else {
             throw EntityNotFoundException("no task found")
         }
+    }
+    override fun findTaskById(id: Int): Optional<TaskEntity> {
+        return taskRepo.findById(id)
     }
 }
