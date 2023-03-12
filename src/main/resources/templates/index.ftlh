@@ -23,7 +23,7 @@
         <tbody>
         <#list tasks as task>
             <tr>
-<#--                <th scope="row">${task.taskId}</th>-->
+                <th scope="row">${task.taskId}</th>
                 <td>${task.task}</td>
                 <td>${task.comment}</td>
                 <td><a href="/update/${task.taskId}" class="btn btn-warning" role="button">

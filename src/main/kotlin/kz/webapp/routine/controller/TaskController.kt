@@ -5,10 +5,7 @@ import kz.webapp.routine.model.dto.AddTaskDto
 import kz.webapp.routine.service.TaskService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.ModelAttribute
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.*
 
 
 @Controller
@@ -24,7 +21,6 @@ class MainController(
     fun saveTaskPage(model: Model): String {
         val addTaskDto = AddTaskDto(0,"","")
         model.addAttribute("addTaskDto", addTaskDto)
-        model.addAttribute("isUpdate", false)
         return "create"
     }
 
@@ -42,17 +38,16 @@ class MainController(
     }
 
     @GetMapping("/update/{id}")
-    @Throws(EntityNotFoundException::class)
-    fun updateTask(model: Model, @PathVariable("id") id: Int): String {
-        val task = taskService.findTaskById(id)
-        model.addAttribute("addTaskDto", task)
-        model.addAttribute("isUpdate", true)
-        return "create"
+    fun updateTaskPage(@PathVariable("id") id: Int, model: Model): String {
+        val addTaskDto = taskService.findByIdOrNull(id)
+        model.addAttribute("addTaskDto", addTaskDto)
+        return "update"
     }
+
     @PostMapping("/update/{id}")
-    fun createUser(@ModelAttribute("addTaskDto") addTaskDto: AddTaskDto, @PathVariable("id") id: Int): String {
-        addTaskDto.taskId = id
-        taskService.addTask(addTaskDto)
+    fun updateTask(@PathVariable("id") id: Int, @ModelAttribute("addTaskDto") addTaskDto: AddTaskDto): String {
+        taskService.updateTask(id, addTaskDto)
         return "redirect:/"
     }
+
 }

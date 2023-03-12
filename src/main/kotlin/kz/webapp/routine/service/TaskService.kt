@@ -10,5 +10,6 @@ interface TaskService {
     fun showTasks(): List<TaskEntity>
     fun addTask(addTaskDto: AddTaskDto)
     fun deleteUserById(id: Int)
-    fun findTaskById(id: Int): Optional<TaskEntity>
+    fun findByIdOrNull(id: Int): TaskEntity?
+    fun updateTask(id: Int, addTaskDto: AddTaskDto)
 }
