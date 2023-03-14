@@ -1,8 +1,9 @@
 package kz.webapp.routine.service.impl
 
-import jakarta.persistence.EntityNotFoundException
 import kz.webapp.routine.exception.TaskException
+import kz.webapp.routine.exception.TaskNotExistsException
 import kz.webapp.routine.model.dto.AddTaskDto
+import kz.webapp.routine.model.dto.UpdateTaskDto
 import kz.webapp.routine.model.entity.TaskEntity
 import kz.webapp.routine.repository.TaskRepo
 import kz.webapp.routine.service.TaskService
@@ -10,7 +11,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import java.util.*
 
 
 @Service
@@ -19,7 +19,11 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
     val logger: Logger = LoggerFactory.getLogger(TaskService::class.java)
 
     override fun showTasks(): List<TaskEntity> {
-        return taskRepo.findAll()
+        return taskRepo.findAll().ifEmpty {
+            val msg = "There are no task found"
+            logger.error(msg)
+            throw TaskNotExistsException(msg)
+        }
     }
 
     override fun addTask(addTaskDto: AddTaskDto) {
@@ -29,7 +33,6 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
             comment = addTaskDto.comment
         )
         try {
-//            if (taskRepo.findById(addTaskDto.taskId == null))
             taskRepo.save(addTaskEntity)
             logger.info("Successfully created new task with ID ${addTaskEntity.taskId}")
         } catch(e: TaskException) {
@@ -40,31 +43,37 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
         }
     }
 
-    @Throws(EntityNotFoundException::class)
-    override fun deleteUserById(id: Int) {
+    override fun deleteTaskById(id: Int) {
         val task = taskRepo.findById(id)
         if (task.isPresent) {
             taskRepo.deleteById(id)
             logger.info("The task with ID $id was successfully deleted")
         } else {
-            throw EntityNotFoundException("no task found")
+            throw TaskNotExistsException("No such task found")
         }
     }
 
-    override fun findByIdOrNull(id: Int): TaskEntity? {
+    override fun findTaskById(id: Int): TaskEntity? {
         return taskRepo.findByIdOrNull(id)
     }
 
-    override fun updateTask(id: Int, addTaskDto: AddTaskDto) {
+    override fun updateTask(id: Int, updateTaskDto: UpdateTaskDto) {
         val updateTaskEntity = taskRepo.findByIdOrNull(id)
         if (updateTaskEntity != null) {
             val updateTaskEntity = TaskEntity(
                 taskId = id,
-                task = addTaskDto.task,
-                comment = addTaskDto.comment
+                task = updateTaskDto.task,
+                comment = updateTaskDto.comment
             )
-            taskRepo.save(updateTaskEntity)
-            logger.info("Task is updated with ID${updateTaskEntity.taskId}")
+            try {
+                taskRepo.save(updateTaskEntity)
+                logger.info("Task ${updateTaskEntity.taskId} is updated")
+            } catch(e: TaskException) {
+                val msg = "Failed to update task with id ${updateTaskEntity.taskId}"
+                logger.error(msg)
+                logger.error(e.message)
+                throw (TaskException(msg))
+            }
         }
     }
 }

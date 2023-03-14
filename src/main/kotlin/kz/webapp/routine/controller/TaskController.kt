@@ -2,6 +2,7 @@ package kz.webapp.routine.controller
 
 import jakarta.persistence.EntityNotFoundException
 import kz.webapp.routine.model.dto.AddTaskDto
+import kz.webapp.routine.model.dto.UpdateTaskDto
 import kz.webapp.routine.service.TaskService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -13,13 +14,14 @@ class MainController(
     val taskService: TaskService
     ) {
     @GetMapping("/")
-    fun test(model: Model): String {
+    fun showAllTasksPage(model: Model): String {
         model.addAttribute("tasks", taskService.showTasks())
         return "index"
     }
+
     @GetMapping("/create")
-    fun saveTaskPage(model: Model): String {
-        val addTaskDto = AddTaskDto(0,"","")
+    fun showSaveTaskPage(model: Model): String {
+        val addTaskDto = AddTaskDto("","")
         model.addAttribute("addTaskDto", addTaskDto)
         return "create"
     }
@@ -31,22 +33,22 @@ class MainController(
     }
 
     @GetMapping("/delete/{id}")
-    @Throws(EntityNotFoundException::class)
+//    @Throws(EntityNotFoundException::class)
     fun deleteTask(@PathVariable("id") id: Int): String {
-        taskService.deleteUserById(id)
+        taskService.deleteTaskById(id)
         return "redirect:/"
     }
 
     @GetMapping("/update/{id}")
-    fun updateTaskPage(@PathVariable("id") id: Int, model: Model): String {
-        val addTaskDto = taskService.findByIdOrNull(id)
-        model.addAttribute("addTaskDto", addTaskDto)
+    fun showUpdateTaskPage(@PathVariable("id") id: Int, model: Model): String {
+        val updateTaskDto = taskService.findTaskById(id)
+        model.addAttribute("updateTaskDto", updateTaskDto)
         return "update"
     }
 
     @PostMapping("/update/{id}")
-    fun updateTask(@PathVariable("id") id: Int, @ModelAttribute("addTaskDto") addTaskDto: AddTaskDto): String {
-        taskService.updateTask(id, addTaskDto)
+    fun updateTask(@PathVariable("id") id: Int, @ModelAttribute("updateTaskDto") updateTaskDto: UpdateTaskDto): String {
+        taskService.updateTask(id, updateTaskDto)
         return "redirect:/"
     }
 

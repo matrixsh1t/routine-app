@@ -8,12 +8,12 @@
 </head>
 <body>
 <div class="container">
-    <h2>User CRUD operation with Freemarker Template</h2>
+    <h2>All Tasks</h2>
     <a href="/create" class="btn btn-primary" role="button">Create New Task</a>
     <table class="table">
         <thead >
         <tr>
-<#--            <th scope="col">Id</th>-->
+            <th scope="col">Id</th>
             <th scope="col">Task</th>
             <th scope="col">Comment</th>
             <th scope="col"></th>

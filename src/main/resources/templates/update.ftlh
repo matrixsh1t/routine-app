@@ -16,7 +16,7 @@
         Update Task
     </h2>
     <div>
-        <form action="/update/${addTaskDto.taskId}" method="post" name="addTaskDto">
+        <form action="/update/${updateTaskDto.taskId}" method="post" name="updateTaskDto">
             <table class="table">
                 <tbody>
                 <thead>
@@ -29,17 +29,17 @@
                     <tr>
                         <th>ID</th>
                         <td>
-                            <div name="id">"ID"</div>
+                            <div name="id">${updateTaskDto.taskId}</div>
                         </td>
                     </tr>
                 <tr>
-                    <th>First Name</th>
-                    <td><input name="Task" type="text" value="<#if addTaskDto.task??>${addTaskDto.task}</#if>"/>
+                    <th>Task</th>
+                    <td><input name="Task" type="text" value="<#if updateTaskDto.task??>${updateTaskDto.task}</#if>"/>
                     </td>
                 </tr>
                 <tr>
-                    <th>Last Name</th>
-                    <td><input name="Comment" type="text" value="<#if addTaskDto.comment??>${addTaskDto.comment}</#if>"/></td>
+                    <th>Comment</th>
+                    <td><input name="Comment" type="text" value="<#if updateTaskDto.comment??>${updateTaskDto.comment}</#if>"/></td>
                 </tr>
                 </tbody>
             </table>

@@ -26,19 +26,13 @@
                 </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th>ID</th>
-                        <td>
-                            <div name="id">"ID"</div>
-                        </td>
-                    </tr>
                 <tr>
-                    <th>First Name</th>
+                    <th>Task</th>
                     <td><input name="Task" type="text" value="<#if addTaskDto.task??>${addTaskDto.task}</#if>"/>
                     </td>
                 </tr>
                 <tr>
-                    <th>Last Name</th>
+                    <th>Comment</th>
                     <td><input name="Comment" type="text" value="<#if addTaskDto.comment??>${addTaskDto.comment}</#if>"/></td>
                 </tr>
                 </tbody>
