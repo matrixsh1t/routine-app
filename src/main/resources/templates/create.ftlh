@@ -16,8 +16,7 @@
         Task
     </h2>
     <div>
-        <form action="<#if isUpdate>/update/${addTaskDto.taskId}</#if>
-                        <#if !isUpdate>/create</#if>" method="post" name="addTaskDto">
+        <form action="/create" method="post" name="addTaskDto">
             <table class="table">
                 <tbody>
                 <thead>
