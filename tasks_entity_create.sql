@@ -10,3 +10,6 @@ CREATE TABLE tasks (
                       date_create TIMESTAMP NOT NULL,
                       date_due TIMESTAMP,
                       date_close TIMESTAMP);
+
+ALTER TABLE tasks
+    add perform_date TIMESTAMP NOT NULL default '2023-03-20 00:00:00';

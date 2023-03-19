@@ -21,11 +21,15 @@
         </tr>
         </thead>
         <tbody>
+<#--        <#if !tasks> No tasks found </#if>-->
         <#list tasks as task>
             <tr>
                 <th scope="row">${task.taskId}</th>
                 <td>${task.task}</td>
                 <td>${task.comment}</td>
+                <td>${task.performDate}</td>
+                <td><a href="/tomorrow/${task.taskId}" class="btn btn-warning" role="button">
+                        Tomorrow</a></td>
                 <td><a href="/update/${task.taskId}" class="btn btn-warning" role="button">
                         Update</a></td>
                 <td><a href="/delete/${task.taskId}" class="btn btn-danger" role="button">

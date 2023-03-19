@@ -2,6 +2,7 @@ package kz.webapp.routine.model.entity
 
 import jakarta.persistence.*
 import org.hibernate.annotations.DynamicUpdate
+import java.time.LocalDate
 
 @Entity
 @Table(name = "tasks")
@@ -18,5 +19,7 @@ class TaskEntity(
 
     @Column(name = "comment")
     val comment: String?,
+    @Column(name = "perform_date")
+    val performDate: LocalDate,
 
-)
+    )

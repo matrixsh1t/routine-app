@@ -1,12 +1,12 @@
 package kz.webapp.routine.controller
 
-import jakarta.persistence.EntityNotFoundException
 import kz.webapp.routine.model.dto.AddTaskDto
 import kz.webapp.routine.model.dto.UpdateTaskDto
 import kz.webapp.routine.service.TaskService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
+import java.time.LocalDateTime
 
 
 @Controller
@@ -21,7 +21,7 @@ class MainController(
 
     @GetMapping("/create")
     fun showSaveTaskPage(model: Model): String {
-        val addTaskDto = AddTaskDto("","")
+        val addTaskDto = AddTaskDto("","", LocalDateTime.now())
         model.addAttribute("addTaskDto", addTaskDto)
         return "create"
     }
@@ -39,6 +39,12 @@ class MainController(
         return "redirect:/"
     }
 
+    @GetMapping("/tomorrow/{id}")
+    fun moveTaskToTomorrow(@PathVariable("id") id: Int): String {
+        taskService.moveTaskToTomorrow(id)
+        return "redirect:/"
+    }
+
     @GetMapping("/update/{id}")
     fun showUpdateTaskPage(@PathVariable("id") id: Int, model: Model): String {
         val updateTaskDto = taskService.findTaskById(id)
@@ -51,5 +57,4 @@ class MainController(
         taskService.updateTask(id, updateTaskDto)
         return "redirect:/"
     }
-
 }

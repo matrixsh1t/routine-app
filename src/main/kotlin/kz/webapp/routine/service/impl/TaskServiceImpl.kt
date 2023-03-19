@@ -2,8 +2,7 @@ package kz.webapp.routine.service.impl
 
 import kz.webapp.routine.exception.TaskException
 import kz.webapp.routine.exception.TaskNotExistsException
-import kz.webapp.routine.model.dto.AddTaskDto
-import kz.webapp.routine.model.dto.UpdateTaskDto
+import kz.webapp.routine.model.dto.*
 import kz.webapp.routine.model.entity.TaskEntity
 import kz.webapp.routine.repository.TaskRepo
 import kz.webapp.routine.service.TaskService
@@ -11,6 +10,9 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import java.time.LocalDate
+
+import java.time.Period
 
 
 @Service
@@ -19,8 +21,8 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
     val logger: Logger = LoggerFactory.getLogger(TaskService::class.java)
 
     override fun showTasks(): List<TaskEntity> {
-        return taskRepo.findAll().ifEmpty {
-            val msg = "There are no task found"
+        return taskRepo.findAllTodaysTasks().ifEmpty {
+            val msg = "There are no tasks found"
             logger.error(msg)
             throw TaskNotExistsException(msg)
         }
@@ -30,7 +32,8 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
         val addTaskEntity = TaskEntity(
             taskId = 0,
             task = addTaskDto.task,
-            comment = addTaskDto.comment
+            comment = addTaskDto.comment,
+            performDate = LocalDate.now()
         )
         try {
             taskRepo.save(addTaskEntity)
@@ -49,7 +52,9 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
             taskRepo.deleteById(id)
             logger.info("The task with ID $id was successfully deleted")
         } else {
-            throw TaskNotExistsException("No such task found")
+            val msg = "No task with id $id found"
+            logger.error(msg)
+            throw TaskNotExistsException(msg)
         }
     }
 
@@ -63,7 +68,8 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
             val updateTaskEntity = TaskEntity(
                 taskId = id,
                 task = updateTaskDto.task,
-                comment = updateTaskDto.comment
+                comment = updateTaskDto.comment,
+                performDate = LocalDate.now()
             )
             try {
                 taskRepo.save(updateTaskEntity)
@@ -76,4 +82,28 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
             }
         }
     }
+
+    override fun moveTaskToTomorrow(id: Int) {
+            val updateTimeEntity = taskRepo.findByIdOrNull(id)
+            val oneDayPeriod = Period.of(0, 0, 1)
+            if (updateTimeEntity != null) {
+                val updateTimeEntity = TaskEntity(
+                    taskId = id,
+                    task = updateTimeEntity.task,
+                    comment = updateTimeEntity.comment,
+                    performDate = updateTimeEntity.performDate.plus(oneDayPeriod)
+                )
+                try {
+                    taskRepo.save(updateTimeEntity)
+                    logger.info("Task ${updateTimeEntity.taskId} is moved to tomorrow")
+                } catch(e: TaskException) {
+                    val msg = "Failed to update task with id ${updateTimeEntity.taskId}"
+                    logger.error(msg)
+                    logger.error(e.message)
+                    throw (TaskException(msg))
+                }
+            }
+    }
+
+
 }
