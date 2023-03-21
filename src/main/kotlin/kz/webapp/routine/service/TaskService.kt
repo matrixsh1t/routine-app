@@ -13,4 +13,5 @@ interface TaskService {
 
     //changes task perform_date to tomorrow's date
     fun moveTaskToTomorrow(id: Int)
+    fun moveTaskToDate(id: Int, period: String)
 }

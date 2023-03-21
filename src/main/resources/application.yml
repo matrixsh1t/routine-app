@@ -10,5 +10,7 @@ spring:
 logging:
   level:
     root: DEBUG
-
-
+#    org:
+#      springframework:
+#        web: trace
+#      apache: trace

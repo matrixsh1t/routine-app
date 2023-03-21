@@ -71,39 +71,67 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
                 comment = updateTaskDto.comment,
                 performDate = LocalDate.now()
             )
-            try {
-                taskRepo.save(updateTaskEntity)
-                logger.info("Task ${updateTaskEntity.taskId} is updated")
-            } catch(e: TaskException) {
-                val msg = "Failed to update task with id ${updateTaskEntity.taskId}"
-                logger.error(msg)
-                logger.error(e.message)
-                throw (TaskException(msg))
-            }
+            //saves entity with try-catch and logs
+            entitySaveTryCatchBlock(updateTaskEntity,
+            "Task ${updateTaskEntity.taskId} is updated",
+            "Failed to update task with id ${updateTaskEntity.taskId}")
         }
     }
 
     override fun moveTaskToTomorrow(id: Int) {
             val updateTimeEntity = taskRepo.findByIdOrNull(id)
-            val oneDayPeriod = Period.of(0, 0, 1)
+
+            var dayPeriod = Period.of(0, 0, 1)
+            if (LocalDate.now().dayOfWeek.toString() == "FRIDAY") {
+                dayPeriod = Period.of(0,0,3)
+            }
             if (updateTimeEntity != null) {
                 val updateTimeEntity = TaskEntity(
                     taskId = id,
                     task = updateTimeEntity.task,
                     comment = updateTimeEntity.comment,
-                    performDate = updateTimeEntity.performDate.plus(oneDayPeriod)
+                    performDate = LocalDate.now().plus(dayPeriod)
                 )
-                try {
-                    taskRepo.save(updateTimeEntity)
-                    logger.info("Task ${updateTimeEntity.taskId} is moved to tomorrow")
-                } catch(e: TaskException) {
-                    val msg = "Failed to update task with id ${updateTimeEntity.taskId}"
-                    logger.error(msg)
-                    logger.error(e.message)
-                    throw (TaskException(msg))
-                }
+                //saves entity with try-catch and logs
+                entitySaveTryCatchBlock(updateTimeEntity,
+                    "Task ${updateTimeEntity.taskId} is moved to tomorrow",
+                    "Failed to update task with id ${updateTimeEntity.taskId}")
             }
     }
+    override fun moveTaskToDate(id: Int, period: String) {
+        val updateTimeEntity = taskRepo.findByIdOrNull(id)
+        var newDate = LocalDate.now()
 
+        if (period == "day") {
+            newDate = LocalDate.now().plusDays(1)
+            if (LocalDate.now().dayOfWeek.toString() == "FRIDAY") newDate = LocalDate.now().plusDays(3)
+        }
 
+        if (period == "week") {
+            newDate = LocalDate.now().plusDays(8-LocalDate.now().dayOfWeek.value.toLong())
+        }
+        if (updateTimeEntity != null) {
+            val updateTimeEntity = TaskEntity(
+                taskId = id,
+                task = updateTimeEntity.task,
+                comment = updateTimeEntity.comment,
+                performDate = newDate
+            )
+            //saves entity with try-catch and logs
+            entitySaveTryCatchBlock(updateTimeEntity,
+                "Task ${updateTimeEntity.taskId} is moved to tomorrow",
+                "Failed to update task with id ${updateTimeEntity.taskId}")
+        }
+    }
+
+    private fun entitySaveTryCatchBlock(entity: TaskEntity, msg: String, errMsg: String) {
+        try {
+            taskRepo.save(entity)
+            logger.info(msg)
+        } catch(e: TaskException) {
+            logger.error(errMsg)
+            logger.error(e.message)
+            throw (TaskException(errMsg))
+        }
+    }
 }

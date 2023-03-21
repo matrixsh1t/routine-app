@@ -30,6 +30,8 @@
                 <td>${task.performDate}</td>
                 <td><a href="/tomorrow/${task.taskId}" class="btn btn-warning" role="button">
                         Tomorrow</a></td>
+                <td><a href="/next-week/${task.taskId}" class="btn btn-warning" role="button">
+                        Next week</a></td>
                 <td><a href="/update/${task.taskId}" class="btn btn-warning" role="button">
                         Update</a></td>
                 <td><a href="/delete/${task.taskId}" class="btn btn-danger" role="button">
