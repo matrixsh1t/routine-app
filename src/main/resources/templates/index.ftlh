@@ -21,7 +21,6 @@
         </tr>
         </thead>
         <tbody>
-<#--        <#if !tasks> No tasks found </#if>-->
         <#list tasks as task>
             <tr>
                 <th scope="row">${task.taskId}</th>
@@ -32,6 +31,8 @@
                         Tomorrow</a></td>
                 <td><a href="/next-week/${task.taskId}" class="btn btn-warning" role="button">
                         Next week</a></td>
+                <td><a href="/next-month/${task.taskId}" class="btn btn-warning" role="button">
+                        Next month</a></td>
                 <td><a href="/update/${task.taskId}" class="btn btn-warning" role="button">
                         Update</a></td>
                 <td><a href="/delete/${task.taskId}" class="btn btn-danger" role="button">

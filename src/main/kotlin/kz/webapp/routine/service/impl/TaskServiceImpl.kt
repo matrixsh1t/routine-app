@@ -11,8 +11,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.time.LocalDate
-
-import java.time.Period
+import java.util.ArrayList
 
 
 @Service
@@ -24,7 +23,7 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
         return taskRepo.findAllTodaysTasks().ifEmpty {
             val msg = "There are no tasks found"
             logger.error(msg)
-            throw TaskNotExistsException(msg)
+            ArrayList()
         }
     }
 
@@ -33,22 +32,17 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
             taskId = 0,
             task = addTaskDto.task,
             comment = addTaskDto.comment,
-            performDate = LocalDate.now()
-        )
-        try {
-            taskRepo.save(addTaskEntity)
-            logger.info("Successfully created new task with ID ${addTaskEntity.taskId}")
-        } catch(e: TaskException) {
-            val msg = "Failed to create task id ${addTaskEntity.taskId}"
-            logger.error(msg)
-            logger.error(e.message)
-            throw (TaskException(msg))
-        }
+            performDate = LocalDate.now())
+
+        entitySaveTryCatchBlock(addTaskEntity,
+            "Successfully created new task with ID ${addTaskEntity.taskId}",
+            "Failed to create task id ${addTaskEntity.taskId}")
     }
 
     override fun deleteTaskById(id: Int) {
-        val task = taskRepo.findById(id)
-        if (task.isPresent) {
+        val task = taskRepo.findByIdOrNull(id)
+
+        if (task != null) {
             taskRepo.deleteById(id)
             logger.info("The task with ID $id was successfully deleted")
         } else {
@@ -56,10 +50,6 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
             logger.error(msg)
             throw TaskNotExistsException(msg)
         }
-    }
-
-    override fun findTaskById(id: Int): TaskEntity? {
-        return taskRepo.findByIdOrNull(id)
     }
 
     override fun updateTask(id: Int, updateTaskDto: UpdateTaskDto) {
@@ -78,45 +68,24 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
         }
     }
 
-    override fun moveTaskToTomorrow(id: Int) {
-            val updateTimeEntity = taskRepo.findByIdOrNull(id)
-
-            var dayPeriod = Period.of(0, 0, 1)
-            if (LocalDate.now().dayOfWeek.toString() == "FRIDAY") {
-                dayPeriod = Period.of(0,0,3)
-            }
-            if (updateTimeEntity != null) {
-                val updateTimeEntity = TaskEntity(
-                    taskId = id,
-                    task = updateTimeEntity.task,
-                    comment = updateTimeEntity.comment,
-                    performDate = LocalDate.now().plus(dayPeriod)
-                )
-                //saves entity with try-catch and logs
-                entitySaveTryCatchBlock(updateTimeEntity,
-                    "Task ${updateTimeEntity.taskId} is moved to tomorrow",
-                    "Failed to update task with id ${updateTimeEntity.taskId}")
-            }
-    }
-    override fun moveTaskToDate(id: Int, period: String) {
+    override fun moveTaskToAnotherDate(id: Int, period: String) {
         val updateTimeEntity = taskRepo.findByIdOrNull(id)
         var newDate = LocalDate.now()
 
-        if (period == "day") {
-            newDate = LocalDate.now().plusDays(1)
-            if (LocalDate.now().dayOfWeek.toString() == "FRIDAY") newDate = LocalDate.now().plusDays(3)
+        //add period to change the date with the account of weekday
+        when(period) {
+            "day" -> {newDate = LocalDate.now().plusDays(1)
+                if (LocalDate.now().dayOfWeek.toString() == "FRIDAY") newDate = LocalDate.now().plusDays(3)}
+            "week" -> newDate = LocalDate.now().plusDays(8-LocalDate.now().dayOfWeek.value.toLong())
+            "month" -> newDate = LocalDate.now().plusDays(29-LocalDate.now().dayOfWeek.value.toLong())
         }
 
-        if (period == "week") {
-            newDate = LocalDate.now().plusDays(8-LocalDate.now().dayOfWeek.value.toLong())
-        }
         if (updateTimeEntity != null) {
             val updateTimeEntity = TaskEntity(
                 taskId = id,
                 task = updateTimeEntity.task,
                 comment = updateTimeEntity.comment,
-                performDate = newDate
-            )
+                performDate = newDate)
             //saves entity with try-catch and logs
             entitySaveTryCatchBlock(updateTimeEntity,
                 "Task ${updateTimeEntity.taskId} is moved to tomorrow",
@@ -124,6 +93,7 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
         }
     }
 
+    //------------------ private functions block ------------------
     private fun entitySaveTryCatchBlock(entity: TaskEntity, msg: String, errMsg: String) {
         try {
             taskRepo.save(entity)

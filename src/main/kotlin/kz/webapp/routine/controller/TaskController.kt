@@ -41,13 +41,19 @@ class MainController(
 
     @GetMapping("/tomorrow/{id}")
     fun moveTaskToTomorrow(@PathVariable("id") id: Int): String {
-        taskService.moveTaskToDate(id,"day")
+        taskService.moveTaskToAnotherDate(id,"day")
         return "redirect:/"
     }
 
     @GetMapping("/next-week/{id}")
     fun moveTaskToNextWeek(@PathVariable("id") id: Int): String {
-        taskService.moveTaskToDate(id,"week")
+        taskService.moveTaskToAnotherDate(id,"week")
+        return "redirect:/"
+    }
+
+    @GetMapping("/next-month/{id}")
+    fun moveTaskToNextMonth(@PathVariable("id") id: Int): String {
+        taskService.moveTaskToAnotherDate(id,"month")
         return "redirect:/"
     }
 
