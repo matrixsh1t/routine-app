@@ -12,7 +12,8 @@ data class AddTaskDto (
 data class UpdateTaskDto (
     var taskId: Int = 0,
     var task: String = "",
-    var comment: String = ""
+    var comment: String = "",
+    var status: String = ""
 )
 
 data class PostponeTaskDto (

@@ -1,6 +1,7 @@
 package kz.webapp.routine.model.entity
 
 import jakarta.persistence.*
+import jakarta.validation.constraints.NotEmpty
 import org.hibernate.annotations.DynamicUpdate
 import java.time.LocalDate
 
@@ -14,12 +15,18 @@ class TaskEntity(
     @Column(name = "task_id")
     val taskId: Int,
 
+    @NotEmpty
     @Column(name = "task")
     val task: String,
 
+    @NotEmpty
     @Column(name = "comment")
     val comment: String?,
+
     @Column(name = "perform_date")
     val performDate: LocalDate,
 
+    @NotEmpty
+    @Column(name = "status")
+    val status: String,
     )

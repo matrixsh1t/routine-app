@@ -1,5 +1,6 @@
 package kz.webapp.routine.controller
 
+import jakarta.validation.Valid
 import kz.webapp.routine.model.dto.AddTaskDto
 import kz.webapp.routine.model.dto.UpdateTaskDto
 import kz.webapp.routine.service.TaskService
@@ -12,6 +13,7 @@ import java.time.LocalDateTime
 @Controller
 class MainController(
     val taskService: TaskService
+
     ) {
     @GetMapping("/")
     fun showAllTasksPage(model: Model): String {

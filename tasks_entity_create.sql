@@ -13,3 +13,7 @@ CREATE TABLE tasks (
 
 ALTER TABLE tasks
     add perform_date TIMESTAMP NOT NULL default '2023-03-20 00:00:00';
+
+ALTER TABLE tasks
+    add status CHAR (1) NOT NULL CONSTRAINT statusConst
+        CHECK(status IN('a', 'x', 'c')) default 'a';

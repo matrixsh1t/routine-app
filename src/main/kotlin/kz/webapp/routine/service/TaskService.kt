@@ -9,6 +9,7 @@ interface TaskService {
     fun addTask(addTaskDto: AddTaskDto)
     fun deleteTaskById(id: Int)
     fun updateTask(id: Int, updateTaskDto: UpdateTaskDto)
+    fun findTaskById(id: Int): TaskEntity?
     //changes task perform_date to date offset
     fun moveTaskToAnotherDate(id: Int, period: String)
 }

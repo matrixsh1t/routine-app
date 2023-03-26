@@ -11,7 +11,8 @@ import org.slf4j.LoggerFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.time.LocalDate
-import java.util.ArrayList
+import java.time.temporal.WeekFields
+import java.util.*
 
 
 @Service
@@ -32,7 +33,8 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
             taskId = 0,
             task = addTaskDto.task,
             comment = addTaskDto.comment,
-            performDate = LocalDate.now())
+            performDate = LocalDate.now(),
+            status = "a")
 
         entitySaveTryCatchBlock(addTaskEntity,
             "Successfully created new task with ID ${addTaskEntity.taskId}",
@@ -54,13 +56,16 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
 
     override fun updateTask(id: Int, updateTaskDto: UpdateTaskDto) {
         val updateTaskEntity = taskRepo.findByIdOrNull(id)
+
         if (updateTaskEntity != null) {
             val updateTaskEntity = TaskEntity(
                 taskId = id,
                 task = updateTaskDto.task,
                 comment = updateTaskDto.comment,
-                performDate = LocalDate.now()
+                performDate = LocalDate.now(),
+                status = updateTaskDto.status,
             )
+
             //saves entity with try-catch and logs
             entitySaveTryCatchBlock(updateTaskEntity,
             "Task ${updateTaskEntity.taskId} is updated",
@@ -72,10 +77,13 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
         val updateTimeEntity = taskRepo.findByIdOrNull(id)
         var newDate = LocalDate.now()
 
-        //add period to change the date with the account of weekday
+        //add period to change the date to make it monday
         when(period) {
-            "day" -> {newDate = LocalDate.now().plusDays(1)
-                if (LocalDate.now().dayOfWeek.toString() == "FRIDAY") newDate = LocalDate.now().plusDays(3)}
+            "day" -> {
+                newDate = if (LocalDate.now().dayOfWeek.value >= 5) {
+                    LocalDate.now().plusDays(8-LocalDate.now().dayOfWeek.value.toLong())
+                } else LocalDate.now().plusDays(1)
+            }
             "week" -> newDate = LocalDate.now().plusDays(8-LocalDate.now().dayOfWeek.value.toLong())
             "month" -> newDate = LocalDate.now().plusDays(29-LocalDate.now().dayOfWeek.value.toLong())
         }
@@ -85,7 +93,9 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
                 taskId = id,
                 task = updateTimeEntity.task,
                 comment = updateTimeEntity.comment,
-                performDate = newDate)
+                performDate = newDate,
+                status = updateTimeEntity.status)
+
             //saves entity with try-catch and logs
             entitySaveTryCatchBlock(updateTimeEntity,
                 "Task ${updateTimeEntity.taskId} is moved to tomorrow",
@@ -93,7 +103,12 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
         }
     }
 
+    override fun findTaskById(id: Int): TaskEntity? {
+        return taskRepo.findByIdOrNull(id)
+    }
+
     //------------------ private functions block ------------------
+    //saves entity with try-catch block and makes logging
     private fun entitySaveTryCatchBlock(entity: TaskEntity, msg: String, errMsg: String) {
         try {
             taskRepo.save(entity)
@@ -103,5 +118,19 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
             logger.error(e.message)
             throw (TaskException(errMsg))
         }
+    }
+
+    fun getLocalDateFromWeekNumber(weekNumber: Int): LocalDate {
+        // Get the ISO week fields
+        val weekFields = WeekFields.of(Locale.getDefault())
+
+        // Get the first day of the first week of the year
+        val firstDayOfYear = LocalDate.now().with(weekFields.weekOfYear(), 1)
+            .with(weekFields.dayOfWeek(), 1)
+
+        // Add the number of weeks to get the target week
+        val targetWeek = firstDayOfYear.plusWeeks(weekNumber.toLong() - 1)
+
+        return targetWeek
     }
 }
