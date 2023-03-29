@@ -107,6 +107,25 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
         return taskRepo.findByIdOrNull(id)
     }
 
+    override fun closeTask(id: Int) {
+        val closeTaskEntity = taskRepo.findByIdOrNull(id)
+
+        if (closeTaskEntity != null) {
+            val closeTaskEntity = TaskEntity(
+                taskId = id,
+                task = closeTaskEntity.task,
+                comment = closeTaskEntity.comment,
+                performDate = closeTaskEntity.performDate,
+                status = "x",
+            )
+
+            //saves entity with try-catch and logs
+            entitySaveTryCatchBlock(closeTaskEntity,
+                "Task ${closeTaskEntity.taskId} is closed",
+                "Failed to closed task with id ${closeTaskEntity.taskId}")
+        }
+    }
+
     //------------------ private functions block ------------------
     //saves entity with try-catch block and makes logging
     private fun entitySaveTryCatchBlock(entity: TaskEntity, msg: String, errMsg: String) {

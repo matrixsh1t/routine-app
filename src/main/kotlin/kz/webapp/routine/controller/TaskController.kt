@@ -71,4 +71,10 @@ class MainController(
         taskService.updateTask(id, updateTaskDto)
         return "redirect:/"
     }
+
+    @PostMapping("/close/{id}")
+    fun closeTask(@PathVariable("id") id: Int): String {
+        taskService.closeTask(id)
+        return "redirect:/"
+    }
 }

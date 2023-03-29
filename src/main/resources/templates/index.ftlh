@@ -37,6 +37,8 @@
                         Update</a></td>
                 <td><a href="/delete/${task.taskId}" class="btn btn-danger" role="button">
                         Delete</a></td>
+                <td><a href="/close/${task.taskId}" class="btn btn-danger" role="button">
+                        Close</a></td>
             </tr>
         </#list>
         </tbody>
