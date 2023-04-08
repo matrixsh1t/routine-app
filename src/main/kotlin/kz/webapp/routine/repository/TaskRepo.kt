@@ -12,5 +12,8 @@ interface TaskRepo: JpaRepository<TaskEntity, Int> {
     @Query("SELECT te FROM TaskEntity te WHERE te.status = 'a' AND te.performDate <= CURRENT_DATE ORDER BY te.performDate")
     fun findAllTodaysTasks(): List<TaskEntity>
 
+    @Query("SELECT te FROM TaskEntity te ORDER BY te.createDate")
+    fun findAllTasks(): List<TaskEntity>
+
     override fun findAll(): List<TaskEntity>
 }

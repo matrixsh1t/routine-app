@@ -1,13 +1,12 @@
 package kz.webapp.routine.controller
 
-import jakarta.validation.Valid
 import kz.webapp.routine.model.dto.AddTaskDto
 import kz.webapp.routine.model.dto.UpdateTaskDto
 import kz.webapp.routine.service.TaskService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
-import java.time.LocalDateTime
+import java.time.LocalDate
 
 
 @Controller
@@ -16,14 +15,22 @@ class MainController(
 
     ) {
     @GetMapping("/")
+    fun showAllTodaysTasksPage(model: Model): String {
+        model.addAttribute("tasks", taskService.showTodaysTasks())
+        model.addAttribute("title", "Список задач на сегодня")
+        return "index"
+    }
+
+    @GetMapping("/all")
     fun showAllTasksPage(model: Model): String {
-        model.addAttribute("tasks", taskService.showTasks())
+        model.addAttribute("tasks", taskService.showAllTasks())
+        model.addAttribute("title", "Список всех задач")
         return "index"
     }
 
     @GetMapping("/create")
     fun showSaveTaskPage(model: Model): String {
-        val addTaskDto = AddTaskDto("","", LocalDateTime.now())
+        val addTaskDto = AddTaskDto("","", LocalDate.now())
         model.addAttribute("addTaskDto", addTaskDto)
         return "create"
     }
@@ -72,7 +79,7 @@ class MainController(
         return "redirect:/"
     }
 
-    @PostMapping("/close/{id}")
+    @GetMapping("/close/{id}")
     fun closeTask(@PathVariable("id") id: Int): String {
         taskService.closeTask(id)
         return "redirect:/"

@@ -26,6 +26,9 @@ class TaskEntity(
     @Column(name = "perform_date")
     val performDate: LocalDate,
 
+    @Column(name = "date_create")
+    val createDate: LocalDate,
+
     @NotEmpty
     @Column(name = "status")
     val status: String,

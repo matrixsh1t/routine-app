@@ -5,7 +5,8 @@ import kz.webapp.routine.model.entity.TaskEntity
 
 
 interface TaskService {
-    fun showTasks(): List<TaskEntity>
+    fun showTodaysTasks(): List<TaskEntity>
+    fun showAllTasks(): List<TaskEntity>
     fun addTask(addTaskDto: AddTaskDto)
     fun deleteTaskById(id: Int)
     fun updateTask(id: Int, updateTaskDto: UpdateTaskDto)

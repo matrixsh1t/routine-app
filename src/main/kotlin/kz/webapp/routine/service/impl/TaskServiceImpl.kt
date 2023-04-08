@@ -20,9 +20,17 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
 
     val logger: Logger = LoggerFactory.getLogger(TaskService::class.java)
 
-    override fun showTasks(): List<TaskEntity> {
+    override fun showTodaysTasks(): List<TaskEntity> {
         return taskRepo.findAllTodaysTasks().ifEmpty {
-            val msg = "There are no tasks found"
+            val msg = "There are no tasks for today found"
+            logger.error(msg)
+            ArrayList()
+        }
+    }
+
+    override fun showAllTasks(): List<TaskEntity> {
+        return taskRepo.findAllTasks().ifEmpty {
+            val msg = "There are no tasks found at all"
             logger.error(msg)
             ArrayList()
         }
@@ -34,6 +42,7 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
             task = addTaskDto.task,
             comment = addTaskDto.comment,
             performDate = LocalDate.now(),
+            createDate = LocalDate.now(),
             status = "a")
 
         entitySaveTryCatchBlock(addTaskEntity,
@@ -63,6 +72,7 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
                 task = updateTaskDto.task,
                 comment = updateTaskDto.comment,
                 performDate = LocalDate.now(),
+                createDate = updateTaskDto.createDate,
                 status = updateTaskDto.status,
             )
 
@@ -94,6 +104,7 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
                 task = updateTimeEntity.task,
                 comment = updateTimeEntity.comment,
                 performDate = newDate,
+                createDate = updateTimeEntity.createDate,
                 status = updateTimeEntity.status)
 
             //saves entity with try-catch and logs
@@ -116,6 +127,7 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
                 task = closeTaskEntity.task,
                 comment = closeTaskEntity.comment,
                 performDate = closeTaskEntity.performDate,
+                createDate = closeTaskEntity.createDate,
                 status = "x",
             )
 
@@ -127,6 +139,7 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
     }
 
     //------------------ private functions block ------------------
+
     //saves entity with try-catch block and makes logging
     private fun entitySaveTryCatchBlock(entity: TaskEntity, msg: String, errMsg: String) {
         try {
@@ -139,14 +152,12 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
         }
     }
 
-    fun getLocalDateFromWeekNumber(weekNumber: Int): LocalDate {
+    fun getDateFromWeekNumber(weekNumber: Int): LocalDate {
         // Get the ISO week fields
         val weekFields = WeekFields.of(Locale.getDefault())
-
         // Get the first day of the first week of the year
         val firstDayOfYear = LocalDate.now().with(weekFields.weekOfYear(), 1)
             .with(weekFields.dayOfWeek(), 1)
-
         // Add the number of weeks to get the target week
         val targetWeek = firstDayOfYear.plusWeeks(weekNumber.toLong() - 1)
 
