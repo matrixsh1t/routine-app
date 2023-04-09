@@ -28,6 +28,38 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
         }
     }
 
+    override fun showTomorrowsTasks(): List<TaskEntity> {
+        return taskRepo.findAllTomorrowsTasks().ifEmpty {
+            val msg = "There are no tasks for tomorrow found"
+            logger.error(msg)
+            ArrayList()
+        }
+    }
+
+    override fun showNextWeeksTasks(): List<TaskEntity> {
+        return taskRepo.findAllNextWeeksTasks().ifEmpty {
+            val msg = "There are no tasks for next week found"
+            logger.error(msg)
+            ArrayList()
+        }
+    }
+
+    override fun showNextMonthsTasks(): List<TaskEntity> {
+        return taskRepo.findAllNextMonthsTasks().ifEmpty {
+            val msg = "There are no tasks for next month found"
+            logger.error(msg)
+            ArrayList()
+        }
+    }
+
+    override fun showAllActiveTasks(): List<TaskEntity> {
+        return taskRepo.findAllActiveTasks().ifEmpty {
+            val msg = "There are no active tasks found"
+            logger.error(msg)
+            ArrayList()
+        }
+    }
+
     override fun showAllTasks(): List<TaskEntity> {
         return taskRepo.findAllTasks().ifEmpty {
             val msg = "There are no tasks found at all"

@@ -13,7 +13,7 @@ data class UpdateTaskDto (
     var taskId: Int = 0,
     var task: String = "",
     var comment: String = "",
-    var status: String = "",
+    var status: String = "a",
     var createDate: LocalDate = LocalDate.now(),
 )
 

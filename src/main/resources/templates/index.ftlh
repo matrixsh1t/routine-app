@@ -9,23 +9,26 @@
 <body>
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+        <a class="navbar-brand" href="/">Задачи</a>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    <a class="nav-link active" aria-current="page" href="/">На сегодня</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/">Today's tasks</a>
+                    <a class="nav-link active" aria-current="page" href="/tomorrows-tasks">На завтра</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/all">All tasks</a>
+                    <a class="nav-link active" aria-current="page" href="/next-weeks-tasks">Следующая неделя</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link disabled">Disabled</a>
+                    <a class="nav-link active" aria-current="page" href="/next-months-tasks">Следующий месяц</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/all-active">Все активные</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/all">Все задачи</a>
                 </li>
             </ul>
         </div>
@@ -33,7 +36,7 @@
 </nav>
 
 <div class="container">
-    <h2>${title}</h2>
+    <h2>${title} (${taskNum})</h2>
     <a href="/create" class="btn btn-primary" role="button">Create New Task</a>
     <table class="table">
         <thead >
