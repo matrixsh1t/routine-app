@@ -23,11 +23,18 @@ class TaskEntity(
     @Column(name = "comment")
     val comment: String?,
 
-    @Column(name = "perform_date")
-    val performDate: LocalDate,
+    @NotEmpty
+    @Column(name = "responsible")
+    val responsible: String?,
+
+    @Column(name = "date_due")
+    val dueDate: LocalDate,
 
     @Column(name = "date_create")
     val createDate: LocalDate,
+
+    @Column(name = "date_close")
+    val closeDate: LocalDate,
 
     @NotEmpty
     @Column(name = "status")

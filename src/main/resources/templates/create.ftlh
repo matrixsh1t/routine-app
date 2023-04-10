@@ -13,27 +13,26 @@
 <body>
 <div class="container">
     <h2>
-        Task
+        Новая задача
     </h2>
     <div>
         <form action="/create" method="post" name="addTaskDto">
             <table class="table">
                 <tbody>
                 <thead>
-                <tr>
-                    <th>Field</th>
-                    <th>Value</th>
-                </tr>
                 </thead>
                 <tbody>
                 <tr>
-                    <th>Task</th>
-                    <td><input name="Task" type="text" value="<#if addTaskDto.task??>${addTaskDto.task}</#if>"/>
-                    </td>
+                    <th>Задача</th>
+                    <td><input class="form-control form-control-sm" type="text" placeholder="Новая задача" value="<#if addTaskDto.task??>${addTaskDto.task}</#if>"/></td>
                 </tr>
                 <tr>
-                    <th>Comment</th>
-                    <td><input name="Comment" type="text" value="<#if addTaskDto.comment??>${addTaskDto.comment}</#if>"/></td>
+                    <th>Комментарий</th>
+                    <td><input class="form-control form-control-sm" type="text" placeholder="Комментарии к задаче" value="<#if addTaskDto.comment??>${addTaskDto.comment}</#if>"/></td>
+                </tr>
+                <tr>
+                    <th>Ответственный</th>
+                    <td><input class="form-control form-control-sm" type="text" placeholder="Исполнитель" value="<#if addTaskDto.responsible??>${addTaskDto.responsible}</#if>"/></td>
                 </tr>
                 </tbody>
             </table>

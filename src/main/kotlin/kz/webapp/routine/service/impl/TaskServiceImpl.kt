@@ -73,8 +73,10 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
             taskId = 0,
             task = addTaskDto.task,
             comment = addTaskDto.comment,
-            performDate = LocalDate.now(),
+            responsible = addTaskDto.responsible,
+            dueDate = LocalDate.now(),
             createDate = LocalDate.now(),
+            closeDate = LocalDate.now(),
             status = "a")
 
         entitySaveTryCatchBlock(addTaskEntity,
@@ -103,8 +105,10 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
                 taskId = id,
                 task = updateTaskDto.task,
                 comment = updateTaskDto.comment,
-                performDate = LocalDate.now(),
+                responsible = updateTaskDto.responsible,
+                dueDate = LocalDate.now(),
                 createDate = updateTaskDto.createDate,
+                closeDate = LocalDate.now(),
                 status = updateTaskDto.status,
             )
 
@@ -135,8 +139,10 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
                 taskId = id,
                 task = updateTimeEntity.task,
                 comment = updateTimeEntity.comment,
-                performDate = newDate,
+                responsible = updateTimeEntity.responsible,
+                dueDate = newDate,
                 createDate = updateTimeEntity.createDate,
+                closeDate = LocalDate.now(),
                 status = updateTimeEntity.status)
 
             //saves entity with try-catch and logs
@@ -158,8 +164,10 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
                 taskId = id,
                 task = closeTaskEntity.task,
                 comment = closeTaskEntity.comment,
-                performDate = closeTaskEntity.performDate,
+                responsible = closeTaskEntity.responsible,
+                dueDate = closeTaskEntity.dueDate,
                 createDate = closeTaskEntity.createDate,
+                closeDate = LocalDate.now(),
                 status = "x",
             )
 

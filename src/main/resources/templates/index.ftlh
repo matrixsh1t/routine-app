@@ -54,7 +54,8 @@
                 <th scope="row">${task.taskId}</th>
                 <td>${task.task}</td>
                 <td>${task.comment}</td>
-                <td>${task.performDate}</td>
+                <td>${task.responsible}</td>
+                <td>${task.dueDate}</td>
                 <td><a href="/tomorrow/${task.taskId}" class="btn btn-warning" role="button">
                         Tomorrow</a></td>
                 <td><a href="/next-week/${task.taskId}" class="btn btn-warning" role="button">

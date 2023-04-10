@@ -7,6 +7,7 @@ data class AddTaskDto (
     var task: String = "",
     var comment: String = "",
     var performDate: LocalDate = LocalDate.now(),
+    var responsible: String = "",
 )
 
 data class UpdateTaskDto (
@@ -15,8 +16,5 @@ data class UpdateTaskDto (
     var comment: String = "",
     var status: String = "a",
     var createDate: LocalDate = LocalDate.now(),
-)
-
-data class PostponeTaskDto (
-    var performDate: LocalDate
+    var responsible: String = "",
 )
