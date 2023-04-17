@@ -16,5 +16,7 @@ data class UpdateTaskDto (
     var comment: String = "",
     var status: String = "a",
     var createDate: LocalDate = LocalDate.now(),
+    var dueDate: LocalDate = LocalDate.now(),
+    var closeDate: LocalDate = LocalDate.now(),
     var responsible: String = "",
 )

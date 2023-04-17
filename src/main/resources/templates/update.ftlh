@@ -13,37 +13,47 @@
 <body>
 <div class="container">
     <h2>
-        Update Task
+        Изменить задачу
     </h2>
     <div>
         <form action="/update/${updateTaskDto.taskId}" method="post" name="updateTaskDto">
             <table class="table">
-                <tbody>
-                <thead>
-                <tr>
-                    <th>Field</th>
-                    <th>Value</th>
-                </tr>
-                </thead>
-                <tbody>
                     <tr>
                         <th>ID</th>
                         <td>
                             <div name="id">${updateTaskDto.taskId}</div>
                         </td>
                     </tr>
+                    <tr>
+                        <th>Дата создания</th>
+                        <td>
+                            <div name="id">${updateTaskDto.createDate}</div>
+                        </td>
+                    </tr>
                 <tr>
-                    <th>Task</th>
-                    <td><input name="Task" type="text" value="<#if updateTaskDto.task??>${updateTaskDto.task}</#if>"/>
-                    </td>
+                <tr>
+                    <th>Задача</th>
+                    <td><input name="Task" class="form-control form-control-sm" type="text" placeholder="Новая задача" value="<#if updateTaskDto.task??>${updateTaskDto.task}</#if>"/></td>
                 </tr>
                 <tr>
-                    <th>Comment</th>
-                    <td><input name="Comment" type="text" value="<#if updateTaskDto.comment??>${updateTaskDto.comment}</#if>"/></td>
+                    <th>Комментарий</th>
+                    <td><input name="Comment" class="form-control form-control-sm" type="text" placeholder="Комментарии к задаче" value="<#if updateTaskDto.comment??>${updateTaskDto.comment}</#if>"/></td>
+                </tr>
+                <tr>
+                    <th>Ответственный</th>
+                    <td><input name="Responsible" class="form-control form-control-sm" type="text" placeholder="Исполнитель" value="<#if updateTaskDto.responsible??>${updateTaskDto.responsible}</#if>"/></td>
+                </tr>
+                <tr>
+                    <th>Дата выполения</th>
+                    <td><input name="DueDate" class="form-control form-control-sm" type="text" placeholder="Дата выполнения" value="<#if updateTaskDto.dueDate??>${updateTaskDto.dueDate}</#if>"/></td>
+                </tr>
+                <tr>
+                    <td>
+                    <td/>
                 </tr>
                 </tbody>
             </table>
-            <button class="btn btn-primary" type="submit">Update</button>
+            <button class="btn btn-primary" type="submit">Сохранить</button>
         </form>
     </div>
 </div>

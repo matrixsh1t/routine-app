@@ -24,15 +24,19 @@
                 <tbody>
                 <tr>
                     <th>Задача</th>
-                    <td><input class="form-control form-control-sm" type="text" placeholder="Новая задача" value="<#if addTaskDto.task??>${addTaskDto.task}</#if>"/></td>
+                    <td><input name="Task" class="form-control form-control-sm" type="text" placeholder="Новая задача" value="<#if addTaskDto.task??>${addTaskDto.task}</#if>"/></td>
                 </tr>
                 <tr>
                     <th>Комментарий</th>
-                    <td><input class="form-control form-control-sm" type="text" placeholder="Комментарии к задаче" value="<#if addTaskDto.comment??>${addTaskDto.comment}</#if>"/></td>
+                    <td><input name="Comment" class="form-control form-control-sm" type="text" placeholder="Комментарии к задаче" value="<#if addTaskDto.comment??>${addTaskDto.comment}</#if>"/></td>
                 </tr>
                 <tr>
                     <th>Ответственный</th>
-                    <td><input class="form-control form-control-sm" type="text" placeholder="Исполнитель" value="<#if addTaskDto.responsible??>${addTaskDto.responsible}</#if>"/></td>
+                    <td><input name="Responsible" class="form-control form-control-sm" type="text" placeholder="Исполнитель" value="<#if addTaskDto.responsible??>${addTaskDto.responsible}</#if>"/></td>
+                </tr>
+                <tr>
+                    <td>
+                    <td/>
                 </tr>
                 </tbody>
             </table>

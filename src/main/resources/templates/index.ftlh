@@ -7,6 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
 </head>
 <body>
+<#--<header style="position: fixed; top: 0; width: 100%; z-index: 999;">-->
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
         <a class="navbar-brand" href="/">Задачи</a>
@@ -34,7 +35,7 @@
         </div>
     </div>
 </nav>
-
+<#--</header>-->
 <div class="container">
     <h2>${title} (${taskNum})</h2>
     <a href="/create" class="btn btn-primary" role="button">Create New Task</a>

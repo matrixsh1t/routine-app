@@ -106,9 +106,9 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
                 task = updateTaskDto.task,
                 comment = updateTaskDto.comment,
                 responsible = updateTaskDto.responsible,
-                dueDate = LocalDate.now(),
+                dueDate = updateTaskDto.dueDate,
                 createDate = updateTaskDto.createDate,
-                closeDate = LocalDate.now(),
+                closeDate = updateTaskDto.closeDate,
                 status = updateTaskDto.status,
             )
 
