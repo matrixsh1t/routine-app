@@ -34,14 +34,14 @@
                     <th>Ответственный</th>
                     <td><input name="Responsible" class="form-control form-control-sm" type="text" placeholder="Исполнитель" value="<#if addTaskDto.responsible??>${addTaskDto.responsible}</#if>"/></td>
                 </tr>
-                <tr>
-                    <td>
-                    <td/>
-                </tr>
+
                 </tbody>
             </table>
             <button class="btn btn-primary" type="submit">Save</button>
-        </form>
+            <tr>
+                <td>
+                <td/>
+            </tr></form>
     </div>
 </div>
 </body>

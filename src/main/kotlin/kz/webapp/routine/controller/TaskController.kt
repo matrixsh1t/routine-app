@@ -41,7 +41,7 @@ class MainController(
     @GetMapping("/next-months-tasks")
     fun showNextMonthsTasksPage(model: Model): String {
         model.addAttribute("tasks", taskService.showNextMonthsTasks())
-        model.addAttribute("title", "Список задач на следующуюю неделю")
+        model.addAttribute("title", "Список задач на следующий месяц")
         model.addAttribute("taskNum", taskService.showNextMonthsTasks().size)
         return "index"
     }
