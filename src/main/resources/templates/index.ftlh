@@ -31,6 +31,12 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/all">Все задачи</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" aria-current="page" href="/all">${currentUser}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/logout">Logout</a>
+                </li>
             </ul>
         </div>
     </div>
@@ -65,8 +71,10 @@
                         Next month</a></td>
                 <td><a href="/update/${task.taskId}" class="btn btn-warning" role="button">
                         Update</a></td>
+                <#if currentUser == "admin">
                 <td><a href="/delete/${task.taskId}" class="btn btn-danger" role="button">
                         Delete</a></td>
+                </#if>
                 <td><a href="/close/${task.taskId}" class="btn btn-danger" role="button">
                         Close</a></td>
             </tr>

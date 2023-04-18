@@ -20,15 +20,22 @@ class WebSecurityConfiguration(
     @Bean
     fun filterChain(httpSecurity: HttpSecurity): SecurityFilterChain {
         httpSecurity
-            //HTTP Basic authentication
-            .httpBasic()
+            .csrf().disable()
+            .exceptionHandling()
             .and()
             .authorizeHttpRequests()
-            .requestMatchers(HttpMethod.GET, "/**").hasAnyAuthority("ADMIN")
-            .requestMatchers(HttpMethod.POST, "/**").hasAnyAuthority("ADMIN")
-            .requestMatchers(HttpMethod.GET, "/**").hasAnyAuthority("USER")
+            /**
+             * Access to Notes and Todos API calls is given to any authenticated system user.
+             */
+            .requestMatchers("/*").authenticated()
+            /**
+             * Access to User API calls is given only to Admin user.
+             */
+            .requestMatchers("/**").hasAnyAuthority("ADMIN")
             .and()
-            .csrf().disable()
+            .formLogin()
+            .and()
+            .logout()
         return httpSecurity.build()
     }
 

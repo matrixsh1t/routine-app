@@ -9,6 +9,7 @@ import kz.webapp.routine.service.TaskService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.temporal.WeekFields
@@ -178,6 +179,11 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
         }
     }
 
+    override fun getCurrentUser(): String? {
+        val authentication = SecurityContextHolder.getContext().authentication
+        return authentication?.name
+    }
+
     //------------------ private functions block ------------------
 
     //saves entity with try-catch block and makes logging
@@ -203,4 +209,6 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
 
         return targetWeek
     }
+
+
 }

@@ -19,6 +19,7 @@ class MainController(
         model.addAttribute("tasks", taskService.showTodaysTasks())
         model.addAttribute("title", "Список задач на сегодня")
         model.addAttribute("taskNum", taskService.showTodaysTasks().size)
+        model.addAttribute("currentUser", taskService.getCurrentUser())
         return "index"
     }
 
@@ -27,6 +28,7 @@ class MainController(
         model.addAttribute("tasks", taskService.showTomorrowsTasks())
         model.addAttribute("title", "Список задач на завтра")
         model.addAttribute("taskNum", taskService.showTomorrowsTasks().size)
+        model.addAttribute("currentUser", taskService.getCurrentUser())
         return "index"
     }
 
@@ -35,6 +37,7 @@ class MainController(
         model.addAttribute("tasks", taskService.showNextWeeksTasks())
         model.addAttribute("title", "Список задач на следующуюю неделю")
         model.addAttribute("taskNum", taskService.showNextWeeksTasks().size)
+        model.addAttribute("currentUser", taskService.getCurrentUser())
         return "index"
     }
 
@@ -43,6 +46,7 @@ class MainController(
         model.addAttribute("tasks", taskService.showNextMonthsTasks())
         model.addAttribute("title", "Список задач на следующий месяц")
         model.addAttribute("taskNum", taskService.showNextMonthsTasks().size)
+        model.addAttribute("currentUser", taskService.getCurrentUser())
         return "index"
     }
 
@@ -51,6 +55,7 @@ class MainController(
         model.addAttribute("tasks", taskService.showAllActiveTasks())
         model.addAttribute("title", "Список активных задач")
         model.addAttribute("taskNum", taskService.showAllActiveTasks().size)
+        model.addAttribute("currentUser", taskService.getCurrentUser())
         return "index"
     }
 
@@ -59,6 +64,7 @@ class MainController(
         model.addAttribute("tasks", taskService.showAllTasks())
         model.addAttribute("title", "Список всех задач")
         model.addAttribute("taskNum", taskService.showAllTasks().size)
+        model.addAttribute("currentUser", taskService.getCurrentUser())
         return "index"
     }
 
