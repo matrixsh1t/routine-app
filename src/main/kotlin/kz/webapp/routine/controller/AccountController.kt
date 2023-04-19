@@ -1,7 +1,6 @@
 package kz.webapp.routine.controller
 
 import kz.webapp.routine.model.dto.AddAccDto
-import kz.webapp.routine.model.dto.AddTaskDto
 import kz.webapp.routine.service.AccountService
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
@@ -11,19 +10,24 @@ import org.springframework.web.bind.annotation.RequestMapping
 
 
 @Controller
+@RequestMapping("/admin")
 class AccountController (
     val accountService: AccountService
         ){
-//    @RequestMapping("/account")
 
-    @GetMapping("/account/register")
+    @GetMapping("/account-register")
     fun registerAccountPage(): String {
-        return "register"
+        return "create-account"
     }
 
-    @PostMapping("/account/register")
+    @PostMapping("/account-register")
     fun registerAccount(@ModelAttribute("addAccDto") addAccDto: AddAccDto): String {
         accountService.addAccount(addAccDto)
         return "redirect:/"
+    }
+
+    @GetMapping("")
+    fun showAdminPage(): String {
+        return "admin-panel"
     }
 }

@@ -10,17 +10,18 @@ import java.time.LocalDate
 
 
 @Controller
+@RequestMapping("/todo")
 class MainController(
     val taskService: TaskService
 
     ) {
-    @GetMapping("/")
+    @GetMapping("")
     fun showTodaysTasksPage(model: Model): String {
         model.addAttribute("tasks", taskService.showTodaysTasks())
         model.addAttribute("title", "Список задач на сегодня")
         model.addAttribute("taskNum", taskService.showTodaysTasks().size)
         model.addAttribute("currentUser", taskService.getCurrentUser())
-        return "index"
+        return "todo-page"
     }
 
     @GetMapping("/tomorrows-tasks")
@@ -29,7 +30,7 @@ class MainController(
         model.addAttribute("title", "Список задач на завтра")
         model.addAttribute("taskNum", taskService.showTomorrowsTasks().size)
         model.addAttribute("currentUser", taskService.getCurrentUser())
-        return "index"
+        return "todo-page"
     }
 
     @GetMapping("/next-weeks-tasks")
@@ -38,7 +39,7 @@ class MainController(
         model.addAttribute("title", "Список задач на следующуюю неделю")
         model.addAttribute("taskNum", taskService.showNextWeeksTasks().size)
         model.addAttribute("currentUser", taskService.getCurrentUser())
-        return "index"
+        return "todo-page"
     }
 
     @GetMapping("/next-months-tasks")
@@ -47,7 +48,7 @@ class MainController(
         model.addAttribute("title", "Список задач на следующий месяц")
         model.addAttribute("taskNum", taskService.showNextMonthsTasks().size)
         model.addAttribute("currentUser", taskService.getCurrentUser())
-        return "index"
+        return "todo-page"
     }
 
     @GetMapping("/all-active")
@@ -56,7 +57,7 @@ class MainController(
         model.addAttribute("title", "Список активных задач")
         model.addAttribute("taskNum", taskService.showAllActiveTasks().size)
         model.addAttribute("currentUser", taskService.getCurrentUser())
-        return "index"
+        return "todo-page"
     }
 
     @GetMapping("/all")
@@ -65,63 +66,63 @@ class MainController(
         model.addAttribute("title", "Список всех задач")
         model.addAttribute("taskNum", taskService.showAllTasks().size)
         model.addAttribute("currentUser", taskService.getCurrentUser())
-        return "index"
+        return "todo-page"
     }
 
     @GetMapping("/create")
     fun showSaveTaskPage(model: Model): String {
         val addTaskDto = AddTaskDto("","", LocalDate.now())
         model.addAttribute("addTaskDto", addTaskDto)
-        return "create"
+        return "create-task"
     }
 
     @PostMapping("/create")
     fun saveTask(@ModelAttribute("addTaskDto") addTaskDto: AddTaskDto): String {
         taskService.addTask(addTaskDto)
-        return "redirect:/"
+        return "redirect:/todo"
     }
 
     @GetMapping("/delete/{id}")
 //    @Throws(EntityNotFoundException::class)
     fun deleteTask(@PathVariable("id") id: Int): String {
         taskService.deleteTaskById(id)
-        return "redirect:/"
+        return "redirect:/todo"
     }
 
     @GetMapping("/tomorrow/{id}")
     fun moveTaskToTomorrow(@PathVariable("id") id: Int): String {
         taskService.moveTaskToAnotherDate(id,"day")
-        return "redirect:/"
+        return "redirect:/todo"
     }
 
     @GetMapping("/next-week/{id}")
     fun moveTaskToNextWeek(@PathVariable("id") id: Int): String {
         taskService.moveTaskToAnotherDate(id,"week")
-        return "redirect:/"
+        return "redirect:/todo"
     }
 
     @GetMapping("/next-month/{id}")
     fun moveTaskToNextMonth(@PathVariable("id") id: Int): String {
         taskService.moveTaskToAnotherDate(id,"month")
-        return "redirect:/"
+        return "redirect:/todo"
     }
 
     @GetMapping("/update/{id}")
     fun showUpdateTaskPage(@PathVariable("id") id: Int, model: Model): String {
         val updateTaskDto = taskService.findTaskById(id)
         model.addAttribute("updateTaskDto", updateTaskDto)
-        return "update"
+        return "update-task"
     }
 
     @PostMapping("/update/{id}")
     fun updateTask(@PathVariable("id") id: Int, @ModelAttribute("updateTaskDto") updateTaskDto: UpdateTaskDto): String {
         taskService.updateTask(id, updateTaskDto)
-        return "redirect:/"
+        return "redirect:/todo"
     }
 
     @GetMapping("/close/{id}")
     fun closeTask(@PathVariable("id") id: Int): String {
         taskService.closeTask(id)
-        return "redirect:/"
+        return "redirect:/todo"
     }
 }

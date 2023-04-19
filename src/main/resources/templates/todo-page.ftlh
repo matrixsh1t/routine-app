@@ -14,28 +14,31 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/">На сегодня</a>
+                    <a class="nav-link active" aria-current="page" href="/todo">На сегодня</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/tomorrows-tasks">На завтра</a>
+                    <a class="nav-link active" aria-current="page" href="/todo/tomorrows-tasks">На завтра</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/next-weeks-tasks">Следующая неделя</a>
+                    <a class="nav-link active" aria-current="page" href="/todo/next-weeks-tasks">Следующая неделя</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/next-months-tasks">Следующий месяц</a>
+                    <a class="nav-link active" aria-current="page" href="/todo/next-months-tasks">Следующий месяц</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/all-active">Все активные</a>
+                    <a class="nav-link active" aria-current="page" href="/todo/all-active">Все активные</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/all">Все задачи</a>
+                    <a class="nav-link active" aria-current="page" href="/todo/all">Все задачи</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link disabled" aria-current="page" href="/all">${currentUser}</a>
+                    <a class="nav-link disabled" aria-current="page" href="#">${currentUser}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/logout">Logout</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/admin">Админка</a>
                 </li>
             </ul>
         </div>
@@ -63,19 +66,19 @@
                 <td>${task.comment}</td>
                 <td>${task.responsible}</td>
                 <td>${task.dueDate}</td>
-                <td><a href="/tomorrow/${task.taskId}" class="btn btn-warning" role="button">
+                <td><a href="/todo/tomorrow/${task.taskId}" class="btn btn-warning" role="button">
                         Tomorrow</a></td>
-                <td><a href="/next-week/${task.taskId}" class="btn btn-warning" role="button">
+                <td><a href="/todo/next-week/${task.taskId}" class="btn btn-warning" role="button">
                         Next week</a></td>
-                <td><a href="/next-month/${task.taskId}" class="btn btn-warning" role="button">
+                <td><a href="/todo/next-month/${task.taskId}" class="btn btn-warning" role="button">
                         Next month</a></td>
-                <td><a href="/update/${task.taskId}" class="btn btn-warning" role="button">
+                <td><a href="/todo/update/${task.taskId}" class="btn btn-warning" role="button">
                         Update</a></td>
                 <#if currentUser == "admin">
-                <td><a href="/delete/${task.taskId}" class="btn btn-danger" role="button">
+                <td><a href="/todo/delete/${task.taskId}" class="btn btn-danger" role="button">
                         Delete</a></td>
                 </#if>
-                <td><a href="/close/${task.taskId}" class="btn btn-danger" role="button">
+                <td><a href="/todo/close/${task.taskId}" class="btn btn-danger" role="button">
                         Close</a></td>
             </tr>
         </#list>

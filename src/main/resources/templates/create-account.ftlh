@@ -12,7 +12,7 @@
         Новый пользователь
     </h2>
     <div>
-        <form action="/account/register" method="post" name="addAccDto">
+        <form action="/admin/account-register" method="post" name="addAccDto">
             <table class="table">
                 <tbody>
                 <thead>
