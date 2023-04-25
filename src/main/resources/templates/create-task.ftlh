@@ -12,7 +12,7 @@
         Новая задача
     </h2>
     <div>
-        <form action="/create" method="post" name="addTaskDto">
+        <form action="/todo/create" method="post" name="addTaskDto">
             <table class="table">
                 <tbody>
                 <thead>

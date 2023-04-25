@@ -83,7 +83,7 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
             createDate = LocalDate.now(),
             closeDate = LocalDate.now(),
             status = "a",
-            accountId = getAccountByUsername(getCurrentUser())
+            userName = getCurrentUser()
         )
 
         entitySaveTryCatchBlock(addTaskEntity,
@@ -117,12 +117,17 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
                 createDate = updateTaskDto.createDate,
                 closeDate = updateTaskDto.closeDate,
                 status = updateTaskDto.status,
+                userName = updateTaskDto.userName
             )
 
             //saves entity with try-catch and logs
-            entitySaveTryCatchBlock(updateTaskEntity,
-            "Task ${updateTaskEntity.taskId} is updated",
-            "Failed to update task with id ${updateTaskEntity.taskId}")
+            if (updateTaskEntity.userName in getAllUserNamesFromDb()) {
+                entitySaveTryCatchBlock(
+                    updateTaskEntity,
+                    "Task ${updateTaskEntity.taskId} is updated",
+                    "Failed to update task with id ${updateTaskEntity.taskId}"
+                )
+            }
         }
     }
 
@@ -150,7 +155,8 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
                 dueDate = newDate,
                 createDate = updateTimeEntity.createDate,
                 closeDate = LocalDate.now(),
-                status = updateTimeEntity.status)
+                status = updateTimeEntity.status,
+                userName = updateTimeEntity.userName)
 
             //saves entity with try-catch and logs
             entitySaveTryCatchBlock(updateTimeEntity,
@@ -176,7 +182,7 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
                 createDate = closeTaskEntity.createDate,
                 closeDate = LocalDate.now(),
                 status = "x",
-            )
+                userName = closeTaskEntity.userName)
 
             //saves entity with try-catch and logs
             entitySaveTryCatchBlock(closeTaskEntity,
@@ -185,9 +191,16 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
         }
     }
 
-    override fun getCurrentUser(): String? {
-        val authentication = SecurityContextHolder.getContext().authentication
-        return authentication?.name
+    override fun getCurrentUser(): String {
+        try {
+            val authentication = SecurityContextHolder.getContext().authentication
+            return authentication.name
+        } catch (e: AccountException) {
+            val msg = "Failed to get current user"
+            logger.error(msg)
+            logger.error(e.message)
+            throw (TaskException(msg))
+        }
     }
 
     //------------------ private functions block ------------------
@@ -225,6 +238,24 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
         }
     }
 
+    // get all usernames from AccountEntity to provide them to frontend to choose a $userName
+    private fun getAllUserNamesFromDb(): List<String> {
+        try {
+            val userNames = accountRepo.findAllUserNamesFromDb()
+
+            if (userNames.isEmpty()) {
+                val msg = "Cannot get a list of users from DB"
+                throw Exception(msg)
+            } else {
+                return userNames
+            }
+        } catch (e: Exception) {
+            val msg = "Cannot get a list of users from DB"
+            logger.error(msg)
+            logger.error(e.message)
+            throw Exception(msg)
+        }
+    }
     fun getDateFromWeekNumber(weekNumber: Int): LocalDate {
         // Get the ISO week fields
         val weekFields = WeekFields.of(Locale.getDefault())

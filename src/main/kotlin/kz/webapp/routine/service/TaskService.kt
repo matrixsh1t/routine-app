@@ -20,4 +20,5 @@ interface TaskService {
     //changes task status to 'x'
     fun closeTask(id: Int)
     fun getCurrentUser(): String?
+
 }

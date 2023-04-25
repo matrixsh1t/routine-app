@@ -47,7 +47,7 @@
 <#--</header>-->
 <div class="container">
     <h2>${title} (${taskNum})</h2>
-    <a href="/create" class="btn btn-primary" role="button">Create New Task</a>
+    <a href="/todo/create" class="btn btn-primary" role="button">Create New Task</a>
     <table class="table">
         <thead >
         <tr>

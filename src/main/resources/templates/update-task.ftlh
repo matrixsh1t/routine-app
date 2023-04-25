@@ -16,7 +16,7 @@
         Изменить задачу
     </h2>
     <div>
-        <form action="/update/${updateTaskDto.taskId}" method="post" name="updateTaskDto">
+        <form action="/todo/update/${updateTaskDto.taskId}" method="post" name="updateTaskDto">
             <table class="table">
                     <tr>
                         <th>ID</th>
@@ -46,6 +46,10 @@
                 <tr>
                     <th>Дата выполения</th>
                     <td><input name="DueDate" class="form-control form-control-sm" type="text" placeholder="Дата выполнения" value="<#if updateTaskDto.dueDate??>${updateTaskDto.dueDate}</#if>"/></td>
+                </tr>
+                <tr>
+                    <th>Эккаунт</th>
+                    <td><input name="Username" class="form-control form-control-sm" type="text" placeholder="Эккаунт" value="<#if updateTaskDto.userName??>${updateTaskDto.userName}</#if>"/></td>
                 </tr>
                 <tr>
                     <td>
