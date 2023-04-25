@@ -39,4 +39,8 @@ class TaskEntity(
     @NotEmpty
     @Column(name = "status")
     val status: String,
+
+    @ManyToOne
+    @JoinColumn(name = "account_id", nullable=false)
+    val accountId: AccountEntity,
     )

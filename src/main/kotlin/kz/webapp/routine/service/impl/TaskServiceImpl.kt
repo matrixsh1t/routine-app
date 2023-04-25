@@ -1,9 +1,13 @@
 package kz.webapp.routine.service.impl
 
+import kz.webapp.routine.exception.AccountException
+import kz.webapp.routine.exception.AccountNotExistsException
 import kz.webapp.routine.exception.TaskException
 import kz.webapp.routine.exception.TaskNotExistsException
 import kz.webapp.routine.model.dto.*
+import kz.webapp.routine.model.entity.AccountEntity
 import kz.webapp.routine.model.entity.TaskEntity
+import kz.webapp.routine.repository.AccountRepo
 import kz.webapp.routine.repository.TaskRepo
 import kz.webapp.routine.service.TaskService
 import org.slf4j.Logger
@@ -17,7 +21,7 @@ import java.util.*
 
 
 @Service
-class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
+class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): TaskService {
 
     val logger: Logger = LoggerFactory.getLogger(TaskService::class.java)
 
@@ -78,7 +82,9 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
             dueDate = LocalDate.now(),
             createDate = LocalDate.now(),
             closeDate = LocalDate.now(),
-            status = "a")
+            status = "a",
+            accountId = getAccountByUsername(getCurrentUser())
+        )
 
         entitySaveTryCatchBlock(addTaskEntity,
             "Successfully created new task with ID ${addTaskEntity.taskId}",
@@ -195,6 +201,27 @@ class TaskServiceImpl(val taskRepo: TaskRepo): TaskService {
             logger.error(errMsg)
             logger.error(e.message)
             throw (TaskException(errMsg))
+        }
+    }
+
+    private fun getAccountByUsername(userName: String?): AccountEntity {
+        try {
+            val accountEntity = accountRepo.findAccountEntityByUsername(userName)
+
+            if (accountEntity.isEmpty) {
+                val msg = "There is no account with username $userName"
+                throw AccountNotExistsException(msg)
+            } else {
+                return accountEntity.get()
+            }
+        } catch (e: AccountNotExistsException) {
+            logger.error(e.message)
+            throw AccountNotExistsException(e.message)
+        } catch (e: Exception) {
+            val msg = "Failed to execute query in account table"
+            logger.error(msg)
+            logger.error(e.message)
+            throw AccountException(msg)
         }
     }
 
