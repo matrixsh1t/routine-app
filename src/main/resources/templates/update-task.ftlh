@@ -27,7 +27,7 @@
                     <tr>
                         <th>Дата создания</th>
                         <td>
-                            <div name="id">${updateTaskDto.createDate}</div>
+                            <div name="createDate">${updateTaskDto.createDate}</div>
                         </td>
                     </tr>
                 <tr>
@@ -49,7 +49,7 @@
                 </tr>
                 <tr>
                     <th>Эккаунт</th>
-                    <td><input name="Username" class="form-control form-control-sm" type="text" placeholder="Эккаунт" value="<#if updateTaskDto.userName??>${updateTaskDto.userName}</#if>"/></td>
+                    <td><input name="userName" class="form-control form-control-sm" type="text" placeholder="Эккаунт" value="<#if updateTaskDto.userName??>${updateTaskDto.userName}</#if>"/></td>
                 </tr>
                 <tr>
                     <td>

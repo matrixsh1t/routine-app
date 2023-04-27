@@ -127,6 +127,9 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
                     "Task ${updateTaskEntity.taskId} is updated",
                     "Failed to update task with id ${updateTaskEntity.taskId}"
                 )
+            } else {
+                logger.error("${updateTaskEntity.userName} is not in the list of accounts ${getAllUserNamesFromDb()}, " +
+                        "so the task is not updated")
             }
         }
     }
@@ -238,7 +241,11 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
         }
     }
 
-    // get all usernames from AccountEntity to provide them to frontend to choose a $userName
+    /** get all usernames from AccountEntity
+     * --- to provide them to frontend to choose a $userName
+     * --- to check if the account username exists before saving the task
+     */
+
     private fun getAllUserNamesFromDb(): List<String> {
         try {
             val userNames = accountRepo.findAllUserNamesFromDb()
@@ -247,6 +254,7 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
                 val msg = "Cannot get a list of users from DB"
                 throw Exception(msg)
             } else {
+                logger.info("List of users $userNames")
                 return userNames
             }
         } catch (e: Exception) {
