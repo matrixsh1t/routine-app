@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>This is a main page</title>
+    <title>Main</title>
 </head>
 <body>
     <h1>This is a main page</h1>

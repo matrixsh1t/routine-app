@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>Админ-панель</title>
     <link rel="stylesheet" href="../static/admin-panel.css">

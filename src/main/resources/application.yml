@@ -7,15 +7,15 @@ spring:
   freemarker:
     expose-request-attributes: true
   flyway:
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:db}?currentSchema=${DB_SCHEMA:public}
-    user: ${DB_MIGRATION_USER:user}
-    password: ${DB_MIGRATION_PASS:pass}
-    enabled: ${FLYWAY_ENABLED:true}
+    url: jdbc:postgresql://localhost:5432/db?currentSchema=public
+    user: user
+    password: pass
+    enabled: true
     baseline-on-migrate: false
     validate-on-migrate: true
     out-of-order: false
     placeholders:
-      application_user: ${DB_USER:user}
+      application_user: user
   jpa:
     show-sql: true
 logging:

@@ -10,7 +10,7 @@
 <#--<header style="position: fixed; top: 0; width: 100%; z-index: 999;">-->
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/">Задачи</a>
+        <a class="navbar-brand" href="/">Главная</a>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
