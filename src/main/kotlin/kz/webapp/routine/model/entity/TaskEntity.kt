@@ -34,7 +34,7 @@ class TaskEntity(
     val createDate: LocalDate,
 
     @Column(name = "date_close")
-    val closeDate: LocalDate,
+    val closeDate: LocalDate?,
 
     @NotEmpty
     @Column(name = "status")

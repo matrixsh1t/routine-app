@@ -16,7 +16,6 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import java.time.LocalDate
-import java.time.temporal.WeekFields
 import java.util.*
 
 
@@ -79,9 +78,9 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
             task = addTaskDto.task,
             comment = addTaskDto.comment,
             responsible = addTaskDto.responsible,
-            dueDate = LocalDate.now(),
+            dueDate = getDateFromWeekNumber(24),
             createDate = LocalDate.now(),
-            closeDate = LocalDate.now(),
+            closeDate = null,
             status = "a",
             userName = getCurrentUser()
         )
@@ -265,15 +264,12 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
         }
     }
     fun getDateFromWeekNumber(weekNumber: Int): LocalDate {
-        // Get the ISO week fields
-        val weekFields = WeekFields.of(Locale.getDefault())
-        // Get the first day of the first week of the year
-        val firstDayOfYear = LocalDate.now().with(weekFields.weekOfYear(), 1)
-            .with(weekFields.dayOfWeek(), 1)
-        // Add the number of weeks to get the target week
-        val targetWeek = firstDayOfYear.plusWeeks(weekNumber.toLong() - 1)
-
-        return targetWeek
+            val firstDayOfYear = LocalDate.of(LocalDate.now().year, 1, 1)
+            val firstWeek = firstDayOfYear.getDayOfWeek().getValue()
+            val daysPassed = (8 - firstWeek).toLong()
+            val firstMonday = firstDayOfYear.plusDays(daysPassed)
+            val mondayOfTargetWeek = firstMonday.plusWeeks(weekNumber.toLong() - 1)
+        return mondayOfTargetWeek
     }
 
 
