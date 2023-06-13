@@ -13,7 +13,6 @@ import java.time.LocalDate
 @RequestMapping("/todo")
 class MainController(
     val taskService: TaskService
-
     ) {
     @GetMapping("")
     fun showTodaysTasksPage(model: Model): String {

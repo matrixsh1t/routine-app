@@ -1,5 +1,6 @@
 package kz.webapp.routine.model.entity
 
+
 import jakarta.persistence.*
 import jakarta.validation.constraints.NotEmpty
 import org.hibernate.annotations.DynamicUpdate
@@ -19,11 +20,9 @@ class TaskEntity(
     @Column(name = "task")
     val task: String,
 
-    @NotEmpty
     @Column(name = "comment")
     val comment: String?,
 
-    @NotEmpty
     @Column(name = "responsible")
     val responsible: String?,
 
