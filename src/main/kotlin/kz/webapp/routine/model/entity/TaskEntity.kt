@@ -27,7 +27,7 @@ class TaskEntity(
     val responsible: String?,
 
     @Column(name = "date_due")
-    val dueDate: LocalDate,
+    val dueDate: LocalDate?,
 
     @Column(name = "date_create")
     val createDate: LocalDate,

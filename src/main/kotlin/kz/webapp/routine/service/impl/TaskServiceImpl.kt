@@ -16,6 +16,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 
@@ -73,12 +74,26 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
     }
 
     override fun addTask(addTaskDto: AddTaskDto) {
+        var dueDate: LocalDate
+
+        if (addTaskDto.dueDate.toString().length == 6) {
+            val formatter = DateTimeFormatter.ofPattern("ddMMyy")
+            dueDate = LocalDate.parse(addTaskDto.dueDate.toString(), formatter)
+        } else if (addTaskDto.dueDate in (1..53) ) {
+            dueDate = getDateFromWeekNumber(addTaskDto.dueDate)
+        } else if (addTaskDto.dueDate == 0) {
+            dueDate = LocalDate.now()
+        } else {
+                dueDate = LocalDate.now()
+        }
+        logger.error("due date finally: $dueDate")
+
         val addTaskEntity = TaskEntity(
             taskId = 0,
             task = addTaskDto.task,
             comment = addTaskDto.comment,
             responsible = addTaskDto.responsible,
-            dueDate = getDateFromWeekNumber(24),
+            dueDate = dueDate,
             createDate = LocalDate.now(),
             closeDate = null,
             status = "a",
@@ -263,13 +278,13 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
             throw Exception(msg)
         }
     }
+
     fun getDateFromWeekNumber(weekNumber: Int): LocalDate {
-            val firstDayOfYear = LocalDate.of(LocalDate.now().year, 1, 1)
-            val firstWeek = firstDayOfYear.getDayOfWeek().getValue()
-            val daysPassed = (8 - firstWeek).toLong()
-            val firstMonday = firstDayOfYear.plusDays(daysPassed)
-            val mondayOfTargetWeek = firstMonday.plusWeeks(weekNumber.toLong() - 1)
-        return mondayOfTargetWeek
+        val firstDayOfYear = LocalDate.of(LocalDate.now().year, 1, 1)
+        val firstWeek = firstDayOfYear.dayOfWeek.value
+        val daysPassed = (8 - firstWeek).toLong()
+        val firstMonday = firstDayOfYear.plusDays(daysPassed)
+        return firstMonday.plusWeeks(weekNumber.toLong() - 1)
     }
 
 

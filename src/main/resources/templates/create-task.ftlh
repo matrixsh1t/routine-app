@@ -30,6 +30,10 @@
                     <th>Ответственный</th>
                     <td><input name="Responsible" class="form-control form-control-sm" type="text" placeholder="Исполнитель" value="<#if addTaskDto.responsible??>${addTaskDto.responsible}</#if>"/></td>
                 </tr>
+                <tr>
+                    <th>Дедлайн</th>
+                    <td><input name="DueDate" class="form-control form-control-sm" type="text" pattern="\d{1}|\d{2}|\d{6}" required placeholder="Дата или неделя" value="<#if addTaskDto.dueDate??>${addTaskDto.dueDate}</#if>"/></td>
+                </tr>
 
                 </tbody>
             </table>

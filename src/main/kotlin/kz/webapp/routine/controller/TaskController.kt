@@ -2,6 +2,7 @@ package kz.webapp.routine.controller
 
 import kz.webapp.routine.model.dto.AddTaskDto
 import kz.webapp.routine.model.dto.UpdateTaskDto
+import kz.webapp.routine.service.ServiceFunctions
 import kz.webapp.routine.service.TaskService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -12,8 +13,10 @@ import java.time.LocalDate
 @Controller
 @RequestMapping("/todo")
 class MainController(
-    val taskService: TaskService
+    val taskService: TaskService,
+    val serviceFunctions: ServiceFunctions
     ) {
+
     @GetMapping("")
     fun showTodaysTasksPage(model: Model): String {
         model.addAttribute("tasks", taskService.showTodaysTasks())
@@ -70,7 +73,7 @@ class MainController(
 
     @GetMapping("/create")
     fun showSaveTaskPage(model: Model): String {
-        val addTaskDto = AddTaskDto("","", LocalDate.now())
+        val addTaskDto = AddTaskDto("","", LocalDate.now(), "Роман")
 
         model.addAttribute("addTaskDto", addTaskDto)
         return "create-task"
