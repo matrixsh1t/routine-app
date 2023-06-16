@@ -12,6 +12,7 @@
         Новая задача
     </h2>
     <div>
+        <a href="/todo" class="btn btn-primary" role="button">Назад</a>
         <form action="/todo/create" method="post" name="addTaskDto">
             <table class="table">
                 <tbody>

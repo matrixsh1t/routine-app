@@ -16,6 +16,7 @@
         Изменить задачу
     </h2>
     <div>
+        <a href="/todo" class="btn btn-primary" role="button">Назад</a>
         <form action="/todo/update/${updateTaskDto.taskId}" method="post" name="updateTaskDto">
             <table class="table">
                     <tr>

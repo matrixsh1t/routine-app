@@ -34,6 +34,9 @@ class WebSecurityConfiguration(
             .and()
             .formLogin()
             .and()
+            .rememberMe()
+                .tokenValiditySeconds(60 * 60 * 24 * 7) // Настройка опции запомнить меня на 7 дней
+                .and()
             .logout()
         return httpSecurity.build()
     }
