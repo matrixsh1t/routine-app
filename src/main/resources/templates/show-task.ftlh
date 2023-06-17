@@ -53,10 +53,10 @@
         <tr>
             <th scope="col">Задача</th>
             <th scope="col">Детали</th>
-            <th scope="col">Исполнитель</th>
-            <th scope="col">Дедлайн</th>
-            <th scope="col">Отложить на</th>
-            <th scope="col">Действия</th>
+            <th scope="col" style="text-align: center">Исполнитель</th>
+            <th scope="col" style="text-align: center">Дедлайн</th>
+            <th scope="col" style="text-align: center">Отложить на:</th>
+            <th scope="col" style="text-align: center">Действия</th>
         </tr>
         </thead>
         <tbody>
@@ -64,22 +64,24 @@
             <tr>
                 <td class="w-25 p-3">${task.task}</td>
                 <td class="w-25 p-3">${task.comment}</td>
-                <td>${task.responsible}</td>
-                <td>${task.dueDate}</td>
-                <td><a href="/todo/tomorrow/${task.taskId}" class="btn btn-warning btn-sm" role="button">
+                <td style="width: 9%; text-align: center">${task.responsible}</td>
+                <td style="width: 9%; text-align: center">${task.dueDate}</td>
+                <td style="width: 9%; text-align: center">
+                    <a href="/todo/tomorrow/${task.taskId}" class="btn btn-warning btn-sm" role="button">
                         Завтра</a><br>
-                <a href="/todo/next-week/${task.taskId}" class="btn btn-warning btn-sm" role="button">
+                    <a href="/todo/next-week/${task.taskId}" class="btn btn-warning btn-sm" role="button">
                         Неделю</a><br>
-                <a href="/todo/next-month/${task.taskId}" class="btn btn-warning btn-sm" role="button">
+                    <a href="/todo/next-month/${task.taskId}" class="btn btn-warning btn-sm" role="button">
                         Месяц</a></td>
-                <td style="width: 20px;"><a href="/todo/update/${task.taskId}" class="btn btn-warning btn-sm" role="button">
+                <td style="width: 9%; text-align: center">
+                    <a href="/todo/update/${task.taskId}" class="btn btn-warning btn-sm" role="button">
                         Обновить</a><br>
-                <a href="/todo/close/${task.taskId}" class="btn btn-success btn-sm " role="button">
+                    <a href="/todo/close/${task.taskId}" class="btn btn-success btn-sm " role="button">
                         Закрыть</a><br>
-                <#if currentUser == "admin">
-                <a href="/todo/delete/${task.taskId}" class="btn btn-danger btn-sm " role="button">
+                    <#if currentUser == "admin">
+                        <a href="/todo/delete/${task.taskId}" class="btn btn-danger btn-sm " role="button">
                         Удалить</a></td>
-                </#if>
+                    </#if>
             </tr>
         </#list>
         </tbody>
