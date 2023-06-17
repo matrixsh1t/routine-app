@@ -7,8 +7,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
 </head>
 <body>
-<#--<header style="position: fixed; top: 0; width: 100%; z-index: 999;">-->
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
+
+<nav class="navbar fixed-top bg-light navbar-expand-lg" style="background-color: #e3f2fd;">
     <div class="container-fluid">
         <a class="navbar-brand" href="/">Главная</a>
         <div class="collapse navbar-collapse" id="navbarNav">
@@ -44,8 +44,8 @@
         </div>
     </div>
 </nav>
-<#--</header>-->
-<div class="container-fluid">
+
+<div class="container-fluid" style="padding-top: 60px;">
     <h2>${title} (${taskNum})</h2>
     <a href="/todo/create" class="btn btn-primary" role="button">Create New Task</a>
     <table class="table table-striped table-bordered table-sm">
