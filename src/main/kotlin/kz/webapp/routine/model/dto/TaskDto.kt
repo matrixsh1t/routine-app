@@ -8,7 +8,7 @@ data class AddTaskDto (
     var comment: String = "",
     var performDate: LocalDate = LocalDate.now(),
     var responsible: String = "",
-    var dueDate: Int = 0,
+    var dueDate: String = "",
 )
 
 data class UpdateTaskDto (

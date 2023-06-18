@@ -75,18 +75,23 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
 
     override fun addTask(addTaskDto: AddTaskDto) {
         var dueDate: LocalDate
+        val dueDateList = addTaskDto.dueDate.split(",")
 
-        if (addTaskDto.dueDate.toString().length == 6) {
-            val formatter = DateTimeFormatter.ofPattern("ddMMyy")
-            dueDate = LocalDate.parse(addTaskDto.dueDate.toString(), formatter)
-        } else if (addTaskDto.dueDate in (1..53) ) {
-            dueDate = getDateFromWeekNumber(addTaskDto.dueDate)
-        } else if (addTaskDto.dueDate == 0) {
-            dueDate = LocalDate.now()
-        } else {
+        if (dueDateList.count() == 2) {
+            if (dueDateList[1] == "") {
+                dueDate = LocalDate.parse(dueDateList[0], DateTimeFormatter.ISO_LOCAL_DATE)
+            } else if (dueDateList[0] == "") {
+                //remove ",2023" from "2023-W06"
+                val dueDateWeekStringList = dueDateList[1].split("-")
+
+                dueDate = getDateFromWeekNumber(dueDateWeekStringList[1].substring(1,3).toInt())
+                logger.error(dueDate.toString())
+            } else {
                 dueDate = LocalDate.now()
+            }
+        } else {
+            dueDate = LocalDate.now()
         }
-        logger.error("due date finally: $dueDate")
 
         val addTaskEntity = TaskEntity(
             taskId = 0,
@@ -100,6 +105,7 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
             userName = getCurrentUser()
         )
 
+        //save entity with separate function of try-catch block
         entitySaveTryCatchBlock(addTaskEntity,
             "Successfully created new task with ID ${addTaskEntity.taskId}",
             "Failed to create task id ${addTaskEntity.taskId}")
@@ -286,6 +292,5 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
         val firstMonday = firstDayOfYear.plusDays(daysPassed)
         return firstMonday.plusWeeks(weekNumber.toLong() - 1)
     }
-
 
 }

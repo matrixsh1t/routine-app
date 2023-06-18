@@ -13,8 +13,7 @@ import java.time.LocalDate
 @Controller
 @RequestMapping("/todo")
 class MainController(
-    val taskService: TaskService,
-    val serviceFunctions: ServiceFunctions
+    val taskService: TaskService
     ) {
 
     @GetMapping("")
