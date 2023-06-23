@@ -46,7 +46,8 @@
                 </tr>
                 <tr>
                     <th>Дата выполения</th>
-                    <td><input name="DueDate" class="form-control form-control-sm" type="text" placeholder="Дата выполнения" value="<#if updateTaskDto.dueDate??>${updateTaskDto.dueDate}</#if>"/></td>
+                    <td><button id="DateToTomorrow" >На Завтра</button>
+                    <input id="DueDate" name="DueDate" class="form-control form-control-sm" type="text" placeholder="Дата выполнения" value="<#if updateTaskDto.dueDate??>${updateTaskDto.dueDate}</#if>"/></td>
                 </tr>
                 <tr>
                     <th>Эккаунт</th>
@@ -62,5 +63,19 @@
         </form>
     </div>
 </div>
+<script>
+    const dateField = document.getElementById("DueDate");
+
+    function setTomorrowDate() {
+        const currentDate = new Date();
+        const tomorrowDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 1);
+        const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+        const formattedDate = tomorrowDate.toLocaleDateString('en-US', options);
+        dateField.value = formattedDate;
+    }
+
+    const button = document.getElementById("DateToTomorrow");
+    button.addEventListener("click", setTomorrowDate);
+</script>
 </body>
 </html>
