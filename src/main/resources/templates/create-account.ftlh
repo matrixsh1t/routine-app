@@ -31,6 +31,10 @@
                     <td><input name="Email" class="form-control form-control-sm" type="text"/></td>
                 </tr>
                 <tr>
+                    <th>Исполнитель</th>
+                    <td><input name="Executor" class="form-control form-control-sm" type="text" placeholder="Ваше имя"/></td>
+                </tr>
+                <tr>
                     <td>
                     <td/>
                 </tr>

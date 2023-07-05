@@ -17,21 +17,26 @@ class WebSecurityConfiguration(
 ) {
 
     @Bean
-    fun filterChain(httpSecurity: HttpSecurity): SecurityFilterChain {
+    fun filterChain(httpSecurity: HttpSecurity) : SecurityFilterChain   {
         httpSecurity
             .csrf().disable()
             .exceptionHandling()
             .and()
             .authorizeHttpRequests()
             /**
-             * Access to Notes and Todos API calls is given to any authenticated system user.
+             * Access to USER to todo app.
              */
-            .requestMatchers("/*").authenticated()
+//            .requestMatchers("/*").authenticated()
+            .requestMatchers("/").hasAnyAuthority("USER")
+            .requestMatchers("/todo").hasAnyAuthority("USER")
+            .requestMatchers("/todo/**").hasAnyAuthority("USER")
             /**
-             * Access to User API calls is given only to Admin user.
+             * Access to ADMIN to all links.
              */
             .requestMatchers("/**").hasAnyAuthority("ADMIN")
+            .requestMatchers("/").hasAnyAuthority("ADMIN")
             .and()
+
             .formLogin()
             .and()
             .rememberMe()

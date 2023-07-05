@@ -29,7 +29,8 @@ class AccountServiceImpl(
             username = addAccDto.username,
             password = passwordEncoder.encode(addAccDto.password),
             email = addAccDto.email,
-            role = Role.USER
+            role = Role.USER,
+            executor = addAccDto.executor
         )
 
         accountEntitySaveTryCatchBlock(addAccountEntity,

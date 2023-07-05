@@ -4,4 +4,5 @@ data class AddAccDto (
     var username: String ="",
     var password: String ="",
     var email: String ="",
+    var executor: String =""
 )
