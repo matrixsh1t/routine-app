@@ -22,4 +22,7 @@ interface AccountRepo: JpaRepository<AccountEntity, Int> {
 //    @Query("SELECT a.username FROM AccountEntity a ORDER BY a.username")
     @Query(nativeQuery = true, value = "SELECT username FROM account ORDER BY username;")
     fun findAllUserNamesFromDb(): List<String>
+
+    @Query(nativeQuery = true, value = "SELECT DISTINCT executor FROM account;" )
+    fun findAllResponsiblesFromDb(): List<String>
 }

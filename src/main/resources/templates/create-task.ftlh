@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Creat task</title>
+    <title>Create task</title>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1" name="viewport">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
@@ -28,7 +28,12 @@
                 </tr>
                 <tr>
                     <th>Ответственный</th>
-                    <td><input name="Responsible" class="form-control form-control-sm" type="text" required placeholder="Исполнитель" value="<#if addTaskDto.responsible??>${addTaskDto.responsible}</#if>"/></td>
+                    <td><div>
+                            <#list responsibles as button>
+                            <button class="btn btn-success btn-sm" onclick="insertButtonValue('${button}')">${button}</button>
+                            </#list>
+                        </div>
+                        <input name="Responsible" id="responsible" class="form-control form-control-sm" type="text" required placeholder="Исполнитель" value="<#if addTaskDto.responsible??>${addTaskDto.responsible}</#if>"/></td>
                 </tr>
                 <tr>
                     <th>Дедлайн</th>
@@ -44,11 +49,12 @@
                             <input name="DueDate" class="form-control form-control-sm" type="week" id="week" value="<#if addTaskDto.dueDate??>${addTaskDto.dueDate}</#if>"/>
                         </div>
                     </td>
-
                 <tr><th></th><td></td></tr>
                 </tbody>
             </table>
+
             <button class="btn btn-primary btn-sm" type="submit">Save</button>
+
             <script>
                 const weekInput = document.getElementById("weekInput");
                 const dateInput = document.getElementById("dateInput");
@@ -63,6 +69,11 @@
                             weekInput.style.display = "none";
                         }
                     });
+                }
+
+                <!-- Change the responsible name in the input field in accordance with button name -->
+                function insertButtonValue(value) {
+                    document.getElementById('responsible').value = value;
                 }
             </script>
         </form>

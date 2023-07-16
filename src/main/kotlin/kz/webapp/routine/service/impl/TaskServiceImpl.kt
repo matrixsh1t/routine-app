@@ -89,7 +89,7 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
             } else {
                 dueDate = LocalDate.now()
             }
-        } else {
+        } else{
             dueDate = LocalDate.now()
         }
 
@@ -224,6 +224,11 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
             logger.error(e.message)
             throw (TaskException(msg))
         }
+    }
+
+    override fun getAllResponsiblesFromDb(): List<String> {
+        val responsibles = accountRepo.findAllResponsiblesFromDb()
+        return responsibles
     }
 
     //------------------ private functions block ------------------

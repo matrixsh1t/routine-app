@@ -21,4 +21,6 @@ interface TaskService {
     fun closeTask(id: Int)
     fun getCurrentUser(): String?
 
+    fun getAllResponsiblesFromDb(): List<String>
+
 }

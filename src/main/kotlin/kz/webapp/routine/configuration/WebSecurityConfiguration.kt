@@ -24,17 +24,15 @@ class WebSecurityConfiguration(
             .and()
             .authorizeHttpRequests()
             /**
-             * Access to USER to todo app.
+             * Access for USER and ADMIN
              */
 //            .requestMatchers("/*").authenticated()
-            .requestMatchers("/").hasAnyAuthority("USER")
-            .requestMatchers("/todo").hasAnyAuthority("USER")
-            .requestMatchers("/todo/**").hasAnyAuthority("USER")
+            .requestMatchers("/").hasAnyAuthority("USER", "ADMIN")
+            .requestMatchers("/todo/**").hasAnyAuthority("USER", "ADMIN")
             /**
-             * Access to ADMIN to all links.
+             * Access for ADMIN only
              */
-            .requestMatchers("/**").hasAnyAuthority("ADMIN")
-            .requestMatchers("/").hasAnyAuthority("ADMIN")
+            .requestMatchers("/admin/**").hasAuthority("ADMIN")
             .and()
 
             .formLogin()
