@@ -74,24 +74,8 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
     }
 
     override fun addTask(addTaskDto: AddTaskDto) {
-        var dueDate: LocalDate
-        val dueDateList = addTaskDto.dueDate.split(",")
-
-        if (dueDateList.count() == 2) {
-            if (dueDateList[1] == "") {
-                dueDate = LocalDate.parse(dueDateList[0], DateTimeFormatter.ISO_LOCAL_DATE)
-            } else if (dueDateList[0] == "") {
-                //remove ",2023" from "2023-W06"
-                val dueDateWeekStringList = dueDateList[1].split("-")
-
-                dueDate = getDateFromWeekNumber(dueDateWeekStringList[1].substring(1,3).toInt())
-                logger.error(dueDate.toString())
-            } else {
-                dueDate = LocalDate.now()
-            }
-        } else{
-            dueDate = LocalDate.now()
-        }
+        //convert the date or weeknumber to LocalDate
+        val dueDate = parseDateFromFrontEnd(addTaskDto.dueDate)
 
         val addTaskEntity = TaskEntity(
             taskId = 0,
@@ -227,8 +211,7 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
     }
 
     override fun getAllResponsiblesFromDb(): List<String> {
-        val responsibles = accountRepo.findAllResponsiblesFromDb()
-        return responsibles
+        return accountRepo.findAllResponsiblesFromDb()
     }
 
     //------------------ private functions block ------------------
@@ -270,7 +253,6 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
      * --- to provide them to frontend to choose a $userName
      * --- to check if the account username exists before saving the task
      */
-
     private fun getAllUserNamesFromDb(): List<String> {
         try {
             val userNames = accountRepo.findAllUserNamesFromDb()
@@ -288,6 +270,43 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
             logger.error(e.message)
             throw Exception(msg)
         }
+    }
+
+    private fun parseDateFromFrontEnd(dateOrWeek: String): LocalDate {
+        val dueDateList: List<String>
+        val dueDate: LocalDate
+
+        //if no date is present then set the date to today
+        if(dateOrWeek.isBlank()) {
+            dueDate = LocalDate.now()
+            logger.error("Invalid date or week number format so set it to TODAY")
+        //if dueDateList is " , " then set the date to today
+        } else if(dateOrWeek == ",") {
+            dueDate = LocalDate.now()
+            logger.error("Invalid date or week number format so set it to TODAY")
+        //if there is date in the format "2023-07-17, " or " ,2023-W06"
+        } else {
+            dueDateList = dateOrWeek.split(",")
+            //if dueDateList has not 2 members
+            if (dueDateList.size != 2) {
+                dueDate = LocalDate.now()
+                logger.error("Invalid date or week number format so set it to TODAY")
+            } else {
+                //if comes the DATE data
+                dueDate = if (dueDateList[0].isNotBlank()) {
+                    LocalDate.parse(dueDateList[0], DateTimeFormatter.ISO_LOCAL_DATE)
+                    //if comes the WEEK data
+                } else {
+                    //get "06" from "2023-W06"
+                    getDateFromWeekNumber(dueDateList[1].substring(6, 8).toInt())
+                }
+
+            }
+        }
+
+
+
+        return dueDate
     }
 
     fun getDateFromWeekNumber(weekNumber: Int): LocalDate {
