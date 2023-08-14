@@ -73,7 +73,7 @@ class MainController(
     @GetMapping("/create")
     fun showSaveTaskPage(model: Model): String {
         val addTaskDto = AddTaskDto("","", LocalDate.now(), "Роман")
-        val responsibles = taskService.getAllResponsiblesFromDb()
+        val responsibles = taskService.getListOfResponsiblesFromDb()
 
         model.addAttribute("addTaskDto", addTaskDto)
         model.addAttribute("responsibles", responsibles)
@@ -114,6 +114,9 @@ class MainController(
     @GetMapping("/update/{id}")
     fun showUpdateTaskPage(@PathVariable("id") id: Int, model: Model): String {
         val updateTaskDto = taskService.findTaskById(id)
+        val responsibles = taskService.getListOfResponsiblesFromDb()
+
+        model.addAttribute("responsibles", responsibles)
         model.addAttribute("updateTaskDto", updateTaskDto)
         return "update-task"
     }

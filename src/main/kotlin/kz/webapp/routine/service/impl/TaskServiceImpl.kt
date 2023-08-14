@@ -125,14 +125,14 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
             )
 
             //saves entity with try-catch and logs
-            if (updateTaskEntity.userName in getAllUserNamesFromDb()) {
+            if (updateTaskEntity.responsible in getAllResponsiblesFromDb()) {
                 entitySaveTryCatchBlock(
                     updateTaskEntity,
                     "Task ${updateTaskEntity.taskId} is updated",
                     "Failed to update task with id ${updateTaskEntity.taskId}"
                 )
             } else {
-                logger.error("${updateTaskEntity.userName} is not in the list of accounts ${getAllUserNamesFromDb()}, " +
+                logger.error("${updateTaskEntity.responsible} is not in the list of accounts ${getAllResponsiblesFromDb()}, " +
                         "so the task is not updated")
             }
         }
@@ -210,7 +210,7 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
         }
     }
 
-    override fun getAllResponsiblesFromDb(): List<String> {
+    override fun getListOfResponsiblesFromDb(): List<String> {
         return accountRepo.findAllResponsiblesFromDb()
     }
 
@@ -253,9 +253,9 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
      * --- to provide them to frontend to choose a $userName
      * --- to check if the account username exists before saving the task
      */
-    private fun getAllUserNamesFromDb(): List<String> {
+    private fun getAllResponsiblesFromDb(): List<String> {
         try {
-            val userNames = accountRepo.findAllUserNamesFromDb()
+            val userNames = accountRepo.findAllResponsiblesFromDb()
 
             if (userNames.isEmpty()) {
                 val msg = "Cannot get a list of users from DB"
@@ -303,9 +303,6 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
 
             }
         }
-
-
-
         return dueDate
     }
 

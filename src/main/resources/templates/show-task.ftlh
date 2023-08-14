@@ -46,7 +46,7 @@
 </nav>
 
 <div class="container-fluid" style="padding-top: 60px;">
-    <h2>${title} (${taskNum})</h2>
+    <h4>${title} (${taskNum})</h4>
     <a href="/todo/create" class="btn btn-primary" role="button">Create New Task</a>
     <table class="table table-striped table-bordered table-sm">
         <thead class="thead-light">

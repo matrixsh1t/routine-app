@@ -74,6 +74,7 @@
                 <!-- Change the responsible name in the input field in accordance with button name -->
                 function insertButtonValue(value) {
                     document.getElementById('responsible').value = value;
+                    event.preventDefault();
                 }
             </script>
         </form>

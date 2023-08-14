@@ -42,7 +42,12 @@
                 </tr>
                 <tr>
                     <th>Ответственный</th>
-                    <td><input name="Responsible" class="form-control form-control-sm" type="text" placeholder="Исполнитель" value="<#if updateTaskDto.responsible??>${updateTaskDto.responsible}</#if>"/></td>
+                    <td><div>
+                        <#list responsibles as button>
+                        <button class="btn btn-success btn-sm" onclick="insertButtonValue('${button}')">${button}</button>
+                    </#list>
+                        </div>
+                    <input name="Responsible" id="responsible" class="form-control form-control-sm" type="text" placeholder="Исполнитель" value="<#if updateTaskDto.responsible??>${updateTaskDto.responsible}</#if>"/></td>
                 </tr>
                 <tr>
                     <th>Дата выполения</th>
@@ -51,7 +56,7 @@
                 </tr>
                 <tr>
                     <th>Эккаунт</th>
-                    <td><input name="userName" class="form-control form-control-sm" type="text" placeholder="Эккаунт" value="<#if updateTaskDto.userName??>${updateTaskDto.userName}</#if>"/></td>
+                    <td><div name="userName">${updateTaskDto.userName}</div></td>
                 </tr>
                 <tr>
                     <td>
@@ -72,10 +77,17 @@
         const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
         const formattedDate = tomorrowDate.toLocaleDateString('en-US', options);
         dateField.value = formattedDate;
+        event.preventDefault();
     }
 
     const button = document.getElementById("DateToTomorrow");
     button.addEventListener("click", setTomorrowDate);
+
+    <!-- Change the responsible name in the input field in accordance with button name -->
+    function insertButtonValue(value) {
+        document.getElementById('responsible').value = value;
+        event.preventDefault();
+    }
 </script>
 </body>
 </html>
