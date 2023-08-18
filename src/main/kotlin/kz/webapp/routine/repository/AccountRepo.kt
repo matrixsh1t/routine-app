@@ -4,6 +4,7 @@ import kz.webapp.routine.model.entity.AccountEntity
 import org.postgresql.core.NativeQuery
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
+import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
 import java.util.*
 
@@ -25,4 +26,7 @@ interface AccountRepo: JpaRepository<AccountEntity, Int> {
 
     @Query(nativeQuery = true, value = "SELECT DISTINCT executor FROM account;" )
     fun findAllResponsiblesFromDb(): List<String>
+
+    @Query("SELECT a.responsible FROM account a WHERE a.userName = :userName")
+    fun findResponsibleByUsername(@Param("userName") userName: String) : String
 }

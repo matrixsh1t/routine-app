@@ -72,7 +72,7 @@ class MainController(
 
     @GetMapping("/create")
     fun showSaveTaskPage(model: Model): String {
-        val addTaskDto = AddTaskDto("","", LocalDate.now(), "Роман")
+        val addTaskDto = AddTaskDto()
         val responsibles = taskService.getListOfResponsiblesFromDb()
 
         model.addAttribute("addTaskDto", addTaskDto)

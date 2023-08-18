@@ -81,7 +81,7 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
             taskId = 0,
             task = addTaskDto.task,
             comment = addTaskDto.comment,
-            responsible = addTaskDto.responsible,
+            responsible = getResponsibleOfCurrentAccount(),
             dueDate = dueDate,
             createDate = LocalDate.now(),
             closeDate = null,
@@ -250,9 +250,8 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
     }
 
     /** get all usernames from AccountEntity
-     * --- to provide them to frontend to choose a $userName
-     * --- to check if the account username exists before saving the task
-     */
+     * to provide them to frontend to choose a $userName
+     * to check if the account username exists before saving the task */
     private fun getAllResponsiblesFromDb(): List<String> {
         try {
             val userNames = accountRepo.findAllResponsiblesFromDb()
@@ -272,6 +271,7 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
         }
     }
 
+    /** Parse date from widget week and date */
     private fun parseDateFromFrontEnd(dateOrWeek: String): LocalDate {
         val dueDateList: List<String>
         val dueDate: LocalDate
@@ -306,7 +306,7 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
         return dueDate
     }
 
-    fun getDateFromWeekNumber(weekNumber: Int): LocalDate {
+    private fun getDateFromWeekNumber(weekNumber: Int): LocalDate {
         val firstDayOfYear = LocalDate.of(LocalDate.now().year, 1, 1)
         val firstWeek = firstDayOfYear.dayOfWeek.value
         val daysPassed = (8 - firstWeek).toLong()
@@ -314,4 +314,7 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
         return firstMonday.plusWeeks(weekNumber.toLong() - 1)
     }
 
+    private fun getResponsibleOfCurrentAccount(): String {
+        return accountRepo.findResponsibleByUsername(getCurrentUser())
+    }
 }
