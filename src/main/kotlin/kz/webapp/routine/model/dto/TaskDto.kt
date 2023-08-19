@@ -1,14 +1,17 @@
 package kz.webapp.routine.model.dto
 
+import kz.webapp.routine.model.entity.AccountEntity
+import kz.webapp.routine.model.enums.City
 import java.time.LocalDate
 
 
 data class AddTaskDto (
     var task: String = "",
     var comment: String = "",
+    var city: City,
     var performDate: LocalDate = LocalDate.now(),
-    var responsible: String = "",
     var dueDate: String = "",
+    var accountId: Int,
 )
 
 data class UpdateTaskDto (

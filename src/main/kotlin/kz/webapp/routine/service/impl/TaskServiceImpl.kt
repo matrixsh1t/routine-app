@@ -81,12 +81,15 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
             taskId = 0,
             task = addTaskDto.task,
             comment = addTaskDto.comment,
-            responsible = "roman", //getResponsibleOfCurrentAccount(),
-            dueDate = dueDate,
-            createDate = LocalDate.now(),
-            closeDate = null,
+            city = addTaskDto.city,
             status = "a",
-            userName = getCurrentUser()
+            createDate = LocalDate.now(),
+            dueDate = dueDate,
+            closeDate = null,
+            accountId =
+
+            //userName = getCurrentUser()
+            //responsible = "roman", //getResponsibleOfCurrentAccount(),
         )
 
         //save entity with separate function of try-catch block
@@ -184,12 +187,14 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
                 taskId = id,
                 task = closeTaskEntity.task,
                 comment = closeTaskEntity.comment,
-                responsible = closeTaskEntity.responsible,
-                dueDate = closeTaskEntity.dueDate,
-                createDate = closeTaskEntity.createDate,
-                closeDate = LocalDate.now(),
+                city = closeTaskEntity.city,
                 status = "x",
-                userName = closeTaskEntity.userName)
+                createDate = closeTaskEntity.createDate,
+                dueDate = closeTaskEntity.dueDate,
+                closeDate = LocalDate.now(),
+                accountId =
+
+                )
 
             //saves entity with try-catch and logs
             entitySaveTryCatchBlock(closeTaskEntity,

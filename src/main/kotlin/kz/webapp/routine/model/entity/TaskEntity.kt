@@ -43,5 +43,5 @@ class TaskEntity(
 
     @ManyToOne
     @JoinColumn(name = "account_id", nullable=false)
-    val account_id: AccountEntity,
+    val accountId: AccountEntity,
     )
