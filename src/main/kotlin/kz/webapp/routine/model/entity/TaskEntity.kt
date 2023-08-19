@@ -3,6 +3,7 @@ package kz.webapp.routine.model.entity
 
 import jakarta.persistence.*
 import jakarta.validation.constraints.NotEmpty
+import kz.webapp.routine.model.enums.City
 import org.hibernate.annotations.DynamicUpdate
 import java.time.LocalDate
 
@@ -23,23 +24,24 @@ class TaskEntity(
     @Column(name = "comment")
     val comment: String?,
 
-    @Column(name = "responsible")
-    val responsible: String?,
-
-    @Column(name = "date_due")
-    val dueDate: LocalDate?,
-
-    @Column(name = "date_create")
-    val createDate: LocalDate,
-
-    @Column(name = "date_close")
-    val closeDate: LocalDate?,
+    @Column(name = "city")
+    @Enumerated(EnumType.STRING)
+    val city: City,
 
     @NotEmpty
     @Column(name = "status")
     val status: String,
 
-    @NotEmpty
-    @Column(name = "user_name")
-    val userName: String,
+    @Column(name = "date_create")
+    val createDate: LocalDate,
+
+    @Column(name = "date_due")
+    val dueDate: LocalDate?,
+
+    @Column(name = "date_close")
+    val closeDate: LocalDate?,
+
+    @ManyToOne
+    @JoinColumn(name = "account_id", nullable=false)
+    val account_id: AccountEntity,
     )
