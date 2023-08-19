@@ -81,7 +81,7 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
             taskId = 0,
             task = addTaskDto.task,
             comment = addTaskDto.comment,
-            responsible = getResponsibleOfCurrentAccount(),
+            responsible = "roman", //getResponsibleOfCurrentAccount(),
             dueDate = dueDate,
             createDate = LocalDate.now(),
             closeDate = null,
@@ -314,7 +314,7 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
         return firstMonday.plusWeeks(weekNumber.toLong() - 1)
     }
 
-    private fun getResponsibleOfCurrentAccount(): String {
-        return accountRepo.findResponsibleByUsername(getCurrentUser())
-    }
+//    private fun getResponsibleOfCurrentAccount(): String {
+//        return accountRepo.findResponsibleByUsername(getCurrentUser())
+//    }
 }
