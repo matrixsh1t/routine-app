@@ -19,7 +19,7 @@ interface TaskService {
     fun moveTaskToAnotherDate(id: Int, period: String)
     //changes task status to 'x'
     fun closeTask(id: Int)
-    fun getCurrentUser(): String?
+//    fun getCurrentUser(): String?
 
     fun getListOfResponsiblesFromDb(): List<String>
 

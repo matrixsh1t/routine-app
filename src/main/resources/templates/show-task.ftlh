@@ -53,7 +53,7 @@
         <tr>
             <th scope="col">Задача</th>
             <th scope="col">Детали</th>
-            <th scope="col" style="text-align: center">Исполнитель</th>
+            <th scope="col">Город</th>
             <th scope="col" style="text-align: center">Дедлайн</th>
             <th scope="col" style="text-align: center">Отложить на:</th>
             <th scope="col" style="text-align: center">Действия</th>
@@ -64,7 +64,7 @@
             <tr>
                 <td class="w-25 p-3">${task.task}</td>
                 <td class="w-25 p-3">${task.comment}</td>
-                <td style="width: 9%; text-align: center">${task.responsible}</td>
+                <td class="w-25 p-3">${task.city}</td>
                 <td style="width: 9%; text-align: center">${task.dueDate}</td>
                 <td style="width: 9%; text-align: center">
                     <a href="/todo/tomorrow/${task.taskId}" class="btn btn-warning btn-sm" role="button">

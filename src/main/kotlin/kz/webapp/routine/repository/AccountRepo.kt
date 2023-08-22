@@ -10,7 +10,7 @@ import java.util.*
 interface AccountRepo: JpaRepository<AccountEntity, Int> {
 
     //---------get account by username
-    fun findAccountEntityByUsername(username: String?): Optional<AccountEntity>
+    fun findAccountEntityByUsername(username: String?): AccountEntity?
 
     //---------get account by email
     fun findByEmail(email: String): AccountEntity?
@@ -28,5 +28,5 @@ interface AccountRepo: JpaRepository<AccountEntity, Int> {
 //    @Query("SELECT a.responsible FROM account a WHERE a.userName = :userName")
 //    fun findResponsibleByUsername(@Param("userName") userName: String) : String
 
-    fun findAccountEntityById(): AccountEntity?
+//    fun findAccountEntityById(): AccountEntity?
 }

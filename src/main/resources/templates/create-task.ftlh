@@ -27,13 +27,20 @@
                     <td><input name="Comment" class="form-control form-control-sm" type="text" placeholder="Комментарии к задаче" value="<#if addTaskDto.comment??>${addTaskDto.comment}</#if>"/></td>
                 </tr>
                 <tr>
+                <tr>
+                    <th>Город</th>
+                    <td><input name="City" class="form-control form-control-sm" type="text" placeholder="Комментарии к задаче" value="<#if addTaskDto.city??>${addTaskDto.city}</#if>"/></td>
+                </tr>
+                <tr>
                     <th>Ответственный</th>
-                    <td><div>
+                    <td>
+                        <div>
                             <#list responsibles as button>
                             <button class="btn btn-success btn-sm" onclick="insertButtonValue('${button}')">${button}</button>
                             </#list>
                         </div>
-                        <input name="Responsible" id="responsible" class="form-control form-control-sm" type="text" required placeholder="Исполнитель" value="<#if addTaskDto.responsible??>${addTaskDto.responsible}</#if>"/></td>
+<!--                        <input name="Responsible" id="responsible" class="form-control form-control-sm" type="text" required placeholder="Исполнитель" value="<#if addTaskDto.responsible??>${addTaskDto.responsible}</#if>"/>-->
+                    </td>
                 </tr>
                 <tr>
                     <th>Дедлайн</th>

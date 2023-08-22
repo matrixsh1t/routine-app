@@ -10,7 +10,7 @@ interface TaskRepo: JpaRepository<TaskEntity, Int> {
 //    fun findByTaskId(taskId: Int): TasksEntity
 //    @Query(nativeQuery = true, value = "select * from tasks where date_due <= current_date order by task")
 
-    @Query("SELECT te FROM TaskEntity te WHERE te.status = 'a' AND te.dueDate <= CURRENT_DATE ORDER BY te.responsible")
+    @Query("SELECT te FROM TaskEntity te WHERE te.status = 'a' AND te.dueDate <= CURRENT_DATE") //ORDER BY te.responsible
     fun findAllTodaysTasks(): List<TaskEntity>
 
     @Query("SELECT te FROM TaskEntity te ORDER BY te.createDate")
@@ -22,7 +22,7 @@ interface TaskRepo: JpaRepository<TaskEntity, Int> {
             "        WHEN extract(dow from current_date) = 5 THEN current_date + INTERVAL '3 days'\n" +
             "        WHEN extract(dow from current_date) = 6 THEN current_date + INTERVAL '2 days'\n" +
             "        ELSE current_date + INTERVAL '1 day'\n" +
-            "    END ORDER BY responsible;")
+            "    END ") //ORDER BY responsible;
     fun findAllTomorrowsTasks(): List<TaskEntity>
 
     //get all tasks for next week
@@ -30,7 +30,7 @@ interface TaskRepo: JpaRepository<TaskEntity, Int> {
             "FROM tasks\n" +
             "WHERE date_due >= DATE_TRUNC('week', CURRENT_DATE) + INTERVAL '1 week' -- начало следующей недели\n" +
             "  AND date_due <= DATE_TRUNC('week', CURRENT_DATE) + INTERVAL '2 week - 2 days' -- конец следующей недели (пятница)\n" +
-            "  AND EXTRACT('dow' FROM date_due) BETWEEN 1 AND 5 ORDER BY responsible")
+            "  AND EXTRACT('dow' FROM date_due) BETWEEN 1 AND 5") //ORDER BY responsible
     fun findAllNextWeeksTasks(): List<TaskEntity>
 
     //get all tasks for next month
@@ -38,10 +38,10 @@ interface TaskRepo: JpaRepository<TaskEntity, Int> {
             "WHERE date_due >= DATE_TRUNC('month', CURRENT_DATE + INTERVAL '1 month') \n" +
             "AND date_due < DATE_TRUNC('month', CURRENT_DATE + INTERVAL '2 month') \n" +
             "AND extract(day from date_due) >= 1 \n" +
-            "AND extract(day from date_due) <= extract(day from DATE_TRUNC('month', CURRENT_DATE + INTERVAL '2 month') - INTERVAL '1 day') ORDER BY responsible;")
+            "AND extract(day from date_due) <= extract(day from DATE_TRUNC('month', CURRENT_DATE + INTERVAL '2 month') - INTERVAL '1 day') ") //ORDER BY responsible;
     fun findAllNextMonthsTasks(): List<TaskEntity>
 
-    @Query("SELECT te FROM TaskEntity te WHERE te.status = 'a' ORDER BY te.responsible")
+    @Query("SELECT te FROM TaskEntity te WHERE te.status = 'a'") //ORDER BY te.responsible
     fun findAllActiveTasks(): List<TaskEntity>
     override fun findAll(): List<TaskEntity>
 }

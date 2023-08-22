@@ -7,13 +7,14 @@ import kz.webapp.routine.service.TaskService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
-import java.time.LocalDate
+import kz.webapp.routine.model.enums.City
 
 
 @Controller
 @RequestMapping("/todo")
 class MainController(
-    val taskService: TaskService
+    val taskService: TaskService,
+    val serviceFunctions: ServiceFunctions,
     ) {
 
     @GetMapping("")
@@ -21,7 +22,7 @@ class MainController(
         model.addAttribute("tasks", taskService.showTodaysTasks())
         model.addAttribute("title", "Список задач на сегодня")
         model.addAttribute("taskNum", taskService.showTodaysTasks().size)
-        model.addAttribute("currentUser", taskService.getCurrentUser())
+        model.addAttribute("currentUser", serviceFunctions.getCurrentUser())
         return "show-task"
     }
 
@@ -30,7 +31,7 @@ class MainController(
         model.addAttribute("tasks", taskService.showTomorrowsTasks())
         model.addAttribute("title", "Список задач на завтра")
         model.addAttribute("taskNum", taskService.showTomorrowsTasks().size)
-        model.addAttribute("currentUser", taskService.getCurrentUser())
+        model.addAttribute("currentUser", serviceFunctions.getCurrentUser())
         return "show-task"
     }
 
@@ -39,7 +40,7 @@ class MainController(
         model.addAttribute("tasks", taskService.showNextWeeksTasks())
         model.addAttribute("title", "Список задач на следующуюю неделю")
         model.addAttribute("taskNum", taskService.showNextWeeksTasks().size)
-        model.addAttribute("currentUser", taskService.getCurrentUser())
+        model.addAttribute("currentUser", serviceFunctions.getCurrentUser())
         return "show-task"
     }
 
@@ -48,7 +49,7 @@ class MainController(
         model.addAttribute("tasks", taskService.showNextMonthsTasks())
         model.addAttribute("title", "Список задач на следующий месяц")
         model.addAttribute("taskNum", taskService.showNextMonthsTasks().size)
-        model.addAttribute("currentUser", taskService.getCurrentUser())
+        model.addAttribute("currentUser", serviceFunctions.getCurrentUser())
         return "show-task"
     }
 
@@ -57,7 +58,7 @@ class MainController(
         model.addAttribute("tasks", taskService.showAllActiveTasks())
         model.addAttribute("title", "Список активных задач")
         model.addAttribute("taskNum", taskService.showAllActiveTasks().size)
-        model.addAttribute("currentUser", taskService.getCurrentUser())
+        model.addAttribute("currentUser", serviceFunctions.getCurrentUser())
         return "show-task"
     }
 
@@ -66,13 +67,13 @@ class MainController(
         model.addAttribute("tasks", taskService.showAllTasks())
         model.addAttribute("title", "Список всех задач")
         model.addAttribute("taskNum", taskService.showAllTasks().size)
-        model.addAttribute("currentUser", taskService.getCurrentUser())
+        model.addAttribute("currentUser", serviceFunctions.getCurrentUser())
         return "show-task"
     }
 
     @GetMapping("/create")
     fun showSaveTaskPage(model: Model): String {
-        val addTaskDto = AddTaskDto()
+        val addTaskDto = AddTaskDto(city = City.Pavlodar, accountId = serviceFunctions.getCurrentUserEntity())
         val responsibles = taskService.getListOfResponsiblesFromDb()
 
         model.addAttribute("addTaskDto", addTaskDto)

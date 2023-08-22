@@ -12,9 +12,9 @@ class AccountConfiguration(
 ): UserDetailsService {
     override fun loadUserByUsername(username: String): UserDetails {
         val account = accountRepo.findAccountEntityByUsername(username)
-        if(account == null || account.isEmpty) {
+        if(account == null) {
             AccountException("Account with username $username is not found!")
         }
-        return account.get()
+        return account!!
     }
 }

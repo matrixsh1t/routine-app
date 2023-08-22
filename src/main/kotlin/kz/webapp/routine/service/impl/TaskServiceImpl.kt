@@ -9,11 +9,11 @@ import kz.webapp.routine.model.entity.AccountEntity
 import kz.webapp.routine.model.entity.TaskEntity
 import kz.webapp.routine.repository.AccountRepo
 import kz.webapp.routine.repository.TaskRepo
+import kz.webapp.routine.service.ServiceFunctions
 import kz.webapp.routine.service.TaskService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.data.repository.findByIdOrNull
-import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -21,7 +21,11 @@ import java.util.*
 
 
 @Service
-class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): TaskService {
+class TaskServiceImpl(
+    val taskRepo: TaskRepo,
+    val accountRepo: AccountRepo,
+    val serviceFunctions: ServiceFunctions
+    ): TaskService {
 
     val logger: Logger = LoggerFactory.getLogger(TaskService::class.java)
 
@@ -74,7 +78,7 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
     }
 
     override fun addTask(addTaskDto: AddTaskDto) {
-        //convert the date or weeknumber to LocalDate
+        //convert the date or week number to LocalDate
         val dueDate = parseDateFromFrontEnd(addTaskDto.dueDate)
 
         val addTaskEntity = TaskEntity(
@@ -86,7 +90,7 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
             createDate = LocalDate.now(),
             dueDate = dueDate,
             closeDate = null,
-            accountId =
+            accountId = accountRepo.findAccountEntityByUsername(serviceFunctions.getCurrentUser())!!
 
             //userName = getCurrentUser()
             //responsible = "roman", //getResponsibleOfCurrentAccount(),
@@ -119,25 +123,30 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
                 taskId = id,
                 task = updateTaskDto.task,
                 comment = updateTaskDto.comment,
-                responsible = updateTaskDto.responsible,
-                dueDate = updateTaskDto.dueDate,
+                city = updateTaskDto.city,
                 createDate = updateTaskDto.createDate,
+                dueDate = updateTaskDto.dueDate,
                 closeDate = updateTaskDto.closeDate,
                 status = updateTaskDto.status,
-                userName = updateTaskDto.userName
+                accountId  = serviceFunctions.getCurrentUserEntity()
             )
 
             //saves entity with try-catch and logs
-            if (updateTaskEntity.responsible in getAllResponsiblesFromDb()) {
-                entitySaveTryCatchBlock(
-                    updateTaskEntity,
-                    "Task ${updateTaskEntity.taskId} is updated",
-                    "Failed to update task with id ${updateTaskEntity.taskId}"
-                )
-            } else {
-                logger.error("${updateTaskEntity.responsible} is not in the list of accounts ${getAllResponsiblesFromDb()}, " +
-                        "so the task is not updated")
-            }
+            entitySaveTryCatchBlock(
+                updateTaskEntity,
+                "Task ${updateTaskEntity.taskId} is updated",
+                "Failed to update task with id ${updateTaskEntity.taskId}"
+            )
+//            if (updateTaskEntity.responsible in getAllResponsiblesFromDb()) {
+//                entitySaveTryCatchBlock(
+//                    updateTaskEntity,
+//                    "Task ${updateTaskEntity.taskId} is updated",
+//                    "Failed to update task with id ${updateTaskEntity.taskId}"
+//                )
+//            } else {
+//                logger.error("${updateTaskEntity.responsible} is not in the list of accounts ${getAllResponsiblesFromDb()}, " +
+//                        "so the task is not updated")
+//            }
         }
     }
 
@@ -161,12 +170,13 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
                 taskId = id,
                 task = updateTimeEntity.task,
                 comment = updateTimeEntity.comment,
-                responsible = updateTimeEntity.responsible,
+                city = updateTimeEntity.city,
                 dueDate = newDate,
                 createDate = updateTimeEntity.createDate,
                 closeDate = LocalDate.now(),
                 status = updateTimeEntity.status,
-                userName = updateTimeEntity.userName)
+                accountId = serviceFunctions.getCurrentUserEntity()
+            )
 
             //saves entity with try-catch and logs
             entitySaveTryCatchBlock(updateTimeEntity,
@@ -192,7 +202,7 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
                 createDate = closeTaskEntity.createDate,
                 dueDate = closeTaskEntity.dueDate,
                 closeDate = LocalDate.now(),
-                accountId =
+                accountId = serviceFunctions.getCurrentUserEntity()
 
                 )
 
@@ -203,25 +213,27 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
         }
     }
 
-    override fun getCurrentUser(): String {
-        try {
-            val authentication = SecurityContextHolder.getContext().authentication
-            return authentication.name
-        } catch (e: AccountException) {
-            val msg = "Failed to get current user"
-            logger.error(msg)
-            logger.error(e.message)
-            throw (TaskException(msg))
-        }
-    }
+//    override fun getCurrentUser(): String {
+//        try {
+//            val authentication = SecurityContextHolder.getContext().authentication
+//            return authentication.name
+//        } catch (e: AccountException) {
+//            val msg = "Failed to get current user"
+//            logger.error(msg)
+//            logger.error(e.message)
+//            throw (TaskException(msg))
+//        }
+//    }
 
     override fun getListOfResponsiblesFromDb(): List<String> {
         return accountRepo.findAllResponsiblesFromDb()
     }
 
+    //-------------------------------------------------------------
     //------------------ private functions block ------------------
+    //-------------------------------------------------------------
 
-    //saves entity with try-catch block and makes logging
+    /** saves entity with try-catch block and makes logging */
     private fun entitySaveTryCatchBlock(entity: TaskEntity, msg: String, errMsg: String) {
         try {
             taskRepo.save(entity)
@@ -237,11 +249,11 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
         try {
             val accountEntity = accountRepo.findAccountEntityByUsername(userName)
 
-            if (accountEntity.isEmpty) {
+            if (accountEntity == null) {
                 val msg = "There is no account with username $userName"
                 throw AccountNotExistsException(msg)
             } else {
-                return accountEntity.get()
+                return accountEntity
             }
         } catch (e: AccountNotExistsException) {
             logger.error(e.message)
@@ -281,7 +293,7 @@ class TaskServiceImpl(val taskRepo: TaskRepo, val accountRepo: AccountRepo): Tas
         val dueDateList: List<String>
         val dueDate: LocalDate
 
-        //if no date is present then set the date to today
+        /** if no date is present then set the date to today */
         if(dateOrWeek.isBlank()) {
             dueDate = LocalDate.now()
             logger.error("Invalid date or week number format so set it to TODAY")
