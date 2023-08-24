@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import kz.webapp.routine.model.enums.City
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 
 @Controller
@@ -118,12 +120,14 @@ class MainController(
         val responsibles = taskService.getListOfResponsiblesFromDb()
 
         model.addAttribute("responsibles", responsibles)
+//        model.addAttribute("cities", City.values())
         model.addAttribute("updateTaskDto", updateTaskDto)
         return "update-task"
     }
 
     @PostMapping("/update/{id}")
     fun updateTask(@PathVariable("id") id: Int, @ModelAttribute("updateTaskDto") updateTaskDto: UpdateTaskDto): String {
+
         taskService.updateTask(id, updateTaskDto)
         return "redirect:/todo"
     }

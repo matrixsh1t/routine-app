@@ -44,4 +44,6 @@ interface TaskRepo: JpaRepository<TaskEntity, Int> {
     @Query("SELECT te FROM TaskEntity te WHERE te.status = 'a'") //ORDER BY te.responsible
     fun findAllActiveTasks(): List<TaskEntity>
     override fun findAll(): List<TaskEntity>
+
+
 }

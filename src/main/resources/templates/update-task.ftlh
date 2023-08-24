@@ -34,20 +34,29 @@
                 <tr>
                 <tr>
                     <th>Задача</th>
-                    <td><input name="Task" class="form-control form-control-sm" type="text" placeholder="Новая задача" value="<#if updateTaskDto.task??>${updateTaskDto.task}</#if>"/></td>
+                    <td><input name="Task" class="form-control form-control-sm" type="text" placeholder="Задача" value="<#if updateTaskDto.task??>${updateTaskDto.task}</#if>"/></td>
                 </tr>
                 <tr>
                     <th>Комментарий</th>
                     <td><input name="Comment" class="form-control form-control-sm" type="text" placeholder="Комментарии к задаче" value="<#if updateTaskDto.comment??>${updateTaskDto.comment}</#if>"/></td>
                 </tr>
                 <tr>
-                    <th>Ответственный</th>
-                    <td><div>
-                        <#list responsibles as button>
-                        <button class="btn btn-success btn-sm" onclick="insertButtonValue('${button}')">${button}</button>
-                    </#list>
+                    <th>Город</th>
+                    <td>
+                        <div>
+                        <input name="City" class="form-control form-control-sm" type="text" required placeholder="Город" value="<#if updateTaskDto.city??>${updateTaskDto.city}</#if>"/>
                         </div>
-                    <input name="Responsible" id="responsible" class="form-control form-control-sm" type="text" placeholder="Исполнитель" value="<#if updateTaskDto.responsible??>${updateTaskDto.responsible}</#if>"/></td>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Ответственный</th>
+                    <td>
+                        <div>
+                        <#list responsibles as button>
+                            <button class="btn btn-success btn-sm" onclick="insertButtonValue('${button}')">${button}</button>
+                        </#list>
+                        </div>
+                    </td>
                 </tr>
                 <tr>
                     <th>Дата выполения</th>
@@ -56,7 +65,9 @@
                 </tr>
                 <tr>
                     <th>Эккаунт</th>
-                    <td><div name="userName">${updateTaskDto.userName}</div></td>
+                    <td>
+
+                    </td>
                 </tr>
                 <tr>
                     <td>
@@ -85,7 +96,7 @@
 
     <!-- Change the responsible name in the input field in accordance with button name -->
     function insertButtonValue(value) {
-        document.getElementById('responsible').value = value;
+        document.getElementById('button').value = value;
         event.preventDefault();
     }
 </script>
