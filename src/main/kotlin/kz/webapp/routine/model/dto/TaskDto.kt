@@ -12,7 +12,7 @@ data class AddTaskDto (
     var city: City = City.Pavlodar,
     var performDate: LocalDate = LocalDate.now(),
     var dueDate: String = "",
-    var accountId: AccountEntity,
+    var accountExecutor: String = "",
 )
 
 data class UpdateTaskDto (

@@ -80,6 +80,8 @@ class TaskServiceImpl(
     override fun addTask(addTaskDto: AddTaskDto) {
         //convert the date or week number to LocalDate
         val dueDate = parseDateFromFrontEnd(addTaskDto.dueDate)
+        val account = accountRepo.findAccountEntityByUsername(addTaskDto.accountExecutor
+            .ifEmpty { serviceFunctions.getCurrentUser() })!!
 
         val addTaskEntity = TaskEntity(
             taskId = 0,
@@ -90,7 +92,7 @@ class TaskServiceImpl(
             createDate = LocalDate.now(),
             dueDate = dueDate,
             closeDate = null,
-            accountId = accountRepo.findAccountEntityByUsername(serviceFunctions.getCurrentUser())!!
+            accountId = account,
 
             //userName = getCurrentUser()
             //responsible = "roman", //getResponsibleOfCurrentAccount(),

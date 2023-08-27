@@ -25,7 +25,7 @@ class MainController(
         model.addAttribute("title", "Список задач на сегодня")
         model.addAttribute("taskNum", taskService.showTodaysTasks().size)
         model.addAttribute("currentUser", serviceFunctions.getCurrentUser())
-        return "show-task"
+        return "show-task-adm"
     }
 
     @GetMapping("/tomorrows-tasks")
@@ -34,7 +34,7 @@ class MainController(
         model.addAttribute("title", "Список задач на завтра")
         model.addAttribute("taskNum", taskService.showTomorrowsTasks().size)
         model.addAttribute("currentUser", serviceFunctions.getCurrentUser())
-        return "show-task"
+        return "show-task-adm"
     }
 
     @GetMapping("/next-weeks-tasks")
@@ -43,7 +43,7 @@ class MainController(
         model.addAttribute("title", "Список задач на следующуюю неделю")
         model.addAttribute("taskNum", taskService.showNextWeeksTasks().size)
         model.addAttribute("currentUser", serviceFunctions.getCurrentUser())
-        return "show-task"
+        return "show-task-adm"
     }
 
     @GetMapping("/next-months-tasks")
@@ -52,7 +52,7 @@ class MainController(
         model.addAttribute("title", "Список задач на следующий месяц")
         model.addAttribute("taskNum", taskService.showNextMonthsTasks().size)
         model.addAttribute("currentUser", serviceFunctions.getCurrentUser())
-        return "show-task"
+        return "show-task-adm"
     }
 
     @GetMapping("/all-active")
@@ -61,7 +61,7 @@ class MainController(
         model.addAttribute("title", "Список активных задач")
         model.addAttribute("taskNum", taskService.showAllActiveTasks().size)
         model.addAttribute("currentUser", serviceFunctions.getCurrentUser())
-        return "show-task"
+        return "show-task-adm"
     }
 
     @GetMapping("/all")
@@ -70,12 +70,12 @@ class MainController(
         model.addAttribute("title", "Список всех задач")
         model.addAttribute("taskNum", taskService.showAllTasks().size)
         model.addAttribute("currentUser", serviceFunctions.getCurrentUser())
-        return "show-task"
+        return "show-task-adm"
     }
 
     @GetMapping("/create")
     fun showSaveTaskPage(model: Model): String {
-        val addTaskDto = AddTaskDto(city = City.Pavlodar, accountId = serviceFunctions.getCurrentUserEntity())
+        val addTaskDto = AddTaskDto(city = City.Pavlodar, accountExecutor = serviceFunctions.getCurrentUser())
         val responsibles = taskService.getListOfResponsiblesFromDb()
 
         model.addAttribute("addTaskDto", addTaskDto)
