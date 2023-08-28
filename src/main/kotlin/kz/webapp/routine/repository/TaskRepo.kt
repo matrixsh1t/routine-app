@@ -3,13 +3,11 @@ package kz.webapp.routine.repository
 import kz.webapp.routine.model.entity.TaskEntity
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
+import org.springframework.data.repository.query.Param
 import org.springframework.stereotype.Repository
 
 @Repository
 interface TaskRepo: JpaRepository<TaskEntity, Int> {
-//    fun findByTaskId(taskId: Int): TasksEntity
-//    @Query(nativeQuery = true, value = "select * from tasks where date_due <= current_date order by task")
-
     @Query("SELECT te FROM TaskEntity te WHERE te.status = 'a' AND te.dueDate <= CURRENT_DATE") //ORDER BY te.responsible
     fun findAllTodaysTasks(): List<TaskEntity>
 
@@ -41,9 +39,6 @@ interface TaskRepo: JpaRepository<TaskEntity, Int> {
             "AND extract(day from date_due) <= extract(day from DATE_TRUNC('month', CURRENT_DATE + INTERVAL '2 month') - INTERVAL '1 day') ") //ORDER BY responsible;
     fun findAllNextMonthsTasks(): List<TaskEntity>
 
-    @Query("SELECT te FROM TaskEntity te WHERE te.status = 'a'") //ORDER BY te.responsible
-    fun findAllActiveTasks(): List<TaskEntity>
-    override fun findAll(): List<TaskEntity>
-
-
+    //get all tasks of current account
+    fun findAllByAccountIdUsernameOrderByDueDate(username: String): List<TaskEntity>
 }

@@ -13,25 +13,39 @@
         <a class="navbar-brand" href="/">Главная</a>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
+                <#if currentUserName == "admin">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/todo/all-active">Активные задачи</a>
+                    <a class="nav-link active" aria-current="page" href="/todo">На сегодня</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/todo/tomorrows-tasks">На завтра</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/todo/next-weeks-tasks">Следующая неделя</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/todo/next-months-tasks">Следующий месяц</a>
+                </li>
+                </#if>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/todo/all-active">Все активные</a>
+                </li>
+
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/todo/all">Все задачи</a>
                 </li>
-                <li>
-                </li>
-                <li>
-                </li>
+                <#if currentUserName == "admin">
                 <li class="nav-item">
-                    <a class="nav-link disabled" aria-current="page" href="#">${currentUser}</a>
+                <a class="nav-link active" aria-current="page" href="/admin">Админка</a>
+                </li>
+                </#if>
+                <li class="nav-item">
+                    <a class="nav-link disabled" aria-current="page" href="#">${currentUserName}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/logout">Logout</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/admin">Админка</a>
-                </li>
+
             </ul>
         </div>
     </div>
@@ -47,6 +61,9 @@
             <th scope="col">Детали</th>
             <th scope="col">Город</th>
             <th scope="col" style="text-align: center">Дедлайн</th>
+            <#if currentUserName == "admin">
+            <th scope="col" style="text-align: center">Отложить на:</th>
+            </#if>
             <th scope="col" style="text-align: center">Действия</th>
         </tr>
         </thead>
@@ -57,11 +74,24 @@
                 <td class="w-25 p-3">${task.comment}</td>
                 <td class="w-25 p-3">${task.city}</td>
                 <td style="width: 9%; text-align: center">${task.dueDate}</td>
+                <#if currentUserName == "admin">
+                <td style="width: 9%; text-align: center">
+                    <a href="/todo/tomorrow/${task.taskId}" class="btn btn-warning btn-sm" role="button">
+                        Завтра</a><br>
+                    <a href="/todo/next-week/${task.taskId}" class="btn btn-warning btn-sm" role="button">
+                        Неделю</a><br>
+                    <a href="/todo/next-month/${task.taskId}" class="btn btn-warning btn-sm" role="button">
+                        Месяц</a></td>
+                </#if>
                 <td style="width: 9%; text-align: center">
                     <a href="/todo/update/${task.taskId}" class="btn btn-warning btn-sm" role="button">
                         Обновить</a><br>
                     <a href="/todo/close/${task.taskId}" class="btn btn-success btn-sm " role="button">
                         Закрыть</a><br>
+                    <#if currentUserName == "admin">
+                        <a href="/todo/delete/${task.taskId}" class="btn btn-danger btn-sm " role="button">
+                        Удалить</a></td>
+                    </#if>
             </tr>
         </#list>
         </tbody>

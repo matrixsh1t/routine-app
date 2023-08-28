@@ -21,19 +21,32 @@ class ServiceFunctions (var accountRepo: AccountRepo) {
         return "$day$month$year".toInt()
     }
 
-    fun getCurrentUser(): String {
+    //receives "Role" or "Name" and returns UserName or UserRole
+    fun getCurrentUser(userData: String): String {
+        val logger = LoggerFactory.getLogger(this::class.java)
+        var result: String
+
         try {
             val authentication = SecurityContextHolder.getContext().authentication
-            return authentication.name
-        } catch (e: AccountException) {
+
+            result = when (userData) {
+                "userName" -> authentication.name
+                "userRole" -> {
+                    val authorities = authentication.authorities.map { it.authority }
+                    authorities.joinToString(", ")
+                }
+                else -> throw IllegalArgumentException("Invalid user parameter: $userData")
+            }
+        } catch (e: Exception) {
             val msg = "Failed to get current user"
             logger.error(msg)
             logger.error(e.message)
-            throw (TaskException(msg))
+            throw Exception(msg, e)
         }
+        return result
     }
 
-    fun getCurrentUserEntity(): AccountEntity {
-        return accountRepo.findAccountEntityByUsername(getCurrentUser())!!
+    fun getCurrentUserEntityByUserName(): AccountEntity {
+        return accountRepo.findAccountEntityByUsername(getCurrentUser("userName"))!!
     }
 }

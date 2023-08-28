@@ -62,7 +62,7 @@ class TaskServiceImpl(
     }
 
     override fun showAllActiveTasks(): List<TaskEntity> {
-        return taskRepo.findAllActiveTasks().ifEmpty {
+        return taskRepo.findAllByAccountIdUsernameOrderByDueDate(serviceFunctions.getCurrentUser("userName")).ifEmpty {
             val msg = "There are no active tasks found"
             logger.error(msg)
             ArrayList()
@@ -81,7 +81,7 @@ class TaskServiceImpl(
         //convert the date or week number to LocalDate
         val dueDate = parseDateFromFrontEnd(addTaskDto.dueDate)
         val account = accountRepo.findAccountEntityByUsername(addTaskDto.accountExecutor
-            .ifEmpty { serviceFunctions.getCurrentUser() })!!
+            .ifEmpty { serviceFunctions.getCurrentUser("userName") })!!
 
         val addTaskEntity = TaskEntity(
             taskId = 0,
@@ -130,7 +130,7 @@ class TaskServiceImpl(
                 dueDate = updateTaskDto.dueDate,
                 closeDate = updateTaskDto.closeDate,
                 status = updateTaskDto.status,
-                accountId  = serviceFunctions.getCurrentUserEntity()
+                accountId  = serviceFunctions.getCurrentUserEntityByUserName()
             )
 
             //saves entity with try-catch and logs
@@ -177,7 +177,7 @@ class TaskServiceImpl(
                 createDate = updateTimeEntity.createDate,
                 closeDate = LocalDate.now(),
                 status = updateTimeEntity.status,
-                accountId = serviceFunctions.getCurrentUserEntity()
+                accountId = serviceFunctions.getCurrentUserEntityByUserName()
             )
 
             //saves entity with try-catch and logs
@@ -204,7 +204,7 @@ class TaskServiceImpl(
                 createDate = closeTaskEntity.createDate,
                 dueDate = closeTaskEntity.dueDate,
                 closeDate = LocalDate.now(),
-                accountId = serviceFunctions.getCurrentUserEntity()
+                accountId = serviceFunctions.getCurrentUserEntityByUserName()
 
                 )
 

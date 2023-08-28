@@ -15,7 +15,7 @@ class MainPageController(
     ) {
     @GetMapping("")
     fun showMainPage(model: Model): String {
-        model.addAttribute("currentUser", serviceFunctions.getCurrentUser())
+        model.addAttribute("currentUser", serviceFunctions.getCurrentUser("userName"))
         return "index"
     }
 }
