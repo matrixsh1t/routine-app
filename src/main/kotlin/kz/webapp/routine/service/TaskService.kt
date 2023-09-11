@@ -10,6 +10,8 @@ interface TaskService {
     fun showNextWeeksTasks(): List<TaskEntity>
     fun showNextMonthsTasks(): List<TaskEntity>
     fun showAllActiveTasks(): List<TaskEntity>
+    fun showAllActiveTasksOfCurrentUser(): List<TaskEntity>
+    fun showAllTasksOfCurrentUser(): List<TaskEntity>
     fun showAllTasks(): List<TaskEntity>
     fun addTask(addTaskDto: AddTaskDto)
     fun deleteTaskById(id: Int)
@@ -17,7 +19,7 @@ interface TaskService {
     fun findTaskById(id: Int): TaskEntity?
     //changes task perform_date to date offset
     fun moveTaskToAnotherDate(id: Int, period: String)
-    //changes task status to 'x'
+    //changes task status to 'x' - closed
     fun closeTask(id: Int)
 //    fun getCurrentUser(): String?
 

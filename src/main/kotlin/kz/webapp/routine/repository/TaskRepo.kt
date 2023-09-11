@@ -8,11 +8,20 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface TaskRepo: JpaRepository<TaskEntity, Int> {
+
+    @Query("SELECT te FROM TaskEntity te WHERE te.status = 'a' ORDER BY te.dueDate")
+    fun findAllActiveTasks(): List<TaskEntity>
+
+//    @Query("SELECT te FROM TaskEntity te WHERE te.status = 'a' ORDER BY te.dueDate")
+    //all active tasks of current user
+    fun findAllByAccountIdUsernameAndStatusEquals(username: String, status: String = "a"): List<TaskEntity>
+
     @Query("SELECT te FROM TaskEntity te WHERE te.status = 'a' AND te.dueDate <= CURRENT_DATE") //ORDER BY te.responsible
     fun findAllTodaysTasks(): List<TaskEntity>
 
-    @Query("SELECT te FROM TaskEntity te ORDER BY te.createDate")
-    fun findAllTasks(): List<TaskEntity>
+//    @Query("SELECT te FROM TaskEntity te ORDER BY te.createDate")
+    // all tasks of all users
+    fun findAllByOrderByCreateDate(): List<TaskEntity>
 
     //get all tasks for tomorrow depending on weekday
     @Query(nativeQuery = true, value = "SELECT * FROM tasks WHERE date_due =\n" +
@@ -39,6 +48,6 @@ interface TaskRepo: JpaRepository<TaskEntity, Int> {
             "AND extract(day from date_due) <= extract(day from DATE_TRUNC('month', CURRENT_DATE + INTERVAL '2 month') - INTERVAL '1 day') ") //ORDER BY responsible;
     fun findAllNextMonthsTasks(): List<TaskEntity>
 
-    //get all tasks of current account
+    // all tasks of current user (closed and active)
     fun findAllByAccountIdUsernameOrderByDueDate(username: String): List<TaskEntity>
 }

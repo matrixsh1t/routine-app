@@ -8,8 +8,6 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import kz.webapp.routine.model.enums.City
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 
 @Controller
@@ -19,7 +17,8 @@ class MainController(
     val serviceFunctions: ServiceFunctions,
     ) {
 
-    @GetMapping("")
+    // active tasks for today of current user
+    @GetMapping("/today-tasks")
     fun showTodaysTasksPage(model: Model): String {
         model.addAttribute("tasks", taskService.showTodaysTasks())
         model.addAttribute("title", "Список задач на сегодня")
@@ -28,7 +27,8 @@ class MainController(
         return "show-task"
     }
 
-    @GetMapping("/tomorrows-tasks")
+    // active tasks for tomorrow of current user
+    @GetMapping("/tomorrow-tasks")
     fun showTomorrowsTasksPage(model: Model): String {
         model.addAttribute("tasks", taskService.showTomorrowsTasks())
         model.addAttribute("title", "Список задач на завтра")
@@ -37,7 +37,8 @@ class MainController(
         return "show-task"
     }
 
-    @GetMapping("/next-weeks-tasks")
+    // active tasks for next week of current user
+    @GetMapping("/next-week-tasks")
     fun showNextWeeksTasksPage(model: Model): String {
         model.addAttribute("tasks", taskService.showNextWeeksTasks())
         model.addAttribute("title", "Список задач на следующуюю неделю")
@@ -46,7 +47,8 @@ class MainController(
         return "show-task"
     }
 
-    @GetMapping("/next-months-tasks")
+    // active tasks for next month of current user
+    @GetMapping("/next-month-tasks")
     fun showNextMonthsTasksPage(model: Model): String {
         model.addAttribute("tasks", taskService.showNextMonthsTasks())
         model.addAttribute("title", "Список задач на следующий месяц")
@@ -55,7 +57,8 @@ class MainController(
         return "show-task"
     }
 
-    @GetMapping("/all-active")
+    // all active tasks of all users
+    @GetMapping("/all-act-tasks")
     fun showAllActiveTasksPage(model: Model): String {
         model.addAttribute("tasks", taskService.showAllActiveTasks())
         model.addAttribute("title", "Список активных задач")
@@ -64,7 +67,28 @@ class MainController(
         return "show-task"
     }
 
-    @GetMapping("/all")
+    // all active tasks of current user
+    @GetMapping("/user-act-tasks")
+    fun showCurrentUserActiveTasksPage(model: Model): String {
+        model.addAttribute("tasks", taskService.showAllActiveTasksOfCurrentUser())
+        model.addAttribute("title", "Список ваших активных задач")
+        model.addAttribute("taskNum", taskService.showAllActiveTasks().size)
+        model.addAttribute("currentUserName", serviceFunctions.getCurrentUser("userName"))
+        return "show-task"
+    }
+
+    // all tasks of current user (closed and active)
+    @GetMapping("/user-all-tasks")
+    fun showCurrentUserAllTasksPage(model: Model): String {
+        model.addAttribute("tasks", taskService.showAllActiveTasks())
+        model.addAttribute("title", "Список активных задач")
+        model.addAttribute("taskNum", taskService.showAllActiveTasks().size)
+        model.addAttribute("currentUserName", serviceFunctions.getCurrentUser("userName"))
+        return "show-task"
+    }
+
+    //all tasks of all users(closed, active, cancelled)
+    @GetMapping("/todo/all-tasks")
     fun showAllTasksPage(model: Model): String {
         model.addAttribute("tasks", taskService.showAllTasks())
         model.addAttribute("title", "Список всех задач")
@@ -86,32 +110,36 @@ class MainController(
     @PostMapping("/create")
     fun saveTask(@ModelAttribute("addTaskDto") addTaskDto: AddTaskDto): String {
         taskService.addTask(addTaskDto)
-        return "redirect:/todo"
+        return if (serviceFunctions.getCurrentUser("userName") == "admin") {
+            "redirect:/todo/today-tasks"
+        } else {
+            "redirect:/todo/user-act-tasks"
+        }
     }
 
     @GetMapping("/delete/{id}")
 //    @Throws(EntityNotFoundException::class)
     fun deleteTask(@PathVariable("id") id: Int): String {
         taskService.deleteTaskById(id)
-        return "redirect:/todo"
+        return "redirect:/todo/today-tasks"
     }
 
     @GetMapping("/tomorrow/{id}")
     fun moveTaskToTomorrow(@PathVariable("id") id: Int): String {
         taskService.moveTaskToAnotherDate(id,"day")
-        return "redirect:/todo"
+        return "redirect:/todo/today-tasks"
     }
 
     @GetMapping("/next-week/{id}")
     fun moveTaskToNextWeek(@PathVariable("id") id: Int): String {
         taskService.moveTaskToAnotherDate(id,"week")
-        return "redirect:/todo"
+        return "redirect:/todo/today-tasks"
     }
 
     @GetMapping("/next-month/{id}")
     fun moveTaskToNextMonth(@PathVariable("id") id: Int): String {
         taskService.moveTaskToAnotherDate(id,"month")
-        return "redirect:/todo"
+        return "redirect:/todo/today-tasks"
     }
 
     @GetMapping("/update/{id}")
@@ -127,14 +155,21 @@ class MainController(
 
     @PostMapping("/update/{id}")
     fun updateTask(@PathVariable("id") id: Int, @ModelAttribute("updateTaskDto") updateTaskDto: UpdateTaskDto): String {
-
         taskService.updateTask(id, updateTaskDto)
-        return "redirect:/todo"
+        return if (serviceFunctions.getCurrentUser("userName") == "admin") {
+            "redirect:/todo/today-tasks"
+        } else {
+            "redirect:/todo/user-act-tasks"
+        }
     }
 
     @GetMapping("/close/{id}")
     fun closeTask(@PathVariable("id") id: Int): String {
         taskService.closeTask(id)
-        return "redirect:/todo"
+        return if (serviceFunctions.getCurrentUser("userName") == "admin") {
+            "redirect:/todo/today-tasks"
+        } else {
+            "redirect:/todo/user-act-tasks"
+        }
     }
 }

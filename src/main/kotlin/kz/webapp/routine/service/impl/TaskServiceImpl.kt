@@ -60,18 +60,38 @@ class TaskServiceImpl(
             ArrayList()
         }
     }
-
+    // all active tasks of all users
     override fun showAllActiveTasks(): List<TaskEntity> {
-        return taskRepo.findAllByAccountIdUsernameOrderByDueDate(serviceFunctions.getCurrentUser("userName")).ifEmpty {
+//        return taskRepo.findAllByAccountIdUsernameOrderByDueDate(serviceFunctions.getCurrentUser("userName")).ifEmpty {
+        return taskRepo.findAllActiveTasks().ifEmpty {
             val msg = "There are no active tasks found"
             logger.error(msg)
             ArrayList()
         }
     }
 
+    //all active tasks of current user
+    override fun showAllActiveTasksOfCurrentUser(): List<TaskEntity> {
+        return taskRepo.findAllByAccountIdUsernameAndStatusEquals(serviceFunctions.getCurrentUser("userName")).ifEmpty {
+            val msg = "There are no active tasks found"
+            logger.error(msg)
+            ArrayList()
+        }
+    }
+
+    // all tasks of current user (closed and active)
+    override fun showAllTasksOfCurrentUser(): List<TaskEntity> {
+        return taskRepo.findAllByAccountIdUsernameOrderByDueDate(serviceFunctions.getCurrentUser("userName")).ifEmpty {
+            val msg = "There are no tasks for this user found at all"
+            logger.error(msg)
+            ArrayList()
+        }
+    }
+
+    // all tasks of all users
     override fun showAllTasks(): List<TaskEntity> {
-        return taskRepo.findAllTasks().ifEmpty {
-            val msg = "There are no tasks found at all"
+        return taskRepo.findAllByOrderByCreateDate().ifEmpty {
+            val msg = "There are no tasks for all users found at all"
             logger.error(msg)
             ArrayList()
         }
@@ -214,18 +234,6 @@ class TaskServiceImpl(
                 "Failed to closed task with id ${closeTaskEntity.taskId}")
         }
     }
-
-//    override fun getCurrentUser(): String {
-//        try {
-//            val authentication = SecurityContextHolder.getContext().authentication
-//            return authentication.name
-//        } catch (e: AccountException) {
-//            val msg = "Failed to get current user"
-//            logger.error(msg)
-//            logger.error(e.message)
-//            throw (TaskException(msg))
-//        }
-//    }
 
     override fun getListOfResponsiblesFromDb(): List<String> {
         return accountRepo.findAllResponsiblesFromDb()

@@ -21,7 +21,7 @@ class ServiceFunctions (var accountRepo: AccountRepo) {
         return "$day$month$year".toInt()
     }
 
-    //receives "Role" or "Name" and returns UserName or UserRole
+    //receives "userRole" or "userName" string and returns current UserName or UserRole
     fun getCurrentUser(userData: String): String {
         val logger = LoggerFactory.getLogger(this::class.java)
         var result: String

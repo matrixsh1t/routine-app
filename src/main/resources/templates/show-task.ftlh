@@ -15,24 +15,30 @@
             <ul class="navbar-nav">
                 <#if currentUserName == "admin">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/todo">На сегодня</a>
+                    <a class="nav-link active" aria-current="page" href="/todo/today-tasks">На сегодня</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/todo/tomorrows-tasks">На завтра</a>
+                    <a class="nav-link active" aria-current="page" href="/todo/tomorrow-tasks">На завтра</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/todo/next-weeks-tasks">Следующая неделя</a>
+                    <a class="nav-link active" aria-current="page" href="/todo/next-week-tasks">Следующая неделя</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/todo/next-months-tasks">Следующий месяц</a>
+                    <a class="nav-link active" aria-current="page" href="/todo/next-month-tasks">Следующий месяц</a>
                 </li>
-                </#if>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/todo/all-active">Все активные</a>
+                    <a class="nav-link active" aria-current="page" href="/todo/all-act-tasks">Активные</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/todo/all">Все задачи</a>
+                    <a class="nav-link active" aria-current="page" href="/todo/all-tasks">Все задачи</a>
+                </li>
+                </#if>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/todo/user-act-tasks">Ваши активные задачи</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/todo/user-all-tasks">Все ваши задачи</a>
                 </li>
                 <#if currentUserName == "admin">
                 <li class="nav-item">
@@ -40,10 +46,10 @@
                 </li>
                 </#if>
                 <li class="nav-item">
-                    <a class="nav-link disabled" aria-current="page" href="#">${currentUserName}</a>
+                    <a class="nav-link active" aria-current="page" href="/logout">Logout</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/logout">Logout</a>
+                    <a class="nav-link disabled" aria-current="page" href="#">Пользователь: ${currentUserName}</a>
                 </li>
 
             </ul>
