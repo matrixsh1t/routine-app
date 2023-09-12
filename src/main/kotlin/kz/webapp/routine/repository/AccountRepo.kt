@@ -25,6 +25,11 @@ interface AccountRepo: JpaRepository<AccountEntity, Int> {
     @Query(nativeQuery = true, value = "SELECT DISTINCT executor FROM account;" )
     fun findAllResponsiblesFromDb(): List<String>
 
+    @Query("SELECT a.id FROM AccountEntity a WHERE a.username = :userName")
+    fun findAccountIdbyUserName(userName: String): Int
+
+
+
 //    @Query("SELECT a.responsible FROM account a WHERE a.userName = :userName")
 //    fun findResponsibleByUsername(@Param("userName") userName: String) : String
 

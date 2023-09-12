@@ -29,16 +29,18 @@ class TaskServiceImpl(
 
     val logger: Logger = LoggerFactory.getLogger(TaskService::class.java)
 
+    // active tasks for today of current user
     override fun showTodaysTasks(): List<TaskEntity> {
-        return taskRepo.findAllTodaysTasks().ifEmpty {
+        return taskRepo.findAllTodaysTasksOfCurrentUser(serviceFunctions.getCurrentUser("userName")).ifEmpty {
             val msg = "There are no tasks for today found"
             logger.error(msg)
             ArrayList()
         }
     }
 
+    // active tasks for tomorrow of current user
     override fun showTomorrowsTasks(): List<TaskEntity> {
-        return taskRepo.findAllTomorrowsTasks().ifEmpty {
+        return taskRepo.findAllTomorrowsTasksOfCurrentUser(serviceFunctions.getCurrentUser("userName")).ifEmpty {
             val msg = "There are no tasks for tomorrow found"
             logger.error(msg)
             ArrayList()

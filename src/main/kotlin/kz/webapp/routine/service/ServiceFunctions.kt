@@ -49,4 +49,11 @@ class ServiceFunctions (var accountRepo: AccountRepo) {
     fun getCurrentUserEntityByUserName(): AccountEntity {
         return accountRepo.findAccountEntityByUsername(getCurrentUser("userName"))!!
     }
+
+    fun getCurrentUserIdByUserName(): Int {
+        logger.error(accountRepo.findAccountIdbyUserName(getCurrentUser("userName")).toString())
+        logger.error(getCurrentUser("userName"))
+        return accountRepo.findAccountIdbyUserName(getCurrentUser("userName"))
+
+    }
 }
