@@ -24,6 +24,7 @@ data class UpdateTaskDto (
     var createDate: LocalDate = LocalDate.now(),
     var dueDate: LocalDate = LocalDate.now(),
     var closeDate: LocalDate = LocalDate.now(),
-//    var responsible: String = "",
 //    var userName: String = "",
+//    var responsible: String = "",
+//
 )

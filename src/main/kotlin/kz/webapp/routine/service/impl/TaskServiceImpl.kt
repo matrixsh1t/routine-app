@@ -40,33 +40,38 @@ class TaskServiceImpl(
 
     // active tasks for tomorrow of current user
     override fun showTomorrowsTasks(): List<TaskEntity> {
-        return taskRepo.findAllTomorrowsTasksOfCurrentUser(serviceFunctions.getCurrentUser("userName")).ifEmpty {
+        val currentUser = serviceFunctions.getCurrentUser("userName")
+        return taskRepo.findAllTomorrowsTasksOfCurrentUser(currentUser).ifEmpty {
             val msg = "There are no tasks for tomorrow found"
             logger.error(msg)
             ArrayList()
         }
     }
 
+    // active tasks for next week of current user
     override fun showNextWeeksTasks(): List<TaskEntity> {
-        return taskRepo.findAllNextWeeksTasks().ifEmpty {
+        val currentUser = serviceFunctions.getCurrentUser("userName")
+        return taskRepo.findAllNextWeeksTasksOfCurrentUser(currentUser).ifEmpty {
             val msg = "There are no tasks for next week found"
             logger.error(msg)
             ArrayList()
         }
     }
 
+    // active tasks for next month of current user
     override fun showNextMonthsTasks(): List<TaskEntity> {
-        return taskRepo.findAllNextMonthsTasks().ifEmpty {
+        val currentUser = serviceFunctions.getCurrentUser("userName")
+        return taskRepo.findAllNextMonthsTasksOfCurrentUser(currentUser).ifEmpty {
             val msg = "There are no tasks for next month found"
             logger.error(msg)
             ArrayList()
         }
     }
-    // all active tasks of all users
+
+    // all active tasks of all users (for Admin)
     override fun showAllActiveTasks(): List<TaskEntity> {
-//        return taskRepo.findAllByAccountIdUsernameOrderByDueDate(serviceFunctions.getCurrentUser("userName")).ifEmpty {
         return taskRepo.findAllActiveTasks().ifEmpty {
-            val msg = "There are no active tasks found"
+            val msg = "There are no active tasks for any user found"
             logger.error(msg)
             ArrayList()
         }
@@ -74,7 +79,8 @@ class TaskServiceImpl(
 
     //all active tasks of current user
     override fun showAllActiveTasksOfCurrentUser(): List<TaskEntity> {
-        return taskRepo.findAllByAccountIdUsernameAndStatusEquals(serviceFunctions.getCurrentUser("userName")).ifEmpty {
+        val currentUser = serviceFunctions.getCurrentUser("userName")
+        return taskRepo.findAllByAccountIdUsernameAndStatusEquals(currentUser).ifEmpty {
             val msg = "There are no active tasks found"
             logger.error(msg)
             ArrayList()
@@ -83,16 +89,17 @@ class TaskServiceImpl(
 
     // all tasks of current user (closed and active)
     override fun showAllTasksOfCurrentUser(): List<TaskEntity> {
-        return taskRepo.findAllByAccountIdUsernameOrderByDueDate(serviceFunctions.getCurrentUser("userName")).ifEmpty {
-            val msg = "There are no tasks for this user found at all"
+        val currentUser = serviceFunctions.getCurrentUser("userName")
+        return taskRepo.findAllByAccountIdUsernameOrderByDueDate(currentUser).ifEmpty {
+            val msg = "There are no active tasks found"
             logger.error(msg)
             ArrayList()
         }
     }
 
-    // all tasks of all users
+    // all tasks of all users(closed, active, cancelled)
     override fun showAllTasks(): List<TaskEntity> {
-        return taskRepo.findAllByOrderByCreateDate().ifEmpty {
+        return taskRepo.findAllByOrderByAccountIdUsername().ifEmpty {
             val msg = "There are no tasks for all users found at all"
             logger.error(msg)
             ArrayList()

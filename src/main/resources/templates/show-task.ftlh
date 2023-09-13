@@ -29,7 +29,6 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/todo/all-act-tasks">Активные</a>
                 </li>
-
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/todo/all-tasks">Все задачи</a>
                 </li>
@@ -68,6 +67,7 @@
             <th scope="col">Город</th>
             <th scope="col" style="text-align: center">Дедлайн</th>
             <#if currentUserName == "admin">
+            <th scope="col" style="text-align: center">Юзер</th>
             <th scope="col" style="text-align: center">Отложить на:</th>
             </#if>
             <th scope="col" style="text-align: center">Действия</th>
@@ -81,6 +81,7 @@
                 <td class="w-25 p-3">${task.city}</td>
                 <td style="width: 9%; text-align: center">${task.dueDate}</td>
                 <#if currentUserName == "admin">
+                <td style="width: 9%; text-align: center">${task.accountId.username}</td>
                 <td style="width: 9%; text-align: center">
                     <a href="/todo/tomorrow/${task.taskId}" class="btn btn-warning btn-sm" role="button">
                         Завтра</a><br>
@@ -90,10 +91,12 @@
                         Месяц</a></td>
                 </#if>
                 <td style="width: 9%; text-align: center">
-                    <a href="/todo/update/${task.taskId}" class="btn btn-warning btn-sm" role="button">
-                        Обновить</a><br>
-                    <a href="/todo/close/${task.taskId}" class="btn btn-success btn-sm " role="button">
-                        Закрыть</a><br>
+                    <#if task.status == "a">
+                        <a href="/todo/update/${task.taskId}" class="btn btn-warning btn-sm" role="button">
+                            Обновить</a><br>
+                        <a href="/todo/close/${task.taskId}" class="btn btn-success btn-sm " role="button">
+                            Закрыть</a><br>
+                    </#if>
                     <#if currentUserName == "admin">
                         <a href="/todo/delete/${task.taskId}" class="btn btn-danger btn-sm " role="button">
                         Удалить</a></td>

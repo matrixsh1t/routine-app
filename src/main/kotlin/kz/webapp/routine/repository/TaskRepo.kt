@@ -26,41 +26,36 @@ interface TaskRepo: JpaRepository<TaskEntity, Int> {
             "    END ") //ORDER BY responsible;
     fun findAllTomorrowsTasksOfCurrentUser(username: String): List<TaskEntity>
 
+    // active tasks for next week of current user
+    @Query(nativeQuery = true, value = "SELECT * FROM tasks WHERE\n" +
+            "account_id IN (SELECT account_id FROM account WHERE username = :username)\n" +
+            "AND status = 'a'\n" +
+            "AND date_due >= DATE_TRUNC('week', CURRENT_DATE) + INTERVAL '1 week' -- начало следующей недели\n" +
+            "AND date_due <= DATE_TRUNC('week', CURRENT_DATE) + INTERVAL '2 week - 2 days' -- конец следующей недели (пятница)\n" +
+            "AND EXTRACT('dow' FROM date_due) BETWEEN 1 AND 5") //ORDER BY responsible
+    fun findAllNextWeeksTasksOfCurrentUser(username: String): List<TaskEntity>
 
-    @Query("SELECT te FROM TaskEntity te WHERE te.status = 'a' ORDER BY te.dueDate")
-    fun findAllActiveTasks(): List<TaskEntity>
-
-//    @Query("SELECT te FROM TaskEntity te WHERE te.status = 'a' ORDER BY te.dueDate")
-    //all active tasks of current user
-    fun findAllByAccountIdUsernameAndStatusEquals(username: String, status: String = "a"): List<TaskEntity>
-
-
-
-//    @Query("SELECT te FROM TaskEntity te ORDER BY te.createDate")
-    // all tasks of all users
-    fun findAllByOrderByCreateDate(): List<TaskEntity>
-
-    //get all tasks for tomorrow
-
-
-    //get all tasks for next week
-    @Query(nativeQuery = true, value = "SELECT *\n" +
-            "FROM tasks\n" +
-            "WHERE date_due >= DATE_TRUNC('week', CURRENT_DATE) + INTERVAL '1 week' -- начало следующей недели\n" +
-            "  AND date_due <= DATE_TRUNC('week', CURRENT_DATE) + INTERVAL '2 week - 2 days' -- конец следующей недели (пятница)\n" +
-            "  AND EXTRACT('dow' FROM date_due) BETWEEN 1 AND 5") //ORDER BY responsible
-    fun findAllNextWeeksTasks(): List<TaskEntity>
-
-    //get all tasks for next month
-    @Query(nativeQuery = true, value = "SELECT * FROM tasks \n" +
-            "WHERE date_due >= DATE_TRUNC('month', CURRENT_DATE + INTERVAL '1 month') \n" +
+    // active tasks for next month of current user
+    @Query(nativeQuery = true, value = "SELECT * FROM tasks WHERE\n" +
+            "account_id IN (SELECT account_id FROM account WHERE username = :username)\n" +
+            "AND status = 'a'\n" +
+            "AND date_due >= DATE_TRUNC('month', CURRENT_DATE + INTERVAL '1 month') \n" +
             "AND date_due < DATE_TRUNC('month', CURRENT_DATE + INTERVAL '2 month') \n" +
             "AND extract(day from date_due) >= 1 \n" +
             "AND extract(day from date_due) <= extract(day from DATE_TRUNC('month', CURRENT_DATE + INTERVAL '2 month') - INTERVAL '1 day') ") //ORDER BY responsible;
-    fun findAllNextMonthsTasks(): List<TaskEntity>
+    fun findAllNextMonthsTasksOfCurrentUser(username: String): List<TaskEntity>
 
     // all tasks of current user (closed and active)
     fun findAllByAccountIdUsernameOrderByDueDate(username: String): List<TaskEntity>
 
+    // all active tasks of all users (for Admin)
+    @Query("SELECT te FROM TaskEntity te WHERE te.status = 'a' ORDER BY te.dueDate")
+    fun findAllActiveTasks(): List<TaskEntity>
+
+    // all active tasks of current user
+    fun findAllByAccountIdUsernameAndStatusEquals(username: String, status: String = "a"): List<TaskEntity>
+
+    // all tasks of all users(closed, active, cancelled) (for Admin)
+    fun findAllByOrderByAccountIdUsername(): List<TaskEntity>
 
 }

@@ -57,11 +57,11 @@ class MainController(
         return "show-task"
     }
 
-    // all active tasks of all users
+    // all active tasks of all users (for Admin)
     @GetMapping("/all-act-tasks")
     fun showAllActiveTasksPage(model: Model): String {
         model.addAttribute("tasks", taskService.showAllActiveTasks())
-        model.addAttribute("title", "Список активных задач")
+        model.addAttribute("title", "Список активных задач всех пользователей")
         model.addAttribute("taskNum", taskService.showAllActiveTasks().size)
         model.addAttribute("currentUserName", serviceFunctions.getCurrentUser("userName"))
         return "show-task"
@@ -72,7 +72,7 @@ class MainController(
     fun showCurrentUserActiveTasksPage(model: Model): String {
         model.addAttribute("tasks", taskService.showAllActiveTasksOfCurrentUser())
         model.addAttribute("title", "Список ваших активных задач")
-        model.addAttribute("taskNum", taskService.showAllActiveTasks().size)
+        model.addAttribute("taskNum", taskService.showAllActiveTasksOfCurrentUser().size)
         model.addAttribute("currentUserName", serviceFunctions.getCurrentUser("userName"))
         return "show-task"
     }
@@ -80,18 +80,18 @@ class MainController(
     // all tasks of current user (closed and active)
     @GetMapping("/user-all-tasks")
     fun showCurrentUserAllTasksPage(model: Model): String {
-        model.addAttribute("tasks", taskService.showAllActiveTasks())
-        model.addAttribute("title", "Список активных задач")
-        model.addAttribute("taskNum", taskService.showAllActiveTasks().size)
+        model.addAttribute("tasks", taskService.showAllTasksOfCurrentUser())
+        model.addAttribute("title", "Список всех ваших задач")
+        model.addAttribute("taskNum", taskService.showAllTasksOfCurrentUser().size)
         model.addAttribute("currentUserName", serviceFunctions.getCurrentUser("userName"))
         return "show-task"
     }
 
-    //all tasks of all users(closed, active, cancelled)
-    @GetMapping("/todo/all-tasks")
+    // all tasks of all users(closed, active, cancelled)
+    @GetMapping("/all-tasks")
     fun showAllTasksPage(model: Model): String {
         model.addAttribute("tasks", taskService.showAllTasks())
-        model.addAttribute("title", "Список всех задач")
+        model.addAttribute("title", "Список всех задач всех пользователей")
         model.addAttribute("taskNum", taskService.showAllTasks().size)
         model.addAttribute("currentUserName", serviceFunctions.getCurrentUser("userName"))
         return "show-task"
@@ -101,7 +101,6 @@ class MainController(
     fun showSaveTaskPage(model: Model): String {
         val addTaskDto = AddTaskDto(city = City.Pavlodar, accountExecutor = serviceFunctions.getCurrentUser("userName"))
         val responsibles = taskService.getListOfResponsiblesFromDb()
-
         model.addAttribute("addTaskDto", addTaskDto)
         model.addAttribute("responsibles", responsibles)
         return "create-task"

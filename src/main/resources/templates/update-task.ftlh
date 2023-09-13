@@ -51,6 +51,7 @@
                 <tr>
                     <th>Ответственный</th>
                     <td>
+
                         <div>
                         <#list responsibles as button>
                             <button class="btn btn-success btn-sm" onclick="insertButtonValue('${button}')">${button}</button>

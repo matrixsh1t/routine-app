@@ -17,12 +17,12 @@ interface TaskService {
     fun deleteTaskById(id: Int)
     fun updateTask(id: Int, updateTaskDto: UpdateTaskDto)
     fun findTaskById(id: Int): TaskEntity?
+
     //changes task perform_date to date offset
     fun moveTaskToAnotherDate(id: Int, period: String)
+
     //changes task status to 'x' - closed
     fun closeTask(id: Int)
-//    fun getCurrentUser(): String?
-
     fun getListOfResponsiblesFromDb(): List<String>
 
 }
