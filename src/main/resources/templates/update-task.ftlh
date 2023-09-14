@@ -1,6 +1,6 @@
 <!doctype html>
 <head>
-    <title>Freemarker Example</title>
+    <title>Update task</title>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1" name="viewport">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
@@ -51,7 +51,9 @@
                 <tr>
                     <th>Ответственный</th>
                     <td>
-
+                        <div>
+                            <input name="Username" class="form-control form-control-sm" type="text" required value="${updateTaskDto.accountId.username}"/>
+                        </div>
                         <div>
                         <#list responsibles as button>
                             <button class="btn btn-success btn-sm" onclick="insertButtonValue('${button}')">${button}</button>

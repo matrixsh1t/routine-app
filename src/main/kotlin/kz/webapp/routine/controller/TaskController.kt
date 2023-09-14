@@ -147,14 +147,13 @@ class MainController(
         val responsibles = taskService.getListOfResponsiblesFromDb()
 
         model.addAttribute("responsibles", responsibles)
-//        model.addAttribute("cities", City.values())
         model.addAttribute("updateTaskDto", updateTaskDto)
         return "update-task"
     }
 
     @PostMapping("/update/{id}")
-    fun updateTask(@PathVariable("id") id: Int, @ModelAttribute("updateTaskDto") updateTaskDto: UpdateTaskDto): String {
-        taskService.updateTask(id, updateTaskDto)
+    fun updateTask(@PathVariable("id") id: Int, @ModelAttribute("updateTaskDto") updateT: List<String>): String {
+        taskService.updateTask(id, updateT)
         return if (serviceFunctions.getCurrentUser("userName") == "admin") {
             "redirect:/todo/today-tasks"
         } else {

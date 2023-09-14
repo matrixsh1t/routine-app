@@ -159,7 +159,7 @@ class TaskServiceImpl(
                 dueDate = updateTaskDto.dueDate,
                 closeDate = updateTaskDto.closeDate,
                 status = updateTaskDto.status,
-                accountId  = serviceFunctions.getCurrentUserEntityByUserName()
+                accountId  = accountRepo.findAccountEntityByUsername(updateTaskDto.userName)!!
             )
 
             //saves entity with try-catch and logs
