@@ -152,8 +152,8 @@ class MainController(
     }
 
     @PostMapping("/update/{id}")
-    fun updateTask(@PathVariable("id") id: Int, @ModelAttribute("updateTaskDto") updateT: List<String>): String {
-        taskService.updateTask(id, updateT)
+    fun updateTask(@PathVariable("id") id: Int, @ModelAttribute("updateTaskDto") updateTaskDto: UpdateTaskDto): String {
+        taskService.updateTask(id, updateTaskDto)
         return if (serviceFunctions.getCurrentUser("userName") == "admin") {
             "redirect:/todo/today-tasks"
         } else {

@@ -148,6 +148,8 @@ class TaskServiceImpl(
 
     override fun updateTask(id: Int, updateTaskDto: UpdateTaskDto) {
         val updateTaskEntity = taskRepo.findByIdOrNull(id)
+        val dueDate = parseDateFromFrontEnd(updateTaskDto.dueDate)
+        logger.error(dueDate.toString())
 
         if (updateTaskEntity != null) {
             val updateTaskEntity = TaskEntity(
@@ -156,8 +158,8 @@ class TaskServiceImpl(
                 comment = updateTaskDto.comment,
                 city = updateTaskDto.city,
                 createDate = updateTaskDto.createDate,
-                dueDate = updateTaskDto.dueDate,
-                closeDate = updateTaskDto.closeDate,
+                dueDate = dueDate,
+                closeDate = null,
                 status = updateTaskDto.status,
                 accountId  = accountRepo.findAccountEntityByUsername(updateTaskDto.userName)!!
             )
@@ -312,31 +314,30 @@ class TaskServiceImpl(
         val dueDateList: List<String>
         val dueDate: LocalDate
 
-        /** if no date is present then set the date to today */
+        // if no date is present then set the date to today
         if(dateOrWeek.isBlank()) {
             dueDate = LocalDate.now()
             logger.error("Invalid date or week number format so set it to TODAY")
-        //if dueDateList is " , " then set the date to today
+        // if dueDateList is " , " then set the date to today
         } else if(dateOrWeek == ",") {
             dueDate = LocalDate.now()
             logger.error("Invalid date or week number format so set it to TODAY")
-        //if there is date in the format "2023-07-17, " or " ,2023-W06"
+        // if there is date in the format "2023-07-17, " or " ,2023-W06"
         } else {
             dueDateList = dateOrWeek.split(",")
-            //if dueDateList has not 2 members
+            // if dueDateList has not 2 members
             if (dueDateList.size != 2) {
                 dueDate = LocalDate.now()
                 logger.error("Invalid date or week number format so set it to TODAY")
             } else {
-                //if comes the DATE data
+                // if comes the DATE data
                 dueDate = if (dueDateList[0].isNotBlank()) {
                     LocalDate.parse(dueDateList[0], DateTimeFormatter.ISO_LOCAL_DATE)
-                    //if comes the WEEK data
+                    // if comes the WEEK data
                 } else {
-                    //get "06" from "2023-W06"
+                    // get "06" from "2023-W06"
                     getDateFromWeekNumber(dueDateList[1].substring(6, 8).toInt())
                 }
-
             }
         }
         return dueDate

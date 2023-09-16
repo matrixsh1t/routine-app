@@ -16,14 +16,13 @@ data class AddTaskDto (
 )
 
 data class UpdateTaskDto (
-    var taskId: Int = 0,
+    var id: Int = 0,
     var task: String = "",
     var comment: String = "",
     var city: City = City.Semey,
     var status: String = "a",
     var createDate: LocalDate = LocalDate.now(),
-    var dueDate: LocalDate = LocalDate.now(),
-    var closeDate: LocalDate = LocalDate.now(),
+    var dueDate: String = "",
     var userName: String = "",
 
 )

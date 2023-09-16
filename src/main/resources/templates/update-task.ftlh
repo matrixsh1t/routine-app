@@ -17,7 +17,7 @@
     </h2>
     <div>
         <a href="/todo" class="btn btn-primary" role="button">Назад</a>
-        <form action="/todo/update/${updateTaskDto.taskId}" method="post" name="updateTaskDto">
+        <form id = "myForm" action="/todo/update/${updateTaskDto.taskId}" method="post" name="updateTaskDto">
             <table class="table">
                     <tr>
                         <th>ID</th>
@@ -34,17 +34,17 @@
                 <tr>
                 <tr>
                     <th>Задача</th>
-                    <td><input name="Task" class="form-control form-control-sm" type="text" placeholder="Задача" value="<#if updateTaskDto.task??>${updateTaskDto.task}</#if>"/></td>
+                    <td><input name="task" class="form-control form-control-sm" type="text" placeholder="Задача" value="<#if updateTaskDto.task??>${updateTaskDto.task}</#if>"/></td>
                 </tr>
                 <tr>
                     <th>Комментарий</th>
-                    <td><input name="Comment" class="form-control form-control-sm" type="text" placeholder="Комментарии к задаче" value="<#if updateTaskDto.comment??>${updateTaskDto.comment}</#if>"/></td>
+                    <td><input name="comment" class="form-control form-control-sm" type="text" placeholder="Комментарии к задаче" value="<#if updateTaskDto.comment??>${updateTaskDto.comment}</#if>"/></td>
                 </tr>
                 <tr>
                     <th>Город</th>
                     <td>
                         <div>
-                        <input name="City" class="form-control form-control-sm" type="text" required placeholder="Город" value="<#if updateTaskDto.city??>${updateTaskDto.city}</#if>"/>
+                        <input name="city" class="form-control form-control-sm" type="text" required placeholder="Город" value="<#if updateTaskDto.city??>${updateTaskDto.city}</#if>"/>
                         </div>
                     </td>
                 </tr>
@@ -52,25 +52,30 @@
                     <th>Ответственный</th>
                     <td>
                         <div>
-                            <input name="Username" class="form-control form-control-sm" type="text" required value="${updateTaskDto.accountId.username}"/>
+                            <input name="userName" id="nameInput" class="form-control form-control-sm" type="text" required value="${updateTaskDto.accountId.username}"/>
                         </div>
-                        <div>
-                        <#list responsibles as button>
-                            <button class="btn btn-success btn-sm" onclick="insertButtonValue('${button}')">${button}</button>
+                        <div id="buttonContainer">
+                        <#list responsibles as name>
+                            <button class="nameButton" type="button">${name}</button>
                         </#list>
                         </div>
                     </td>
                 </tr>
                 <tr>
-                    <th>Дата выполения</th>
-                    <td><button id="DateToTomorrow" >На Завтра</button>
-                    <input id="DueDate" name="DueDate" class="form-control form-control-sm" type="text" placeholder="Дата выполнения" value="<#if updateTaskDto.dueDate??>${updateTaskDto.dueDate}</#if>"/></td>
-                </tr>
-                <tr>
-                    <th>Эккаунт</th>
+                    <th>Дедлайн</th>
                     <td>
-
+                        <p>
+                            <label><input type="radio" name="weekOrDate" value="date" checked>Дата</label>
+                            <label><input type="radio" name="weekOrDate" value="week">Неделя</label>
+                        </p>
+                        <div id="dateInput" style="width: 20%">
+                            <input name="dueDate" class="form-control form-control-sm" type="date" id="date" value="<#if updateTaskDto.dueDate??>${updateTaskDto.dueDate}</#if>"/>
+                        </div>
+                        <div id="weekInput" style="display:none; width: 20%">
+                            <input name="dueDate" class="form-control form-control-sm" type="week" id="week" value="<#if updateTaskDto.dueDate??>${updateTaskDto.dueDate}</#if>"/>
+                        </div>
                     </td>
+
                 </tr>
                 <tr>
                     <td>
@@ -83,25 +88,37 @@
     </div>
 </div>
 <script>
-    const dateField = document.getElementById("DueDate");
+        document.addEventListener("DOMContentLoaded", function() {
+            // Получаем ссылки на элементы DOM
+            const form = document.getElementById("myForm");
+            const nameInput = document.getElementById("nameInput");
+            const buttonContainer = document.getElementById("buttonContainer");
 
-    function setTomorrowDate() {
-        const currentDate = new Date();
-        const tomorrowDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 1);
-        const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-        const formattedDate = tomorrowDate.toLocaleDateString('en-US', options);
-        dateField.value = formattedDate;
-        event.preventDefault();
-    }
+            // Обработчик события клика на кнопки
+            buttonContainer.addEventListener("click", function(event) {
+                if (event.target.classList.contains("nameButton")) {
+                    // Вставляем текст кнопки в поле input при клике
+                    nameInput.value = event.target.textContent;
+                    event.preventDefault(); // Предотвращаем отправку формы
+                }
+            });
+        });
 
-    const button = document.getElementById("DateToTomorrow");
-    button.addEventListener("click", setTomorrowDate);
-
-    <!-- Change the responsible name in the input field in accordance with button name -->
-    function insertButtonValue(value) {
-        document.getElementById('button').value = value;
-        event.preventDefault();
-    }
+        // выбираем дату или неделю
+        const weekInput = document.getElementById("weekInput");
+        const dateInput = document.getElementById("dateInput");
+        const radios = document.getElementsByName("weekOrDate");
+        for(let i = 0; i < radios.length; i++) {
+            radios[i].addEventListener("change", function(event) {
+                if(event.target.value === "week") {
+                    weekInput.style.display = "block";
+                    dateInput.style.display = "none";
+                } else if (event.target.value === "date") {
+                    dateInput.style.display = "block";
+                    weekInput.style.display = "none";
+                }
+            });
+        }
 </script>
 </body>
 </html>
