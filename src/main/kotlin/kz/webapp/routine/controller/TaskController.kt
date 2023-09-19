@@ -2,19 +2,20 @@ package kz.webapp.routine.controller
 
 import kz.webapp.routine.model.dto.AddTaskDto
 import kz.webapp.routine.model.dto.UpdateTaskDto
-import kz.webapp.routine.service.ServiceFunctions
+import kz.webapp.routine.service.Utils
 import kz.webapp.routine.service.TaskService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import kz.webapp.routine.model.enums.City
+import java.time.LocalDate
 
 
 @Controller
 @RequestMapping("/todo")
 class MainController(
     val taskService: TaskService,
-    val serviceFunctions: ServiceFunctions,
+    val utils: Utils,
     ) {
 
     // active tasks for today of current user
@@ -23,7 +24,7 @@ class MainController(
         model.addAttribute("tasks", taskService.showTodaysTasks())
         model.addAttribute("title", "Список задач на сегодня")
         model.addAttribute("taskNum", taskService.showTodaysTasks().size)
-        model.addAttribute("currentUserName", serviceFunctions.getCurrentUser("userName"))
+        model.addAttribute("currentUserName", utils.getCurrentUser("userName"))
         return "show-task"
     }
 
@@ -33,7 +34,7 @@ class MainController(
         model.addAttribute("tasks", taskService.showTomorrowsTasks())
         model.addAttribute("title", "Список задач на завтра")
         model.addAttribute("taskNum", taskService.showTomorrowsTasks().size)
-        model.addAttribute("currentUserName", serviceFunctions.getCurrentUser("userName"))
+        model.addAttribute("currentUserName", utils.getCurrentUser("userName"))
         return "show-task"
     }
 
@@ -43,7 +44,7 @@ class MainController(
         model.addAttribute("tasks", taskService.showNextWeeksTasks())
         model.addAttribute("title", "Список задач на следующуюю неделю")
         model.addAttribute("taskNum", taskService.showNextWeeksTasks().size)
-        model.addAttribute("currentUserName", serviceFunctions.getCurrentUser("userName"))
+        model.addAttribute("currentUserName", utils.getCurrentUser("userName"))
         return "show-task"
     }
 
@@ -53,7 +54,7 @@ class MainController(
         model.addAttribute("tasks", taskService.showNextMonthsTasks())
         model.addAttribute("title", "Список задач на следующий месяц")
         model.addAttribute("taskNum", taskService.showNextMonthsTasks().size)
-        model.addAttribute("currentUserName", serviceFunctions.getCurrentUser("userName"))
+        model.addAttribute("currentUserName", utils.getCurrentUser("userName"))
         return "show-task"
     }
 
@@ -63,7 +64,7 @@ class MainController(
         model.addAttribute("tasks", taskService.showAllActiveTasks())
         model.addAttribute("title", "Список активных задач всех пользователей")
         model.addAttribute("taskNum", taskService.showAllActiveTasks().size)
-        model.addAttribute("currentUserName", serviceFunctions.getCurrentUser("userName"))
+        model.addAttribute("currentUserName", utils.getCurrentUser("userName"))
         return "show-task"
     }
 
@@ -73,7 +74,7 @@ class MainController(
         model.addAttribute("tasks", taskService.showAllActiveTasksOfCurrentUser())
         model.addAttribute("title", "Список ваших активных задач")
         model.addAttribute("taskNum", taskService.showAllActiveTasksOfCurrentUser().size)
-        model.addAttribute("currentUserName", serviceFunctions.getCurrentUser("userName"))
+        model.addAttribute("currentUserName", utils.getCurrentUser("userName"))
         return "show-task"
     }
 
@@ -83,7 +84,7 @@ class MainController(
         model.addAttribute("tasks", taskService.showAllTasksOfCurrentUser())
         model.addAttribute("title", "Список всех ваших задач")
         model.addAttribute("taskNum", taskService.showAllTasksOfCurrentUser().size)
-        model.addAttribute("currentUserName", serviceFunctions.getCurrentUser("userName"))
+        model.addAttribute("currentUserName", utils.getCurrentUser("userName"))
         return "show-task"
     }
 
@@ -93,13 +94,17 @@ class MainController(
         model.addAttribute("tasks", taskService.showAllTasks())
         model.addAttribute("title", "Список всех задач всех пользователей")
         model.addAttribute("taskNum", taskService.showAllTasks().size)
-        model.addAttribute("currentUserName", serviceFunctions.getCurrentUser("userName"))
+        model.addAttribute("currentUserName", utils.getCurrentUser("userName"))
         return "show-task"
     }
 
     @GetMapping("/create")
     fun showSaveTaskPage(model: Model): String {
-        val addTaskDto = AddTaskDto(city = City.Pavlodar, accountExecutor = serviceFunctions.getCurrentUser("userName"))
+        val addTaskDto = AddTaskDto(
+            city = City.Pavlodar,
+            dueDate = LocalDate.now().toString(),
+            account = utils.getCurrentUser("userName"))
+
         val responsibles = taskService.getListOfResponsiblesFromDb()
         model.addAttribute("addTaskDto", addTaskDto)
         model.addAttribute("responsibles", responsibles)
@@ -109,7 +114,7 @@ class MainController(
     @PostMapping("/create")
     fun saveTask(@ModelAttribute("addTaskDto") addTaskDto: AddTaskDto): String {
         taskService.addTask(addTaskDto)
-        return if (serviceFunctions.getCurrentUser("userName") == "admin") {
+        return if (utils.getCurrentUser("userName") == "admin") {
             "redirect:/todo/today-tasks"
         } else {
             "redirect:/todo/user-act-tasks"
@@ -154,7 +159,7 @@ class MainController(
     @PostMapping("/update/{id}")
     fun updateTask(@PathVariable("id") id: Int, @ModelAttribute("updateTaskDto") updateTaskDto: UpdateTaskDto): String {
         taskService.updateTask(id, updateTaskDto)
-        return if (serviceFunctions.getCurrentUser("userName") == "admin") {
+        return if (utils.getCurrentUser("userName") == "admin") {
             "redirect:/todo/today-tasks"
         } else {
             "redirect:/todo/user-act-tasks"
@@ -164,7 +169,7 @@ class MainController(
     @GetMapping("/close/{id}")
     fun closeTask(@PathVariable("id") id: Int): String {
         taskService.closeTask(id)
-        return if (serviceFunctions.getCurrentUser("userName") == "admin") {
+        return if (utils.getCurrentUser("userName") == "admin") {
             "redirect:/todo/today-tasks"
         } else {
             "redirect:/todo/user-act-tasks"

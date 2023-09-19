@@ -1,7 +1,5 @@
 package kz.webapp.routine.service
 
-import kz.webapp.routine.exception.AccountException
-import kz.webapp.routine.exception.TaskException
 import kz.webapp.routine.model.entity.AccountEntity
 import kz.webapp.routine.repository.AccountRepo
 import org.slf4j.Logger
@@ -9,11 +7,13 @@ import org.slf4j.LoggerFactory
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 @Service
-class ServiceFunctions (var accountRepo: AccountRepo) {
+class Utils (var accountRepo: AccountRepo) {
 
-    val logger: Logger = LoggerFactory.getLogger(ServiceFunctions::class.java)
+    val logger: Logger = LoggerFactory.getLogger(Utils::class.java)
+
     fun localDateToInt(localDate: LocalDate): Int {
         val day = String.format("%02d", localDate.dayOfMonth)
         val month = String.format("%02d", localDate.monthValue)
@@ -21,7 +21,7 @@ class ServiceFunctions (var accountRepo: AccountRepo) {
         return "$day$month$year".toInt()
     }
 
-    //receives "userRole" or "userName" string and returns current UserName or UserRole
+    /** receives "userRole" or "userName" string and returns current UserName or UserRole */
     fun getCurrentUser(userData: String): String {
         val logger = LoggerFactory.getLogger(this::class.java)
         var result: String
@@ -55,5 +55,30 @@ class ServiceFunctions (var accountRepo: AccountRepo) {
         logger.error(getCurrentUser("userName"))
         return accountRepo.findAccountIdbyUserName(getCurrentUser("userName"))
 
+    }
+
+    fun getDateFromWeekNumber(weekNumber: Int): LocalDate {
+        val firstDayOfYear = LocalDate.of(LocalDate.now().year, 1, 1)
+        val firstWeek = firstDayOfYear.dayOfWeek.value
+        val daysPassed = (8 - firstWeek).toLong()
+        val firstMonday = firstDayOfYear.plusDays(daysPassed)
+        val mondayDateOfWeekNumber = firstMonday.plusWeeks(weekNumber.toLong() - 1)
+        logger.info("Week received from frontend is $weekNumber and parced to date $mondayDateOfWeekNumber ")
+        return mondayDateOfWeekNumber
+    }
+
+    fun parseTheWeekOrDateFromFrontEnd(date: String?, week: String?): LocalDate {
+        val dueDate: LocalDate
+        // parse the date or week from controller
+        if (week == "" && date!!.isNotBlank()) {
+            dueDate = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE)
+            logger.info("Date received from widget dueDate is $dueDate")
+        } else if (date == "" && week!!.isNotBlank()) {
+            dueDate = getDateFromWeekNumber(week.substring(6, 8).toInt())
+        } else {
+            dueDate = LocalDate.now()
+            logger.info("No date or week received from widget so the date is set to today ($dueDate)")
+        }
+        return dueDate
     }
 }

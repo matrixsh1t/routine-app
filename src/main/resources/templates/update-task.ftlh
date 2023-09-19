@@ -72,15 +72,10 @@
                             <input name="dueDate" class="form-control form-control-sm" type="date" id="date" value="<#if updateTaskDto.dueDate??>${updateTaskDto.dueDate}</#if>"/>
                         </div>
                         <div id="weekInput" style="display:none; width: 20%">
-                            <input name="dueDate" class="form-control form-control-sm" type="week" id="week" value="<#if updateTaskDto.dueDate??>${updateTaskDto.dueDate}</#if>"/>
+                            <input name="dueWeek" class="form-control form-control-sm" type="week" id="week" value="<#if updateTaskDto.dueDate??>${updateTaskDto.dueDate}</#if>"/>
                         </div>
                     </td>
-
-                </tr>
-                <tr>
-                    <td>
-                    <td/>
-                </tr>
+                <tr><th></th><td></td></tr>
                 </tbody>
             </table>
             <button class="btn btn-primary" type="submit">Сохранить</button>
@@ -88,6 +83,7 @@
     </div>
 </div>
 <script>
+        // функция установки ответсвенного в поле по нажатию на кнопку
         document.addEventListener("DOMContentLoaded", function() {
             // Получаем ссылки на элементы DOM
             const form = document.getElementById("myForm");
@@ -104,7 +100,7 @@
             });
         });
 
-        // выбираем дату или неделю
+        // выбираем дату или неделю из виджетов, и отдаем в контроллер
         const weekInput = document.getElementById("weekInput");
         const dateInput = document.getElementById("dateInput");
         const radios = document.getElementsByName("weekOrDate");
@@ -113,9 +109,11 @@
                 if(event.target.value === "week") {
                     weekInput.style.display = "block";
                     dateInput.style.display = "none";
+                    document.getElementById("date").value = "";
                 } else if (event.target.value === "date") {
                     dateInput.style.display = "block";
                     weekInput.style.display = "none";
+                    document.getElementById("week").value = "";
                 }
             });
         }

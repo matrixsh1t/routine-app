@@ -9,7 +9,7 @@ import kz.webapp.routine.model.entity.AccountEntity
 import kz.webapp.routine.model.entity.TaskEntity
 import kz.webapp.routine.repository.AccountRepo
 import kz.webapp.routine.repository.TaskRepo
-import kz.webapp.routine.service.ServiceFunctions
+import kz.webapp.routine.service.Utils
 import kz.webapp.routine.service.TaskService
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -18,20 +18,21 @@ import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.math.log
 
 
 @Service
 class TaskServiceImpl(
     val taskRepo: TaskRepo,
     val accountRepo: AccountRepo,
-    val serviceFunctions: ServiceFunctions
+    val utils: Utils
     ): TaskService {
 
     val logger: Logger = LoggerFactory.getLogger(TaskService::class.java)
 
     // active tasks for today of current user
     override fun showTodaysTasks(): List<TaskEntity> {
-        return taskRepo.findAllTodaysTasksOfCurrentUser(serviceFunctions.getCurrentUser("userName")).ifEmpty {
+        return taskRepo.findAllTodaysTasksOfCurrentUser(utils.getCurrentUser("userName")).ifEmpty {
             val msg = "There are no tasks for today found"
             logger.error(msg)
             ArrayList()
@@ -40,7 +41,7 @@ class TaskServiceImpl(
 
     // active tasks for tomorrow of current user
     override fun showTomorrowsTasks(): List<TaskEntity> {
-        val currentUser = serviceFunctions.getCurrentUser("userName")
+        val currentUser = utils.getCurrentUser("userName")
         return taskRepo.findAllTomorrowsTasksOfCurrentUser(currentUser).ifEmpty {
             val msg = "There are no tasks for tomorrow found"
             logger.error(msg)
@@ -50,7 +51,7 @@ class TaskServiceImpl(
 
     // active tasks for next week of current user
     override fun showNextWeeksTasks(): List<TaskEntity> {
-        val currentUser = serviceFunctions.getCurrentUser("userName")
+        val currentUser = utils.getCurrentUser("userName")
         return taskRepo.findAllNextWeeksTasksOfCurrentUser(currentUser).ifEmpty {
             val msg = "There are no tasks for next week found"
             logger.error(msg)
@@ -60,7 +61,7 @@ class TaskServiceImpl(
 
     // active tasks for next month of current user
     override fun showNextMonthsTasks(): List<TaskEntity> {
-        val currentUser = serviceFunctions.getCurrentUser("userName")
+        val currentUser = utils.getCurrentUser("userName")
         return taskRepo.findAllNextMonthsTasksOfCurrentUser(currentUser).ifEmpty {
             val msg = "There are no tasks for next month found"
             logger.error(msg)
@@ -79,7 +80,7 @@ class TaskServiceImpl(
 
     //all active tasks of current user
     override fun showAllActiveTasksOfCurrentUser(): List<TaskEntity> {
-        val currentUser = serviceFunctions.getCurrentUser("userName")
+        val currentUser = utils.getCurrentUser("userName")
         return taskRepo.findAllByAccountIdUsernameAndStatusEquals(currentUser).ifEmpty {
             val msg = "There are no active tasks found"
             logger.error(msg)
@@ -89,7 +90,7 @@ class TaskServiceImpl(
 
     // all tasks of current user (closed and active)
     override fun showAllTasksOfCurrentUser(): List<TaskEntity> {
-        val currentUser = serviceFunctions.getCurrentUser("userName")
+        val currentUser = utils.getCurrentUser("userName")
         return taskRepo.findAllByAccountIdUsernameOrderByDueDate(currentUser).ifEmpty {
             val msg = "There are no active tasks found"
             logger.error(msg)
@@ -108,9 +109,14 @@ class TaskServiceImpl(
 
     override fun addTask(addTaskDto: AddTaskDto) {
         //convert the date or week number to LocalDate
-        val dueDate = parseDateFromFrontEnd(addTaskDto.dueDate)
-        val account = accountRepo.findAccountEntityByUsername(addTaskDto.accountExecutor
-            .ifEmpty { serviceFunctions.getCurrentUser("userName") })!!
+//        val dueDate = parseDateFromFrontEnd(addTaskDto.dueDate)
+        // parse the date or week from controller
+        val dueDate: LocalDate = utils.parseTheWeekOrDateFromFrontEnd(addTaskDto.dueDate, addTaskDto.dueWeek)
+
+        val account = accountRepo.findAccountEntityByUsername(addTaskDto.account
+            .ifEmpty { utils.getCurrentUser("userName") })!!
+        logger.error("Account from frontend: ${addTaskDto.account}")
+        logger.error("Acc parsed ${account.username}")
 
         val addTaskEntity = TaskEntity(
             taskId = 0,
@@ -122,9 +128,6 @@ class TaskServiceImpl(
             dueDate = dueDate,
             closeDate = null,
             accountId = account,
-
-            //userName = getCurrentUser()
-            //responsible = "roman", //getResponsibleOfCurrentAccount(),
         )
 
         //save entity with separate function of try-catch block
@@ -148,8 +151,8 @@ class TaskServiceImpl(
 
     override fun updateTask(id: Int, updateTaskDto: UpdateTaskDto) {
         val updateTaskEntity = taskRepo.findByIdOrNull(id)
-        val dueDate = parseDateFromFrontEnd(updateTaskDto.dueDate)
-        logger.error(dueDate.toString())
+        // parse the date or week from controller
+        val dueDate: LocalDate = utils.parseTheWeekOrDateFromFrontEnd(updateTaskDto.dueDate, updateTaskDto.dueWeek)
 
         if (updateTaskEntity != null) {
             val updateTaskEntity = TaskEntity(
@@ -170,16 +173,6 @@ class TaskServiceImpl(
                 "Task ${updateTaskEntity.taskId} is updated",
                 "Failed to update task with id ${updateTaskEntity.taskId}"
             )
-//            if (updateTaskEntity.responsible in getAllResponsiblesFromDb()) {
-//                entitySaveTryCatchBlock(
-//                    updateTaskEntity,
-//                    "Task ${updateTaskEntity.taskId} is updated",
-//                    "Failed to update task with id ${updateTaskEntity.taskId}"
-//                )
-//            } else {
-//                logger.error("${updateTaskEntity.responsible} is not in the list of accounts ${getAllResponsiblesFromDb()}, " +
-//                        "so the task is not updated")
-//            }
         }
     }
 
@@ -187,7 +180,7 @@ class TaskServiceImpl(
         val updateTimeEntity = taskRepo.findByIdOrNull(id)
         var newDate = LocalDate.now()
 
-        //add period to change the date to make it monday
+        // add period to change the date to make it monday
         when(period) {
             "day" -> {
                 newDate = if (LocalDate.now().dayOfWeek.value >= 5) {
@@ -208,10 +201,10 @@ class TaskServiceImpl(
                 createDate = updateTimeEntity.createDate,
                 closeDate = LocalDate.now(),
                 status = updateTimeEntity.status,
-                accountId = serviceFunctions.getCurrentUserEntityByUserName()
+                accountId = utils.getCurrentUserEntityByUserName()
             )
 
-            //saves entity with try-catch and logs
+            // saves entity with try-catch and logs
             entitySaveTryCatchBlock(updateTimeEntity,
                 "Task ${updateTimeEntity.taskId} is moved to tomorrow",
                 "Failed to update task with id ${updateTimeEntity.taskId}")
@@ -235,11 +228,11 @@ class TaskServiceImpl(
                 createDate = closeTaskEntity.createDate,
                 dueDate = closeTaskEntity.dueDate,
                 closeDate = LocalDate.now(),
-                accountId = serviceFunctions.getCurrentUserEntityByUserName()
+                accountId = utils.getCurrentUserEntityByUserName()
 
                 )
 
-            //saves entity with try-catch and logs
+            // saves entity with try-catch and logs
             entitySaveTryCatchBlock(closeTaskEntity,
                 "Task ${closeTaskEntity.taskId} is closed",
                 "Failed to closed task with id ${closeTaskEntity.taskId}")
@@ -336,22 +329,11 @@ class TaskServiceImpl(
                     // if comes the WEEK data
                 } else {
                     // get "06" from "2023-W06"
-                    getDateFromWeekNumber(dueDateList[1].substring(6, 8).toInt())
+                    utils.getDateFromWeekNumber(dueDateList[1].substring(6, 8).toInt())
                 }
             }
         }
         return dueDate
     }
 
-    private fun getDateFromWeekNumber(weekNumber: Int): LocalDate {
-        val firstDayOfYear = LocalDate.of(LocalDate.now().year, 1, 1)
-        val firstWeek = firstDayOfYear.dayOfWeek.value
-        val daysPassed = (8 - firstWeek).toLong()
-        val firstMonday = firstDayOfYear.plusDays(daysPassed)
-        return firstMonday.plusWeeks(weekNumber.toLong() - 1)
-    }
-
-//    private fun getResponsibleOfCurrentAccount(): String {
-//        return accountRepo.findResponsibleByUsername(getCurrentUser())
-//    }
 }
