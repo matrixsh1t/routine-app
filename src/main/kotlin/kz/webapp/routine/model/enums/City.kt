@@ -4,6 +4,10 @@ enum class City {
     Pavlodar,
     Semey,
     Oskemen,
-    Kokshetau,
     Astana,
+    Karaganda,
+    Termirtau,
+    Kokshetau,
+    Petropavlovsk,
+    Kostanay,
 }

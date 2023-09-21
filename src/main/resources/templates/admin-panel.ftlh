@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <title>Админ-панель</title>
-    <link rel="stylesheet" href="../static/admin-panel.css">
+    <link rel="icon" type="image/x-icon" href="/img/bar.svg">
+    <link rel="stylesheet" href="/css/admin-panel.css">
 </head>
 <body>
 <header>

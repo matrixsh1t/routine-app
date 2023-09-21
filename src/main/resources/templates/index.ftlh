@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Main page</title>
+    <link rel="icon" type="image/x-icon" href="/img/bar.svg">
 </head>
 <body>
     <h1>This is a main page</h1>

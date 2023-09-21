@@ -3,35 +3,38 @@
 <head>
     <meta charset="utf-8">
     <title>Main</title>
-    <!-- CSS only -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link rel="icon" type="image/x-icon" href="/img/bar.svg">
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+
 </head>
 <body>
 
 <nav class="navbar fixed-top bg-light navbar-expand-lg" style="background-color: #e3f2fd;">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/">Главная</a>
+        <a class="navbar-brand" href="/">
+            <img src="/img/house.svg" alt="Домой" width="30" height="30">
+        </a>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <#if currentUserName == "admin">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/todo/today-tasks">На сегодня</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/todo/tomorrow-tasks">На завтра</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/todo/next-week-tasks">Следующая неделя</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/todo/next-month-tasks">Следующий месяц</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/todo/all-act-tasks">Активные</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/todo/all-tasks">Все задачи</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/todo/today-tasks">На сегодня</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/todo/tomorrow-tasks">На завтра</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/todo/next-week-tasks">Следующая неделя</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/todo/next-month-tasks">Следующий месяц</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/todo/all-act-tasks">Активные</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/todo/all-tasks">Все задачи</a>
+                    </li>
                 </#if>
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/todo/user-act-tasks">Ваши активные задачи</a>
@@ -39,18 +42,22 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/todo/user-all-tasks">Все ваши задачи</a>
                 </li>
-                <#if currentUserName == "admin">
-                <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/admin">Админка</a>
-                </li>
-                </#if>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="/logout">Logout</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" aria-current="page" href="#">Пользователь: ${currentUserName}</a>
-                </li>
 
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        ${currentUserName}
+                    </a>
+                    <ul class="dropdown-menu">
+                        <#if currentUserName == "admin">
+                            <li class="nav-item">
+                                <a class="dropdown-item" href="/admin">Админка</a>
+                            </li>
+                        </#if>
+                        <li>
+                            <a class="dropdown-item" href="/logout">Logout</a>
+                        </li>
+                    </ul>
+                </li>
             </ul>
         </div>
     </div>
@@ -81,31 +88,46 @@
                 <td class="w-25 p-3">${task.city}</td>
                 <td style="width: 9%; text-align: center">${task.dueDate}</td>
                 <#if currentUserName == "admin">
-                <td style="width: 9%; text-align: center">${task.accountId.username}</td>
-                <td style="width: 9%; text-align: center">
-                    <a href="/todo/tomorrow/${task.taskId}" class="btn btn-warning btn-sm" role="button">
-                        Завтра</a><br>
-                    <a href="/todo/next-week/${task.taskId}" class="btn btn-warning btn-sm" role="button">
-                        Неделю</a><br>
-                    <a href="/todo/next-month/${task.taskId}" class="btn btn-warning btn-sm" role="button">
-                        Месяц</a></td>
+                    <td style="width: 9%; text-align: center">${task.accountId.username}</td>
+                    <td style="width: 9%; text-align: center">
+                        <a href="/todo/tomorrow/${task.taskId}"
+                           class="btn btn-warning btn-sm"
+                           role="button">Завтра</a>
+                        <br>
+                        <a href="/todo/next-week/${task.taskId}"
+                           class="btn btn-warning btn-sm"
+                           role="button">Неделю</a>
+                        <br>
+                        <a href="/todo/next-month/${task.taskId}"
+                           class="btn btn-warning btn-sm"
+                           role="button">Месяц</a>
+                    </td>
                 </#if>
                 <td style="width: 9%; text-align: center">
                     <#if task.status == "a">
-                        <a href="/todo/update/${task.taskId}" class="btn btn-warning btn-sm" role="button">
-                            Обновить</a><br>
-                        <a href="/todo/close/${task.taskId}" class="btn btn-success btn-sm " role="button">
-                            Закрыть</a><br>
+                        <a href="/todo/update/${task.taskId}"
+                           class="btn btn-warning btn-sm"
+                           role="button">Обновить</a>
+                        <br>
+                        <a href="/todo/close/${task.taskId}"
+                           class="btn btn-success btn-sm "
+                           role="button">Закрыть</a>
+                        <br>
+                    <#else>
+                        <p><h6>Выполнено</h6></p>
                     </#if>
                     <#if currentUserName == "admin">
-                        <a href="/todo/delete/${task.taskId}" class="btn btn-danger btn-sm " role="button">
-                        Удалить</a></td>
+                        <a href="/todo/delete/${task.taskId}"
+                           class="btn btn-danger btn-sm"
+                           role="button">Удалить</a>
                     </#if>
+                </td>
             </tr>
         </#list>
         </tbody>
     </table>
 </div>
+<script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 

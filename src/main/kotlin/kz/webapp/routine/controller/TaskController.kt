@@ -104,10 +104,13 @@ class MainController(
             city = City.Pavlodar,
             dueDate = LocalDate.now().toString(),
             account = utils.getCurrentUser("userName"))
+        val cities = City.values()
 
         val responsibles = taskService.getListOfResponsiblesFromDb()
         model.addAttribute("addTaskDto", addTaskDto)
         model.addAttribute("responsibles", responsibles)
+        model.addAttribute("currentUser", utils.getCurrentUser("userName"))
+        model.addAttribute("cities", cities)
         return "create-task"
     }
 
@@ -150,9 +153,11 @@ class MainController(
     fun showUpdateTaskPage(@PathVariable("id") id: Int, model: Model): String {
         val updateTaskDto = taskService.findTaskById(id)
         val responsibles = taskService.getListOfResponsiblesFromDb()
+        val cities = City.values()
 
         model.addAttribute("responsibles", responsibles)
         model.addAttribute("updateTaskDto", updateTaskDto)
+        model.addAttribute("cities", cities)
         return "update-task"
     }
 

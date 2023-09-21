@@ -14,7 +14,7 @@ class RESTCommandLineRunner(
     private val passwordEncoder: BCryptPasswordEncoder
 ): CommandLineRunner {
     override fun run(vararg args: String?) {
-        if (!accountRepo.existsAccountEntityByUsername("admin")) {
+        if (!accountRepo.existsByUsername("admin")) {
             accountRepo.saveAndFlush(AccountEntity(
                 id = null,
                 username = "admin",

@@ -25,3 +25,8 @@ logging:
 #      springframework:
 #        web: trace
 #      apache: trace
+
+#server:
+#  tomcat:
+#    native:
+#      enabled: false

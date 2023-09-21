@@ -26,9 +26,12 @@ class WebSecurityConfiguration(
             /**
              * Access for USER and ADMIN
              */
-//            .requestMatchers("/*").authenticated()
+            .requestMatchers("/bootstrap/**").authenticated()
+            .requestMatchers("/img/**").authenticated()
+            .requestMatchers("/css/**").authenticated()
             .requestMatchers("/").hasAnyAuthority("USER", "ADMIN")
             .requestMatchers("/todo/**").hasAnyAuthority("USER", "ADMIN")
+//            .requestMatchers("/bootstrap/**").hasAnyAuthority("USER", "ADMIN")
             /**
              * Access for ADMIN only
              */
