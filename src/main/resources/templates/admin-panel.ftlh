@@ -15,7 +15,7 @@
         <li><a href="/">Главная</a></li>
         <li><a href="/admin/account-register">Добавить эккаунт</a></li>
         <li><a href="#">Статистика</a></li>
-        <li><a href="#">Выход</a></li>
+        <li><a href="/logout">Выход</a></li>
     </ul>
 </nav>
 <main>

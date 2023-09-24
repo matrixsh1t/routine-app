@@ -4,21 +4,20 @@ import kz.webapp.routine.exception.AccountException
 import kz.webapp.routine.exception.AccountNotExistsException
 import kz.webapp.routine.exception.TaskException
 import kz.webapp.routine.exception.TaskNotExistsException
-import kz.webapp.routine.model.dto.*
+import kz.webapp.routine.model.dto.AddTaskDto
+import kz.webapp.routine.model.dto.UpdateTaskDto
 import kz.webapp.routine.model.entity.AccountEntity
 import kz.webapp.routine.model.entity.TaskEntity
 import kz.webapp.routine.repository.AccountRepo
 import kz.webapp.routine.repository.TaskRepo
-import kz.webapp.routine.service.Utils
 import kz.webapp.routine.service.TaskService
+import kz.webapp.routine.service.Utils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.util.*
-import kotlin.math.log
 
 
 @Service
@@ -241,6 +240,19 @@ class TaskServiceImpl(
 
     override fun getListOfResponsiblesFromDb(): List<String> {
         return accountRepo.findAllResponsiblesFromDb()
+    }
+
+    // all tasks which have searchstring in Task or Comment or City cell of admin or other users
+    override fun searchInDb(searchString: String): List<TaskEntity> {
+        val currentUser = utils.getCurrentUser("userName")
+        return if (currentUser == "admin") {
+            taskRepo.findAllTasksAsSearchResult(searchString)
+                .ifEmpty { ArrayList() }.also { logger.info("Serchiing for results for prompt: $searchString")}
+        } else {
+            taskRepo.findAllTasksAsSearchResultOfCurrentUser(searchString, currentUser)
+                .ifEmpty { ArrayList() }
+        }
+
     }
 
     //-------------------------------------------------------------

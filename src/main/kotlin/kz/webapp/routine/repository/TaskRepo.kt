@@ -58,4 +58,17 @@ interface TaskRepo: JpaRepository<TaskEntity, Int> {
     // all tasks of all users(closed, active, cancelled) (for Admin)
     fun findAllByOrderByAccountIdUsername(): List<TaskEntity>
 
+    // all tasks which have serchstring in Task or Comment or City cell of all users
+    @Query("SELECT t FROM TaskEntity t " +
+            "WHERE (t.task LIKE %:searchString% " +
+            "OR t.comment LIKE %:searchString% )")
+    fun findAllTasksAsSearchResult(searchString: String): List<TaskEntity>
+
+    // all tasks which have serchstring in Task or Comment or City cell of current user
+    @Query("SELECT t FROM TaskEntity t " +
+            "WHERE (t.task LIKE %:searchString% " +
+            "OR t.comment LIKE %:searchString% )" +
+            "AND t.accountId.username = :username")
+    fun findAllTasksAsSearchResultOfCurrentUser(@Param("searchString") searchString: String, @Param("username") username: String): List<TaskEntity>
+
 }

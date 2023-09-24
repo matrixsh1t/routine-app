@@ -180,4 +180,14 @@ class MainController(
             "redirect:/todo/user-act-tasks"
         }
     }
+
+    // all tasks which have searchstring in Task or Comment or City cell of admin or other users
+    @GetMapping("/search")
+    fun showSearchResultPage(@RequestParam("searchString") searchString: String, model: Model): String {
+        model.addAttribute("tasks", taskService.searchInDb(searchString))
+        model.addAttribute("title", "Найденные записи")
+        model.addAttribute("taskNum", taskService.searchInDb(searchString).size)
+        model.addAttribute("currentUserName", utils.getCurrentUser("userName"))
+        return "show-task"
+    }
 }

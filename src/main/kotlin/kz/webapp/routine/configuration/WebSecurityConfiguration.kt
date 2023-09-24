@@ -31,6 +31,7 @@ class WebSecurityConfiguration(
             .requestMatchers("/css/**").authenticated()
             .requestMatchers("/").hasAnyAuthority("USER", "ADMIN")
             .requestMatchers("/todo/**").hasAnyAuthority("USER", "ADMIN")
+            .requestMatchers("/todo/search/*").hasAnyAuthority("USER", "ADMIN")
             /**
              * Access for ADMIN only
              */

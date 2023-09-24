@@ -42,7 +42,15 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/todo/user-all-tasks">Все ваши задачи</a>
                 </li>
-
+                <!-- Форма поиска задач -->
+                <form action="/todo/search" method="get" class="d-flex" role="search">
+                    <input class="form-control me-2"
+                           type="search" name="searchString"
+                           placeholder="Поиск по задачам"
+                           value="<#if searchString??>${searchString}</#if>"
+                           aria-label="Search">
+                    <button class="btn btn-outline-success btn-sm" type="submit">Поиск</button>
+                </form>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         ${currentUserName}

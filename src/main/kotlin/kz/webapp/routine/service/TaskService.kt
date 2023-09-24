@@ -25,4 +25,7 @@ interface TaskService {
     fun closeTask(id: Int)
     fun getListOfResponsiblesFromDb(): List<String>
 
+    // all tasks which have serchstring in Task or Comment or City cell
+    fun searchInDb(searchString: String): List<TaskEntity>
+
 }
