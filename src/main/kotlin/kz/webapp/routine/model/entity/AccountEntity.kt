@@ -33,9 +33,6 @@ class AccountEntity (
     @Enumerated(EnumType.STRING)
     val role: Role,
 
-    @Column(name = "executor")
-    val executor: String,
-
 ): UserDetails {
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
         val authority = SimpleGrantedAuthority(role.name)

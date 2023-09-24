@@ -20,8 +20,7 @@ class RESTCommandLineRunner(
                 username = "admin",
                 password = passwordEncoder.encode("admin"),
                 email = "email",
-                role = Role.ADMIN,
-                executor = "Roman"
+                role = Role.ADMIN
             )
             )
         }
