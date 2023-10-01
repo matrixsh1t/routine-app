@@ -4,8 +4,9 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1" name="viewport">
     <link rel="icon" type="image/x-icon" href="/img/bar.svg">
+    <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
-    </script>
+
 </head>
 <body>
 <div class="container">
@@ -32,6 +33,7 @@
                         <input name="task"
                                class="form-control form-control-sm"
                                type="text" placeholder="Задача"
+                               maxlength="150"
                                value="<#if updateTaskDto.task??>${updateTaskDto.task}</#if>"/>
                     </td>
                 </tr>
@@ -41,6 +43,7 @@
                         <input name="comment"
                                class="form-control form-control-sm"
                                type="text" placeholder="Комментарии к задаче"
+                               maxlength="255"
                                value="<#if updateTaskDto.comment??>${updateTaskDto.comment}</#if>"/>
                     </td>
                 </tr>

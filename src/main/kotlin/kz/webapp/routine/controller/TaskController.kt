@@ -106,7 +106,7 @@ class MainController(
             account = utils.getCurrentUser("userName"))
         val cities = City.values()
 
-        val responsibles = taskService.getListOfResponsiblesFromDb()
+        val responsibles = taskService.getListOfResponsiblesFromDb() + "All"
         model.addAttribute("addTaskDto", addTaskDto)
         model.addAttribute("responsibles", responsibles)
         model.addAttribute("currentUser", utils.getCurrentUser("userName"))

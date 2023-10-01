@@ -27,6 +27,7 @@
                             <input name="Task"
                                    class="form-control form-control-sm"
                                    type="text" required placeholder="Новая задача"
+                                   maxlength="150"
                                    value="<#if addTaskDto.task??>${addTaskDto.task}</#if>"/>
                         </td>
                     </tr>
@@ -36,6 +37,7 @@
                             <input name="Comment"
                                    class="form-control form-control-sm"
                                    type="text" placeholder="Комментарии к задаче"
+                                   maxlength="255"
                                    value="<#if addTaskDto.comment??>${addTaskDto.comment}</#if>"/>
                         </td>
                     </tr>

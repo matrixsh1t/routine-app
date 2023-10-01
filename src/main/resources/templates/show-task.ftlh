@@ -5,7 +5,7 @@
     <title>Main</title>
     <link rel="icon" type="image/x-icon" href="/img/bar.svg">
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
-
+    <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
 
@@ -92,7 +92,7 @@
         <#list tasks as task>
             <tr>
                 <td class="w-25 p-3">${task.task}</td>
-                <td class="w-25 p-3">${task.comment}</td>
+                <td class="w-25 p-3 ">${task.comment}</td>
                 <td class="w-25 p-3">${task.city}</td>
                 <td style="width: 9%; text-align: center">${task.dueDate}</td>
                 <#if currentUserName == "admin">

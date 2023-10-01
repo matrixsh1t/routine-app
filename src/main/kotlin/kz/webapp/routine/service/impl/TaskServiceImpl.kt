@@ -107,32 +107,53 @@ class TaskServiceImpl(
     }
 
     override fun addTask(addTaskDto: AddTaskDto) {
-        //convert the date or week number to LocalDate
-//        val dueDate = parseDateFromFrontEnd(addTaskDto.dueDate)
         // parse the date or week from controller
         val dueDate: LocalDate = utils.parseTheWeekOrDateFromFrontEnd(addTaskDto.dueDate, addTaskDto.dueWeek)
 
-        val account = accountRepo.findAccountEntityByUsername(addTaskDto.account
-            .ifEmpty { utils.getCurrentUser("userName") })!!
-        logger.error("Account from frontend: ${addTaskDto.account}")
-        logger.error("Acc parsed ${account.username}")
+        if(addTaskDto.account == "All") {
+            logger.info("Saving task for all users")
+            val accounts = accountRepo.findAll()
+            for (account in accounts) {
+                val addTaskEntity = TaskEntity(
+                    taskId = 0,
+                    task = addTaskDto.task,
+                    comment = addTaskDto.comment,
+                    city = addTaskDto.city,
+                    status = "a",
+                    createDate = LocalDate.now(),
+                    dueDate = dueDate,
+                    closeDate = null,
+                    accountId = account
+                )
 
-        val addTaskEntity = TaskEntity(
-            taskId = 0,
-            task = addTaskDto.task,
-            comment = addTaskDto.comment,
-            city = addTaskDto.city,
-            status = "a",
-            createDate = LocalDate.now(),
-            dueDate = dueDate,
-            closeDate = null,
-            accountId = account,
-        )
+                //save entity with separate function of try-catch block
+                entitySaveTryCatchBlock(addTaskEntity,
+                    "Successfully created new task with ID ${addTaskEntity.taskId}",
+                    "Failed to create task id ${addTaskEntity.taskId}")
+            }
+        } else {
+            val account = accountRepo.findAccountEntityByUsername(addTaskDto.account
+                .ifEmpty { utils.getCurrentUser("userName") })!!
+            logger.info("Account from frontend: ${addTaskDto.account}")
+            logger.info("Acc parsed ${account.username}")
 
-        //save entity with separate function of try-catch block
-        entitySaveTryCatchBlock(addTaskEntity,
-            "Successfully created new task with ID ${addTaskEntity.taskId}",
-            "Failed to create task id ${addTaskEntity.taskId}")
+            val addTaskEntity = TaskEntity(
+                taskId = 0,
+                task = addTaskDto.task,
+                comment = addTaskDto.comment,
+                city = addTaskDto.city,
+                status = "a",
+                createDate = LocalDate.now(),
+                dueDate = dueDate,
+                closeDate = null,
+                accountId = account,
+            )
+
+            entitySaveTryCatchBlock(addTaskEntity,
+                "Successfully created new task with ID ${addTaskEntity.taskId}",
+                "Failed to create task id ${addTaskEntity.taskId}")
+        }
+
     }
 
     override fun deleteTaskById(id: Int) {
