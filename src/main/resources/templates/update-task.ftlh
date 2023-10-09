@@ -40,11 +40,10 @@
                 <tr>
                     <th>Комментарий</th>
                     <td>
-                        <input name="comment"
-                               class="form-control form-control-sm"
-                               type="text" placeholder="Комментарии к задаче"
-                               maxlength="255"
-                               value="<#if updateTaskDto.comment??>${updateTaskDto.comment}</#if>"/>
+                        <textarea name="Comment"
+                                  class="form-control form-control-sm"
+                                  rows="5" wrap="hard"
+                                  maxlength="255"><#if updateTaskDto.comment??>${updateTaskDto.comment}</#if></textarea>
                     </td>
                 </tr>
                 <tr>

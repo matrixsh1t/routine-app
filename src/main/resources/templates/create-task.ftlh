@@ -26,6 +26,7 @@
                         <td>
                             <input name="Task"
                                    class="form-control form-control-sm"
+                                   autofocus
                                    type="text" required placeholder="Новая задача"
                                    maxlength="150"
                                    value="<#if addTaskDto.task??>${addTaskDto.task}</#if>"/>
@@ -34,11 +35,11 @@
                     <tr>
                         <th>Комментарий</th>
                         <td>
-                            <input name="Comment"
-                                   class="form-control form-control-sm"
-                                   type="text" placeholder="Комментарии к задаче"
-                                   maxlength="255"
-                                   value="<#if addTaskDto.comment??>${addTaskDto.comment}</#if>"/>
+                            <textarea
+                                    name="Comment"
+                                    class="form-control form-control-sm"
+                                    rows="5" wrap="hard"
+                                    maxlength="255"></textarea>
                         </td>
                     </tr>
                     <tr>

@@ -6,6 +6,14 @@
     <link rel="icon" type="image/x-icon" href="/img/bar.svg">
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/main.css">
+
+    <style>
+    .td-ellipsis {
+        white-space: pre-line; /* Запрет переноса текста на новую строку */
+        overflow: hidden;     /* Скрыть текст, выходящий за пределы ячейки */
+        text-overflow: clip;  /* Убрать "..." при обрезании текста */
+    }
+</style>
 </head>
 <body>
 
@@ -73,8 +81,11 @@
 
 <div class="container-fluid" style="padding-top: 60px;">
     <h4>${title} (${taskNum})</h4>
-    <a href="/todo/create" class="btn btn-primary" role="button">Create New Task</a>
-    <table class="table table-striped table-bordered table-sm">
+    <a href="/todo/create"
+       class="btn btn-primary"
+       role="button"
+       style="padding: 10px;">Новая задача</a>
+    <table class="table table-striped table-bordered table-sm" style="margin-top: 10px;">
         <thead class="thead-light">
         <tr>
             <th scope="col">Задача</th>
@@ -92,7 +103,7 @@
         <#list tasks as task>
             <tr>
                 <td class="w-25 p-3">${task.task}</td>
-                <td class="w-25 p-3 ">${task.comment}</td>
+                <td class="w-25 p-3 td-ellipsis">${task.comment}</td>
                 <td class="w-25 p-3">${task.city}</td>
                 <td style="width: 9%; text-align: center">${task.dueDate}</td>
                 <#if currentUserName == "admin">
