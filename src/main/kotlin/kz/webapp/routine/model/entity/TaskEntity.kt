@@ -10,7 +10,7 @@ import java.time.LocalDate
 @Entity
 @Table(name = "tasks")
 @DynamicUpdate
-class TaskEntity(
+class TaskEntity (
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "task_generator")
     @SequenceGenerator(name = "task_generator", sequenceName = "tasks_task_id_seq", allocationSize = 1)
@@ -44,4 +44,16 @@ class TaskEntity(
     @ManyToOne
     @JoinColumn(name = "account_id", nullable=false)
     val accountId: AccountEntity,
-    )
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "task_tags",
+        joinColumns = [JoinColumn(name = "task_id")],
+        inverseJoinColumns = [JoinColumn(name = "tag_id")]
+        )
+    val tags: Set<TagEntity> = HashSet()
+) {
+    fun getTagNames(): List<String> {
+        return tags.map { it.tagName }
+    }
+}

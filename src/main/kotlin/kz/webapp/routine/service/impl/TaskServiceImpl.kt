@@ -173,7 +173,7 @@ class TaskServiceImpl(
         val updateTaskEntity = taskRepo.findByIdOrNull(id)
         // parse the date or week from controller
         val dueDate: LocalDate = utils.parseTheWeekOrDateFromFrontEnd(updateTaskDto.dueDate, updateTaskDto.dueWeek)
-
+        
         if (updateTaskEntity != null) {
             val updateTaskEntity = TaskEntity(
                 taskId = id,
@@ -184,7 +184,8 @@ class TaskServiceImpl(
                 dueDate = dueDate,
                 closeDate = null,
                 status = updateTaskDto.status,
-                accountId  = accountRepo.findAccountEntityByUsername(updateTaskDto.userName)!!
+                accountId  = accountRepo.findAccountEntityByUsername(updateTaskDto.userName)!!,
+
             )
 
             //saves entity with try-catch and logs

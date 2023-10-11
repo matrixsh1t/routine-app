@@ -153,9 +153,13 @@ class MainController(
     fun showUpdateTaskPage(@PathVariable("id") id: Int, model: Model): String {
         val updateTaskDto = taskService.findTaskById(id)
         val responsibles = taskService.getListOfResponsiblesFromDb()
+        val tagList = utils.getAllTags()
+        val taskTags = updateTaskDto?.getTagNames() ?: emptyList<String>()
         val cities = City.values()
 
         model.addAttribute("responsibles", responsibles)
+        model.addAttribute("tagList", tagList)
+        model.addAttribute("taskTags", taskTags)
         model.addAttribute("updateTaskDto", updateTaskDto)
         model.addAttribute("cities", cities)
         return "update-task"

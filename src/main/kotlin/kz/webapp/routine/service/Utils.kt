@@ -2,6 +2,8 @@ package kz.webapp.routine.service
 
 import kz.webapp.routine.model.entity.AccountEntity
 import kz.webapp.routine.repository.AccountRepo
+import kz.webapp.routine.repository.TagRepo
+import kz.webapp.routine.repository.TaskRepo
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.security.core.context.SecurityContextHolder
@@ -10,7 +12,10 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @Service
-class Utils (var accountRepo: AccountRepo) {
+class Utils (
+    var accountRepo: AccountRepo,
+    var tagRepo: TagRepo
+    ) {
 
     val logger: Logger = LoggerFactory.getLogger(Utils::class.java)
 
@@ -81,4 +86,9 @@ class Utils (var accountRepo: AccountRepo) {
         }
         return dueDate
     }
+
+    fun getAllTags(): List<String> {
+        return tagRepo.findAllTags()
+    }
+
 }

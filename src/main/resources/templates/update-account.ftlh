@@ -4,13 +4,11 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1" name="viewport">
     <link rel="icon" type="image/x-icon" href="/img/bar.svg">
-    <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
-
 </head>
 <body>
 <div class="container">
-    <h2>Изменить задачу</h2>
+    <h2>Изменить эккаунт</h2>
     <div>
         <#if updateTaskDto.accountId.username == "admin">
             <a href="/todo/today-tasks" class="btn btn-primary btn-sm" role="button">Назад</a>
@@ -40,10 +38,11 @@
                 <tr>
                     <th>Комментарий</th>
                     <td>
-                        <textarea name="Comment"
-                                  class="form-control form-control-sm"
-                                  rows="5" wrap="hard"
-                                  maxlength="255"><#if updateTaskDto.comment??>${updateTaskDto.comment}</#if></textarea>
+                        <input name="comment"
+                               class="form-control form-control-sm"
+                               type="text" placeholder="Комментарии к задаче"
+                               maxlength="255"
+                               value="<#if updateTaskDto.comment??>${updateTaskDto.comment}</#if>"/>
                     </td>
                 </tr>
                 <tr>
@@ -101,51 +100,6 @@
                             <input name="dueWeek" class="form-control form-control-sm" type="week" id="week" value="<#if updateTaskDto.dueDate??>${updateTaskDto.dueDate}</#if>"/>
                         </div>
                     </td>
-                </tr>
-                <tr>
-                    <th>Тэги</th>
-                    <td>
-                        <div>
-                            <input name="tagName"
-                                   id="tagInput"
-                                   class="form-control form-control-sm"
-                                   type="text"
-                                   value=""/>
-                        </div>
-                            <div><#list taskTags as t>
-                                <h6>${t}</h6>
-                            </#list>
-                        </div>
-                        <div id="tagButtonContainer">
-                            <#list tagList as tag>
-                            <button class="tagNameButton btn btn-outline-secondary"
-                                    style="--bs-btn-padding-y: .05rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .87rem;"
-                                    type="button">${tag}</button>
-                        </#list>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Тэги</th>
-                    <!-- Сравниваем список tagList(все тэги из БД) со списком taskTags(тэги таска)
-                         и отмечаем те чекбоксы, которые есть в списке taskTags -->
-                    <td>
-                        <#list tagList as labelForCheckbox>
-                            <#assign isChecked = ''>
-                            <#list taskTags as checkedLabel>
-                                <#if checkedLabel == labelForCheckbox>
-                                    <#assign isChecked = 'checked'>
-                                </#if>
-                            </#list>
-                            <label>
-                                <input type="checkbox"
-                                       name="selectedTags"
-                                       value="${labelForCheckbox}" ${isChecked}> ${labelForCheckbox}
-                            </label>
-                            <br>
-                        </#list>
-                    </td>
-                </tr>
                 </tbody>
             </table>
             <button class="btn btn-success" type="submit">Сохранить</button>
@@ -183,23 +137,6 @@
                     // Вставляем текст кнопки в поле input при клике
                     nameInput.value = event.target.textContent;
                     event.preventDefault(); // Предотвращаем отправку формы
-                }
-            });
-        });
-
-        // функция установки тега в поле по нажатию на кнопку
-        document.addEventListener("DOMContentLoaded", function() {
-        // Получаем ссылки на элементы DOM
-        const form = document.getElementById("myForm");
-        const tagInput = document.getElementById("tagInput");
-        const buttonContainer = document.getElementById("tagButtonContainer");
-
-        // Обработчик события клика на кнопки
-        tagButtonContainer.addEventListener("click", function(event) {
-            if (event.target.classList.contains("tagNameButton")) {
-                // Вставляем текст кнопки в поле input при клике
-                tagInput.value = event.target.textContent;
-                event.preventDefault(); // Предотвращаем отправку формы
                 }
             });
         });
