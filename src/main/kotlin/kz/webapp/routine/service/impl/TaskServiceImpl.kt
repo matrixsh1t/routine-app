@@ -7,8 +7,10 @@ import kz.webapp.routine.exception.TaskNotExistsException
 import kz.webapp.routine.model.dto.AddTaskDto
 import kz.webapp.routine.model.dto.UpdateTaskDto
 import kz.webapp.routine.model.entity.AccountEntity
+import kz.webapp.routine.model.entity.TagEntity
 import kz.webapp.routine.model.entity.TaskEntity
 import kz.webapp.routine.repository.AccountRepo
+import kz.webapp.routine.repository.TagRepo
 import kz.webapp.routine.repository.TaskRepo
 import kz.webapp.routine.service.TaskService
 import kz.webapp.routine.service.Utils
@@ -18,12 +20,14 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import kotlin.reflect.jvm.internal.impl.load.java.lazy.descriptors.DeclaredMemberIndex.Empty
 
 
 @Service
 class TaskServiceImpl(
     val taskRepo: TaskRepo,
     val accountRepo: AccountRepo,
+    val tagRepo: TagRepo,
     val utils: Utils
     ): TaskService {
 
@@ -173,7 +177,9 @@ class TaskServiceImpl(
         val updateTaskEntity = taskRepo.findByIdOrNull(id)
         // parse the date or week from controller
         val dueDate: LocalDate = utils.parseTheWeekOrDateFromFrontEnd(updateTaskDto.dueDate, updateTaskDto.dueWeek)
-        
+        // get tags from frontend and prepare to save
+        val tagsToAdd = addTagsToTask(updateTaskEntity, updateTaskDto.selectedTags)
+
         if (updateTaskEntity != null) {
             val updateTaskEntity = TaskEntity(
                 taskId = id,
@@ -185,7 +191,7 @@ class TaskServiceImpl(
                 closeDate = null,
                 status = updateTaskDto.status,
                 accountId  = accountRepo.findAccountEntityByUsername(updateTaskDto.userName)!!,
-
+                tags = tagsToAdd
             )
 
             //saves entity with try-catch and logs
@@ -370,4 +376,25 @@ class TaskServiceImpl(
         return dueDate
     }
 
+    private fun addTagsToTask(taskEntity: TaskEntity?, tagNames: List<String>): Set<TagEntity> {
+        var tagsToSave: Set<TagEntity> = HashSet()
+        var tagEntity: TagEntity
+
+        logger.info("tagNames checked in frontend: $tagNames")
+        if (tagNames.isEmpty()) {
+            return tagsToSave
+        } else {
+            if (taskEntity != null) {
+                for (tagName in tagNames) {
+                    logger.info("adding tagEntity with tagName: $tagName")
+                    tagEntity = tagRepo.findByTagName(tagName)
+                    logger.info("initial tagsToSave value: $tagsToSave")
+                    logger.info("initial tagEntity value: $tagEntity")
+                    tagsToSave = tagsToSave + tagEntity
+                    logger.info("final tagsToSave after iteration: $tagsToSave")
+                }
+            }
+        }
+        return tagsToSave
+    }
 }

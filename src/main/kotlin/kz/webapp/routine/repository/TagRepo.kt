@@ -7,8 +7,10 @@ import org.springframework.stereotype.Repository
 
 
 @Repository
-interface TagRepo: JpaRepository<TagEntity, Int> {
+interface TagRepo: JpaRepository<TagEntity, Long> {
 
     @Query(nativeQuery = true, value = "SELECT DISTINCT tag_name FROM tags;" )
     fun findAllTags(): List<String>
+
+    fun findByTagName(tagName: String): TagEntity
 }

@@ -102,32 +102,10 @@
                         </div>
                     </td>
                 </tr>
+
                 <tr>
                     <th>Тэги</th>
-                    <td>
-                        <div>
-                            <input name="tagName"
-                                   id="tagInput"
-                                   class="form-control form-control-sm"
-                                   type="text"
-                                   value=""/>
-                        </div>
-                            <div><#list taskTags as t>
-                                <h6>${t}</h6>
-                            </#list>
-                        </div>
-                        <div id="tagButtonContainer">
-                            <#list tagList as tag>
-                            <button class="tagNameButton btn btn-outline-secondary"
-                                    style="--bs-btn-padding-y: .05rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .87rem;"
-                                    type="button">${tag}</button>
-                        </#list>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Тэги</th>
-                    <!-- Сравниваем список tagList(все тэги из БД) со списком taskTags(тэги таска)
+                    <!-- Сравниваем список tagList(все тэги из БД) со списком taskTags(тэги этого таска)
                          и отмечаем те чекбоксы, которые есть в списке taskTags -->
                     <td>
                         <#list tagList as labelForCheckbox>
@@ -142,7 +120,7 @@
                                        name="selectedTags"
                                        value="${labelForCheckbox}" ${isChecked}> ${labelForCheckbox}
                             </label>
-                            <br>
+
                         </#list>
                     </td>
                 </tr>

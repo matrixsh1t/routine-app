@@ -51,7 +51,7 @@ class TaskEntity (
         joinColumns = [JoinColumn(name = "task_id")],
         inverseJoinColumns = [JoinColumn(name = "tag_id")]
         )
-    val tags: Set<TagEntity> = HashSet()
+    var tags: Set<TagEntity> = HashSet()
 ) {
     fun getTagNames(): List<String> {
         return tags.map { it.tagName }

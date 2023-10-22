@@ -9,11 +9,18 @@ import org.hibernate.annotations.DynamicUpdate
 
 class TagEntity (
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tag_generator")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "tag_generator")
     @SequenceGenerator(name = "tag_generator", sequenceName = "tags_tag_id_seq", allocationSize = 1)
     @Column(name = "tag_id")
-    val tagId: Int? = null,
+    val tagId: Long,
 
-    @Column(name = "tag_name", unique = true)
-    val tagName: String
+    @Column(name = "tag_name")
+    val tagName: String,
+
+    @ManyToMany(mappedBy = "tags")
+//    @JoinTable(
+//    name = "task_tags",
+//    joinColumns = [JoinColumn(name = "tag_id")],
+//    inverseJoinColumns = [JoinColumn(name = "task_id")])
+    var tasks: Set<TaskEntity> = HashSet()
 )

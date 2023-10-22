@@ -23,6 +23,6 @@ data class UpdateTaskDto (
     var dueDate: String = "",
     var dueWeek: String = "",
     var userName: String = "",
-    var tag: String = "",
+    var selectedTags: List<String> = emptyList(),
 
 )
