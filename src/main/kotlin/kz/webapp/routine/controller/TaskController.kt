@@ -101,16 +101,18 @@ class MainController(
     @GetMapping("/create")
     fun showSaveTaskPage(model: Model): String {
         val addTaskDto = AddTaskDto(
-            city = City.Pavlodar,
+            city = City.General,
             dueDate = LocalDate.now().toString(),
             account = utils.getCurrentUser("userName"))
         val cities = City.values()
-
         val responsibles = taskService.getListOfResponsiblesFromDb() + "All"
-        model.addAttribute("addTaskDto", addTaskDto)
-        model.addAttribute("responsibles", responsibles)
+        val tagList = utils.getAllTags()
+
         model.addAttribute("currentUser", utils.getCurrentUser("userName"))
+        model.addAttribute("addTaskDto", addTaskDto)
         model.addAttribute("cities", cities)
+        model.addAttribute("responsibles", responsibles)
+        model.addAttribute("tagList", tagList)
         return "create-task"
     }
 

@@ -113,10 +113,12 @@ class TaskServiceImpl(
     override fun addTask(addTaskDto: AddTaskDto) {
         // parse the date or week from controller
         val dueDate: LocalDate = utils.parseTheWeekOrDateFromFrontEnd(addTaskDto.dueDate, addTaskDto.dueWeek)
+        val tagsToAdd = addTagsToTask(addTaskDto.selectedTags)
 
         if(addTaskDto.account == "All") {
             logger.info("Saving task for all users")
             val accounts = accountRepo.findAll()
+
             for (account in accounts) {
                 val addTaskEntity = TaskEntity(
                     taskId = 0,
@@ -127,7 +129,8 @@ class TaskServiceImpl(
                     createDate = LocalDate.now(),
                     dueDate = dueDate,
                     closeDate = null,
-                    accountId = account
+                    accountId = account,
+                    tags = tagsToAdd,
                 )
 
                 //save entity with separate function of try-catch block
@@ -138,6 +141,7 @@ class TaskServiceImpl(
         } else {
             val account = accountRepo.findAccountEntityByUsername(addTaskDto.account
                 .ifEmpty { utils.getCurrentUser("userName") })!!
+
             logger.info("Account from frontend: ${addTaskDto.account}")
             logger.info("Acc parsed ${account.username}")
 
@@ -151,6 +155,7 @@ class TaskServiceImpl(
                 dueDate = dueDate,
                 closeDate = null,
                 accountId = account,
+                tags = tagsToAdd,
             )
 
             entitySaveTryCatchBlock(addTaskEntity,
@@ -178,7 +183,7 @@ class TaskServiceImpl(
         // parse the date or week from controller
         val dueDate: LocalDate = utils.parseTheWeekOrDateFromFrontEnd(updateTaskDto.dueDate, updateTaskDto.dueWeek)
         // get tags from frontend and prepare to save
-        val tagsToAdd = addTagsToTask(updateTaskEntity, updateTaskDto.selectedTags)
+        val tagsToAdd = addTagsToTask(updateTaskDto.selectedTags)
 
         if (updateTaskEntity != null) {
             val updateTaskEntity = TaskEntity(
@@ -270,7 +275,7 @@ class TaskServiceImpl(
         return accountRepo.findAllResponsiblesFromDb()
     }
 
-    // all tasks which have searchstring in Task or Comment or City cell of admin or other users
+    // all tasks which have searchstring in Task or Comment cell of admin or other users
     override fun searchInDb(searchString: String): List<TaskEntity> {
         val currentUser = utils.getCurrentUser("userName")
         return if (currentUser == "admin") {
@@ -376,25 +381,26 @@ class TaskServiceImpl(
         return dueDate
     }
 
-    private fun addTagsToTask(taskEntity: TaskEntity?, tagNames: List<String>): Set<TagEntity> {
+    private fun addTagsToTask(tagNames: List<String>): Set<TagEntity> {
         var tagsToSave: Set<TagEntity> = HashSet()
         var tagEntity: TagEntity
 
         logger.info("tagNames checked in frontend: $tagNames")
+
         if (tagNames.isEmpty()) {
             return tagsToSave
         } else {
-            if (taskEntity != null) {
                 for (tagName in tagNames) {
                     logger.info("adding tagEntity with tagName: $tagName")
                     tagEntity = tagRepo.findByTagName(tagName)
                     logger.info("initial tagsToSave value: $tagsToSave")
-                    logger.info("initial tagEntity value: $tagEntity")
-                    tagsToSave = tagsToSave + tagEntity
-                    logger.info("final tagsToSave after iteration: $tagsToSave")
+
+                    if (tagEntity != null) {
+                        tagsToSave = tagsToSave + tagEntity
+                        logger.info("tagsToSave after iteration: $tagsToSave")
+                    }
                 }
             }
-        }
         return tagsToSave
     }
 }

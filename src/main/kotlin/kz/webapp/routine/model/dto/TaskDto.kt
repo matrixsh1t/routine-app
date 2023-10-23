@@ -11,6 +11,7 @@ data class AddTaskDto (
     var dueDate: String = "",
     var dueWeek: String = "",
     var account: String = "",
+    var selectedTags: List<String> = emptyList(),
 )
 
 data class UpdateTaskDto (

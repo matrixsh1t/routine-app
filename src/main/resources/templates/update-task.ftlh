@@ -165,22 +165,7 @@
             });
         });
 
-        // функция установки тега в поле по нажатию на кнопку
-        document.addEventListener("DOMContentLoaded", function() {
-        // Получаем ссылки на элементы DOM
-        const form = document.getElementById("myForm");
-        const tagInput = document.getElementById("tagInput");
-        const buttonContainer = document.getElementById("tagButtonContainer");
 
-        // Обработчик события клика на кнопки
-        tagButtonContainer.addEventListener("click", function(event) {
-            if (event.target.classList.contains("tagNameButton")) {
-                // Вставляем текст кнопки в поле input при клике
-                tagInput.value = event.target.textContent;
-                event.preventDefault(); // Предотвращаем отправку формы
-                }
-            });
-        });
 
         // выбираем дату или неделю из виджетов, и отдаем в контроллер
         const weekInput = document.getElementById("weekInput");

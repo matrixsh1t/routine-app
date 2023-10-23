@@ -18,7 +18,7 @@
         </#if>
     </div>
     <div style="margin-top: 5px"></div>
-        <form action="/todo/create" method="post" name="addTaskDto">
+        <form id="myForm" action="/todo/create" method="post" name="addTaskDto">
             <table class="table">
                 <tbody>
                     <tr>
@@ -106,7 +106,21 @@
                                    value="<#if addTaskDto.dueDate??>${addTaskDto.dueDate}</#if>"/>
                         </div>
                     </td>
-
+                </tr>
+                <tr>
+                    <th>Тэги</th>
+                    <!-- Сравниваем список tagList(все тэги из БД) со списком taskTags(тэги этого таска)
+                         и отмечаем те чекбоксы, которые есть в списке taskTags -->
+                    <td>
+                        <#list tagList as labelForCheckbox>
+                            <label>
+                                <input type="checkbox"
+                                       name="selectedTags"
+                                       value="${labelForCheckbox}"> ${labelForCheckbox}
+                            </label>
+                        </#list>
+                    </td>
+                </tr>
                 </tbody>
             </table>
             <button class="btn btn-success btn-sm" type="submit">Save</button>
@@ -164,7 +178,8 @@
                 }
             });
         });
-            </script>
+
+    </script>
         </form>
     </div>
 </div>
