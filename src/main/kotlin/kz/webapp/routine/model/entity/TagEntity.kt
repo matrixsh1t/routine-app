@@ -18,9 +18,5 @@ class TagEntity (
     val tagName: String,
 
     @ManyToMany(mappedBy = "tags")
-//    @JoinTable(
-//    name = "task_tags",
-//    joinColumns = [JoinColumn(name = "tag_id")],
-//    inverseJoinColumns = [JoinColumn(name = "task_id")])
     var tasks: Set<TaskEntity> = HashSet()
 )

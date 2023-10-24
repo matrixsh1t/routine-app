@@ -14,12 +14,11 @@
     <ul>
         <li><a href="/">Главная</a></li>
         <li><a href="/admin/account-register">Добавить эккаунт</a></li>
-        <li><a href="#">Статистика</a></li>
+        <li><a href="/admin/tags/all-tags">Теги</a></li>
         <li><a href="/logout">Выход</a></li>
     </ul>
 </nav>
 <main>
-    <h2>Добро пожаловать в админ-панель!</h2>
     <h4>Список зарегестрированных эккаунтов</h4>
     <table class="table table-striped table-bordered table-sm">
         <thead class="thead-light">

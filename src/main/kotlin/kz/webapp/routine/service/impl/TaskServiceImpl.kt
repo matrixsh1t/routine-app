@@ -288,9 +288,9 @@ class TaskServiceImpl(
 
     }
 
-    //-------------------------------------------------------------
-    //------------------ private functions block ------------------
-    //-------------------------------------------------------------
+        //-------------------------------------------------------------
+        //------------------ private functions block ------------------
+        //-------------------------------------------------------------
 
     /** saves entity with try-catch block and makes logging */
     private fun entitySaveTryCatchBlock(entity: TaskEntity, msg: String, errMsg: String) {
