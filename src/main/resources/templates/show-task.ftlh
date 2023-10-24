@@ -94,7 +94,7 @@
             <th scope="col" style="text-align: center">Дедлайн</th>
             <#if currentUserName == "admin">
             <th scope="col" style="text-align: center">Юзер</th>
-            <th scope="col" style="text-align: center">Отложить на:</th>
+            <th scope="col" style="text-align: center">Отложить</th>
             </#if>
             <th scope="col" style="text-align: center">Действия</th>
         </tr>
@@ -110,26 +110,26 @@
                     <td style="width: 9%; text-align: center">${task.accountId.username}</td>
                     <td style="width: 9%; text-align: center">
                         <a href="/todo/tomorrow/${task.taskId}"
-                           class="btn btn-warning btn-sm"
+                           class="btn btn-outline-warning btn-sm b"
                            role="button">Завтра</a>
                         <br>
                         <a href="/todo/next-week/${task.taskId}"
-                           class="btn btn-warning btn-sm"
+                           class="btn btn-outline-warning btn-sm b"
                            role="button">Неделю</a>
                         <br>
                         <a href="/todo/next-month/${task.taskId}"
-                           class="btn btn-warning btn-sm"
+                           class="btn btn-outline-warning btn-sm b"
                            role="button">Месяц</a>
                     </td>
                 </#if>
                 <td style="width: 9%; text-align: center">
                     <#if task.status == "a">
                         <a href="/todo/update/${task.taskId}"
-                           class="btn btn-warning btn-sm"
+                           class="btn btn-outline-warning btn-sm b"
                            role="button">Обновить</a>
                         <br>
                         <a href="/todo/close/${task.taskId}"
-                           class="btn btn-success btn-sm "
+                           class="btn btn-outline-success btn-sm b"
                            role="button">Закрыть</a>
                         <br>
                     <#else>
@@ -137,7 +137,7 @@
                     </#if>
                     <#if currentUserName == "admin">
                         <a href="/todo/delete/${task.taskId}"
-                           class="btn btn-danger btn-sm"
+                           class="btn btn-outline-danger btn-sm b "
                            role="button">Удалить</a>
                     </#if>
                 </td>

@@ -6,3 +6,10 @@
 .right {
     float: right;
 }
+
+.b {
+    width: 80px;
+    height: 23px;
+    line-height: 1;
+    color: black;
+}
