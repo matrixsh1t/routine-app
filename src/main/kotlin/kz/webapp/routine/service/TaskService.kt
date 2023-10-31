@@ -10,7 +10,9 @@ interface TaskService {
     fun showNextWeeksTasks(): List<TaskEntity>
     fun showNextMonthsTasks(): List<TaskEntity>
     fun showAllActiveTasks(): List<TaskEntity>
+    fun showAllClosedTasks(): List<TaskEntity>
     fun showAllActiveTasksOfCurrentUser(): List<TaskEntity>
+    fun showAllClosedTasksOfCurrentUser(): List<TaskEntity>
     fun showAllTasksOfCurrentUser(): List<TaskEntity>
     fun showAllTasks(): List<TaskEntity>
     fun addTask(addTaskDto: AddTaskDto)
@@ -27,5 +29,9 @@ interface TaskService {
 
     // all tasks which have serchstring in Task or Comment or City cell
     fun searchInDb(searchString: String): List<TaskEntity>
+
+    fun activateTask(id: Int)
+
+    fun getAllTasksByTagName(tagName: String): List<TaskEntity>
 
 }

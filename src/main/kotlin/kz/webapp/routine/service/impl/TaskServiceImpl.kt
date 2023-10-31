@@ -74,8 +74,17 @@ class TaskServiceImpl(
 
     // all active tasks of all users (for Admin)
     override fun showAllActiveTasks(): List<TaskEntity> {
-        return taskRepo.findAllActiveTasks().ifEmpty {
+        return taskRepo.findAllTasksByStatus("a").ifEmpty {
             val msg = "There are no active tasks for any user found"
+            logger.error(msg)
+            ArrayList()
+        }
+    }
+
+    // all closed tasks of all users (for Admin)
+    override fun showAllClosedTasks(): List<TaskEntity> {
+        return taskRepo.findAllTasksByStatus("x").ifEmpty {
+            val msg = "There are no closed tasks for any user found"
             logger.error(msg)
             ArrayList()
         }
@@ -84,8 +93,18 @@ class TaskServiceImpl(
     //all active tasks of current user
     override fun showAllActiveTasksOfCurrentUser(): List<TaskEntity> {
         val currentUser = utils.getCurrentUser("userName")
-        return taskRepo.findAllByAccountIdUsernameAndStatusEquals(currentUser).ifEmpty {
-            val msg = "There are no active tasks found"
+        return taskRepo.findAllByAccountIdUsernameAndStatusEquals(currentUser, "a").ifEmpty {
+            val msg = "There are no active tasks found of ${currentUser}"
+            logger.error(msg)
+            ArrayList()
+        }
+    }
+
+    //all closed tasks of current user
+    override fun showAllClosedTasksOfCurrentUser(): List<TaskEntity> {
+        val currentUser = utils.getCurrentUser("userName")
+        return taskRepo.findAllByAccountIdUsernameAndStatusEquals(currentUser, "x").ifEmpty {
+            val msg = "There are no closed tasks found of ${currentUser}"
             logger.error(msg)
             ArrayList()
         }
@@ -260,8 +279,7 @@ class TaskServiceImpl(
                 createDate = closeTaskEntity.createDate,
                 dueDate = closeTaskEntity.dueDate,
                 closeDate = LocalDate.now(),
-                accountId = utils.getCurrentUserEntityByUserName()
-
+                accountId = closeTaskEntity.accountId
                 )
 
             // saves entity with try-catch and logs
@@ -287,6 +305,39 @@ class TaskServiceImpl(
         }
 
     }
+
+    override fun activateTask(id: Int) {
+        val activateTaskEntity = taskRepo.findByIdOrNull(id)
+
+        if (activateTaskEntity != null) {
+            val activateTaskEntity = TaskEntity(
+                taskId = id,
+                task = activateTaskEntity.task,
+                comment = activateTaskEntity.comment,
+                city = activateTaskEntity.city,
+                status = "a",
+                createDate = activateTaskEntity.createDate,
+                dueDate = activateTaskEntity.dueDate,
+                closeDate = null,
+                accountId = activateTaskEntity.accountId
+            )
+
+            // saves entity with try-catch and logs
+            entitySaveTryCatchBlock(activateTaskEntity,
+                "Task ${activateTaskEntity.taskId} is activated",
+                "Failed to activate task with id ${activateTaskEntity.taskId}")
+        }
+    }
+
+    // all tasks by TagName of all users (for Admin)
+    override fun getAllTasksByTagName(tagName: String): List<TaskEntity> {
+        return taskRepo.findAllByTagsTagName(tagName).ifEmpty {
+            val msg = "There are no tasks for tag $tagName for all users found at all"
+            logger.error(msg)
+            ArrayList()
+        }
+    }
+
 
         //-------------------------------------------------------------
         //------------------ private functions block ------------------

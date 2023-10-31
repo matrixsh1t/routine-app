@@ -25,6 +25,7 @@ class MainController(
         model.addAttribute("title", "Список задач на сегодня")
         model.addAttribute("taskNum", taskService.showTodaysTasks().size)
         model.addAttribute("currentUserName", utils.getCurrentUser("userName"))
+        model.addAttribute("tags", utils.getAllTags())
         return "show-task"
     }
 
@@ -35,6 +36,7 @@ class MainController(
         model.addAttribute("title", "Список задач на завтра")
         model.addAttribute("taskNum", taskService.showTomorrowsTasks().size)
         model.addAttribute("currentUserName", utils.getCurrentUser("userName"))
+        model.addAttribute("tags", utils.getAllTags())
         return "show-task"
     }
 
@@ -45,6 +47,7 @@ class MainController(
         model.addAttribute("title", "Список задач на следующуюю неделю")
         model.addAttribute("taskNum", taskService.showNextWeeksTasks().size)
         model.addAttribute("currentUserName", utils.getCurrentUser("userName"))
+        model.addAttribute("tags", utils.getAllTags())
         return "show-task"
     }
 
@@ -55,6 +58,7 @@ class MainController(
         model.addAttribute("title", "Список задач на следующий месяц")
         model.addAttribute("taskNum", taskService.showNextMonthsTasks().size)
         model.addAttribute("currentUserName", utils.getCurrentUser("userName"))
+        model.addAttribute("tags", utils.getAllTags())
         return "show-task"
     }
 
@@ -65,6 +69,18 @@ class MainController(
         model.addAttribute("title", "Список активных задач всех пользователей")
         model.addAttribute("taskNum", taskService.showAllActiveTasks().size)
         model.addAttribute("currentUserName", utils.getCurrentUser("userName"))
+        model.addAttribute("tags", utils.getAllTags())
+        return "show-task"
+    }
+
+    // all closed tasks of all users (for Admin)
+    @GetMapping("/all-clo-tasks")
+    fun showAllClosedTasksPage(model: Model): String {
+        model.addAttribute("tasks", taskService.showAllClosedTasks())
+        model.addAttribute("title", "Список закрытых задач всех пользователей")
+        model.addAttribute("taskNum", taskService.showAllClosedTasks().size)
+        model.addAttribute("currentUserName", utils.getCurrentUser("userName"))
+        model.addAttribute("tags", utils.getAllTags())
         return "show-task"
     }
 
@@ -75,6 +91,18 @@ class MainController(
         model.addAttribute("title", "Список ваших активных задач")
         model.addAttribute("taskNum", taskService.showAllActiveTasksOfCurrentUser().size)
         model.addAttribute("currentUserName", utils.getCurrentUser("userName"))
+        model.addAttribute("tags", utils.getAllTags())
+        return "show-task"
+    }
+
+    // all closed tasks of current user
+    @GetMapping("/user-clo-tasks")
+    fun showCurrentUserClosedTasksPage(model: Model): String {
+        model.addAttribute("tasks", taskService.showAllClosedTasksOfCurrentUser())
+        model.addAttribute("title", "Список ваших закрытых задач")
+        model.addAttribute("taskNum", taskService.showAllClosedTasksOfCurrentUser().size)
+        model.addAttribute("currentUserName", utils.getCurrentUser("userName"))
+        model.addAttribute("tags", utils.getAllTags())
         return "show-task"
     }
 
@@ -85,6 +113,7 @@ class MainController(
         model.addAttribute("title", "Список всех ваших задач")
         model.addAttribute("taskNum", taskService.showAllTasksOfCurrentUser().size)
         model.addAttribute("currentUserName", utils.getCurrentUser("userName"))
+        model.addAttribute("tags", utils.getAllTags())
         return "show-task"
     }
 
@@ -95,6 +124,7 @@ class MainController(
         model.addAttribute("title", "Список всех задач всех пользователей")
         model.addAttribute("taskNum", taskService.showAllTasks().size)
         model.addAttribute("currentUserName", utils.getCurrentUser("userName"))
+        model.addAttribute("tags", utils.getAllTags())
         return "show-task"
     }
 
@@ -187,13 +217,36 @@ class MainController(
         }
     }
 
-    // all tasks which have searchstring in Task or Comment or City cell of admin or other users
+    // activate task by ID, only for URL
+    @GetMapping("/activate/{id}")
+    fun activateTask(@PathVariable("id") id: Int): String {
+        taskService.activateTask(id)
+        return if (utils.getCurrentUser("userName") == "admin") {
+            "redirect:/todo/today-tasks"
+        } else {
+            "redirect:/todo/user-act-tasks"
+        }
+    }
+
+    // all tasks which have search-string in Task or Comment or City cell of admin or other users
     @GetMapping("/search")
     fun showSearchResultPage(@RequestParam("searchString") searchString: String, model: Model): String {
         model.addAttribute("tasks", taskService.searchInDb(searchString))
         model.addAttribute("title", "Найденные записи")
         model.addAttribute("taskNum", taskService.searchInDb(searchString).size)
         model.addAttribute("currentUserName", utils.getCurrentUser("userName"))
+        model.addAttribute("tags", utils.getAllTags())
+        return "show-task"
+    }
+
+    // active tasks for today of current user
+    @GetMapping("/tags/{tagName}")
+    fun showTasksByTagsPage(@PathVariable("tagName") tagName: String, model: Model): String {
+        model.addAttribute("tasks", taskService.getAllTasksByTagName(tagName))
+        model.addAttribute("title", "Список задач по тегу $tagName")
+        model.addAttribute("taskNum", taskService.getAllTasksByTagName(tagName).size)
+        model.addAttribute("currentUserName", utils.getCurrentUser("userName"))
+        model.addAttribute("tags", utils.getAllTags())
         return "show-task"
     }
 }

@@ -25,20 +25,49 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <#if currentUserName == "admin">
+                    <!-- Выпадающее меню Задач -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle"
+                           href="#" role="button"
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false">Задачи
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="nav-item">
+                                <a class="dropdown-item" href="/todo/today-tasks">На сегодня</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="/todo/tomorrow-tasks">На завтра</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="/todo/next-week-tasks">Следующая неделя</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="/todo/next-month-tasks">Следующий месяц</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- Выпадающее меню Тегов -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle"
+                           href="#" role="button"
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false">Теги
+                        </a>
+                        <ul class="dropdown-menu">
+                            <#list tags as tag>
+                                <li class="nav-item">
+                                    <a class="dropdown-item" id="tagName" href="/todo/tags/${tag}">#${tag}</a>
+                                </li>
+                            </#list>
+                        </ul>
+                    </li>
+
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/todo/today-tasks">На сегодня</a>
+                        <a class="nav-link active" aria-current="page" href="/todo/all-act-tasks">Все активные</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/todo/tomorrow-tasks">На завтра</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/todo/next-week-tasks">Следующая неделя</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/todo/next-month-tasks">Следующий месяц</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/todo/all-act-tasks">Активные</a>
+                        <a class="nav-link active" aria-current="page" href="/todo/all-clo-tasks">Все закрытые</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/todo/all-tasks">Все задачи</a>
@@ -46,6 +75,9 @@
                 </#if>
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/todo/user-act-tasks">Ваши активные задачи</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/todo/user-clo-tasks">Ваши закрытые задачи</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/todo/user-all-tasks">Все ваши задачи</a>
@@ -59,6 +91,7 @@
                            aria-label="Search">
                     <button class="btn btn-outline-success btn-sm" type="submit">Поиск</button>
                 </form>
+                <!-- Выпадающее меню Админки -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         ${currentUserName}

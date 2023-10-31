@@ -48,12 +48,12 @@ interface TaskRepo: JpaRepository<TaskEntity, Int> {
     // all tasks of current user (closed and active)
     fun findAllByAccountIdUsernameOrderByDueDate(username: String): List<TaskEntity>
 
-    // all active tasks of all users (for Admin)
-    @Query("SELECT te FROM TaskEntity te WHERE te.status = 'a' ORDER BY te.dueDate")
-    fun findAllActiveTasks(): List<TaskEntity>
+    // all active or closed tasks of all users (for Admin)
+    @Query("SELECT te FROM TaskEntity te WHERE te.status = :status ORDER BY te.dueDate")
+    fun findAllTasksByStatus(status: String): List<TaskEntity>
 
     // all active tasks of current user
-    fun findAllByAccountIdUsernameAndStatusEquals(username: String, status: String = "a"): List<TaskEntity>
+    fun findAllByAccountIdUsernameAndStatusEquals(username: String, status: String): List<TaskEntity>
 
     // all tasks of all users(closed, active, cancelled) (for Admin)
     fun findAllByOrderByAccountIdUsername(): List<TaskEntity>
@@ -71,4 +71,10 @@ interface TaskRepo: JpaRepository<TaskEntity, Int> {
             "AND t.accountId.username = :username")
     fun findAllTasksAsSearchResultOfCurrentUser(@Param("searchString") searchString: String, @Param("username") username: String): List<TaskEntity>
 
+    // all closed tasks of all users (for Admin)
+    @Query("SELECT te FROM TaskEntity te WHERE te.status = 'x' ORDER BY te.closeDate")
+    fun findAllClosedTasks(): List<TaskEntity>
+
+    // all active tasks of current user by Tag
+    fun findAllByTagsTagName(tagName: String): List<TaskEntity>
 }
