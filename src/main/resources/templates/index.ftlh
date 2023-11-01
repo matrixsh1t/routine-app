@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            background-color: #eee;
             margin: 0;
             padding: 0;
         }
@@ -15,32 +15,46 @@
             text-align: center;
             color: #333;
         }
+        h4 {
+            text-align: right;
+            color: #333;
+        }
         div {
             margin: 10px;
             padding: 10px;
-            background-color: #fff;
+            background-color: #eee;
             border: 1px solid #ddd;
             border-radius: 5px;
             text-align: center;
         }
         a {
+            display: block;
             text-decoration: none;
             color: black;
         }
         a:hover {
-            color: grey;
+            color: black;
+            font-weight: 700;
+        }
+        .wrapper {
+            width: 30%;
+            margin: 0 auto;
         }
     </style>
 </head>
 <body>
     <h1>Главная страница</h1>
+    <h4>Version: 1.1.6</h4>
 
-    <#if currentUser == "admin">
-        <div><a href="/todo/today-tasks">Задачи</a></div>
-        <div><a href="/admin">Админка</a></div>
-    <#else>
-        <div><a href="/todo/user-act-tasks">Задачи</a></div>
-    </#if>
-    <div><a href="/logout">Выйти</a></div>
+    </span></div>
+    <div class="wrapper">
+        <#if currentUser == "admin">
+            <div><a href="/todo/today-tasks">Задачи</a></div>
+            <div><a href="/admin">Админка</a></div>
+        <#else>
+            <div><a href="/todo/user-act-tasks">Задачи</a></div>
+        </#if>
+        <div><a href="/logout">Выйти</a></div>
+    </div>
 </body>
 </html>

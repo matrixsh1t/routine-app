@@ -39,7 +39,7 @@
                                     name="Comment"
                                     class="form-control form-control-sm"
                                     rows="5" wrap="hard"
-                                    maxlength="255"></textarea>
+                                    maxlength="500"></textarea>
                         </td>
                     </tr>
                     <tr>
@@ -116,7 +116,7 @@
                             <label>
                                 <input type="checkbox"
                                        name="selectedTags"
-                                       value="${labelForCheckbox}"> ${labelForCheckbox}
+                                       value="${labelForCheckbox}"> #${labelForCheckbox}
                             </label>
                         </#list>
                     </td>

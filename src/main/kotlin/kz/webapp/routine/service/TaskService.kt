@@ -32,6 +32,9 @@ interface TaskService {
 
     fun activateTask(id: Int)
 
+    // all tasks by TagName of all users (for Admin)
     fun getAllTasksByTagName(tagName: String): List<TaskEntity>
+
+    // all tasks by TagName of current user
 
 }

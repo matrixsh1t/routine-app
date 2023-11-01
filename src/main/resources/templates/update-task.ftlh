@@ -43,7 +43,7 @@
                         <textarea name="Comment"
                                   class="form-control form-control-sm"
                                   rows="5" wrap="hard"
-                                  maxlength="255"><#if updateTaskDto.comment??>${updateTaskDto.comment}</#if></textarea>
+                                  maxlength="500"><#if updateTaskDto.comment??>${updateTaskDto.comment}</#if></textarea>
                     </td>
                 </tr>
                 <tr>
@@ -118,7 +118,7 @@
                             <label>
                                 <input type="checkbox"
                                        name="selectedTags"
-                                       value="${labelForCheckbox}" ${isChecked}> ${labelForCheckbox}
+                                       value="${labelForCheckbox}" ${isChecked}> #${labelForCheckbox}
                             </label>
 
                         </#list>

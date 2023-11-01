@@ -25,7 +25,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <#if currentUserName == "admin">
-                    <!-- Выпадающее меню Задач -->
+                    <!-- Выпадающее меню Задач для Админа-->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle"
                            href="#" role="button"
@@ -47,22 +47,6 @@
                             </li>
                         </ul>
                     </li>
-                    <!-- Выпадающее меню Тегов -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle"
-                           href="#" role="button"
-                           data-bs-toggle="dropdown"
-                           aria-expanded="false">Теги
-                        </a>
-                        <ul class="dropdown-menu">
-                            <#list tags as tag>
-                                <li class="nav-item">
-                                    <a class="dropdown-item" id="tagName" href="/todo/tags/${tag}">#${tag}</a>
-                                </li>
-                            </#list>
-                        </ul>
-                    </li>
-
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/todo/all-act-tasks">Все активные</a>
                     </li>
@@ -81,6 +65,21 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="/todo/user-all-tasks">Все ваши задачи</a>
+                </li>
+                <!-- Выпадающее меню Тегов -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle"
+                       href="#" role="button"
+                       data-bs-toggle="dropdown"
+                       aria-expanded="false">Теги
+                    </a>
+                    <ul class="dropdown-menu">
+                        <#list tags as tag>
+                        <li class="nav-item">
+                            <a class="dropdown-item" id="tagName" href="/todo/tags/${tag}">#${tag}</a>
+                        </li>
+                    </#list>
+                    </ul>
                 </li>
                 <!-- Форма поиска задач -->
                 <form action="/todo/search" method="get" class="d-flex" role="search">
@@ -115,7 +114,7 @@
 <div class="container-fluid" style="padding-top: 60px;">
     <h4>${title} (${taskNum})</h4>
     <a href="/todo/create"
-       class="btn btn-primary"
+       class="btn btn-outline-secondary"
        role="button"
        style="padding: 10px;">Новая задача</a>
     <table class="table table-striped table-bordered table-sm" style="margin-top: 10px;">
