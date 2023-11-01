@@ -331,13 +331,23 @@ class TaskServiceImpl(
 
     // all tasks by TagName of all users (for Admin)
     override fun getAllTasksByTagName(tagName: String): List<TaskEntity> {
-        return taskRepo.findAllByTagsTagName(tagName).ifEmpty {
+        return taskRepo.findAllByTagsTagNameAndStatusEquals(tagName, "a").ifEmpty {
             val msg = "There are no tasks for tag $tagName for all users found at all"
             logger.error(msg)
             ArrayList()
         }
     }
 
+    // all active tasks by TagName of current user
+    override fun getAllTasksByTagNameOfCurrentUser(tagName: String): List<TaskEntity> {
+        val currentUser = utils.getCurrentUser("userName")
+        return taskRepo
+            .findAllTasksByTagOfCurrentUser(currentUser, tagName).ifEmpty {
+            val msg = "There are no tasks for tag $tagName for user $currentUser found at all"
+            logger.error(msg)
+            ArrayList()
+        }
+    }
 
         //-------------------------------------------------------------
         //------------------ private functions block ------------------

@@ -75,6 +75,15 @@ interface TaskRepo: JpaRepository<TaskEntity, Int> {
     @Query("SELECT te FROM TaskEntity te WHERE te.status = 'x' ORDER BY te.closeDate")
     fun findAllClosedTasks(): List<TaskEntity>
 
-    // all active tasks of current user by Tag
-    fun findAllByTagsTagName(tagName: String): List<TaskEntity>
+    // all active tasks by TagName of current user
+    @Query("SELECT te FROM TaskEntity te " +
+            "JOIN te.accountId a " +
+            "JOIN te.tags tags " +
+            "WHERE te.status = 'a' " +
+            "AND a.username = :username " +
+            "AND tags.tagName = :tagName ")
+    fun findAllTasksByTagOfCurrentUser(username: String, tagName: String): List<TaskEntity>
+
+    // all active tasks of all users by Tag (for Admin)
+    fun findAllByTagsTagNameAndStatusEquals(tagName: String, status: String): List<TaskEntity>
 }

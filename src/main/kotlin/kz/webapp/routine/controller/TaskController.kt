@@ -239,12 +239,23 @@ class MainController(
         return "show-task"
     }
 
-    // active tasks for today of current user
-    @GetMapping("/tags/{tagName}")
+    // active tasks by tagName of all users (for Admin)
+    @GetMapping("/tags/adm/{tagName}")
     fun showTasksByTagsPage(@PathVariable("tagName") tagName: String, model: Model): String {
         model.addAttribute("tasks", taskService.getAllTasksByTagName(tagName))
         model.addAttribute("title", "Список задач по тегу $tagName")
         model.addAttribute("taskNum", taskService.getAllTasksByTagName(tagName).size)
+        model.addAttribute("currentUserName", utils.getCurrentUser("userName"))
+        model.addAttribute("tags", utils.getAllTags())
+        return "show-task"
+    }
+
+    // active tasks by tagName of current user
+    @GetMapping("/tags/{tagName}")
+    fun showTasksByTagsOfCurrentUserPage(@PathVariable("tagName") tagName: String, model: Model): String {
+        model.addAttribute("tasks", taskService.getAllTasksByTagNameOfCurrentUser(tagName))
+        model.addAttribute("title", "Список задач по тегу $tagName")
+        model.addAttribute("taskNum", taskService.getAllTasksByTagNameOfCurrentUser(tagName).size)
         model.addAttribute("currentUserName", utils.getCurrentUser("userName"))
         model.addAttribute("tags", utils.getAllTags())
         return "show-task"

@@ -47,6 +47,21 @@
                             </li>
                         </ul>
                     </li>
+                    <!-- Выпадающее меню Тегов Админа-->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle"
+                           href="#" role="button"
+                           data-bs-toggle="dropdown"
+                           aria-expanded="false">Все по Тегам
+                        </a>
+                        <ul class="dropdown-menu">
+                            <#list tags as tag>
+                            <li class="nav-item">
+                                <a class="dropdown-item" id="tagNameAdm" href="/todo/tags/adm/${tag}">#${tag}</a>
+                            </li>
+                        </#list>
+                    </ul>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/todo/all-act-tasks">Все активные</a>
                     </li>
