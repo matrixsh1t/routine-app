@@ -44,7 +44,7 @@
 </head>
 <body>
     <h1>Главная страница</h1>
-    <h4>Version: 1.6.2</h4>
+    <h4>Version: 1.8.1</h4>
 
     </span></div>
     <div class="wrapper">

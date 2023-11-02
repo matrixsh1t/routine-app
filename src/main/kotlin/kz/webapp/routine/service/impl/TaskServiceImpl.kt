@@ -1,12 +1,9 @@
 package kz.webapp.routine.service.impl
 
-import kz.webapp.routine.exception.AccountException
-import kz.webapp.routine.exception.AccountNotExistsException
 import kz.webapp.routine.exception.TaskException
 import kz.webapp.routine.exception.TaskNotExistsException
 import kz.webapp.routine.model.dto.AddTaskDto
 import kz.webapp.routine.model.dto.UpdateTaskDto
-import kz.webapp.routine.model.entity.AccountEntity
 import kz.webapp.routine.model.entity.TagEntity
 import kz.webapp.routine.model.entity.TaskEntity
 import kz.webapp.routine.repository.AccountRepo
@@ -19,8 +16,6 @@ import org.slf4j.LoggerFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import kotlin.reflect.jvm.internal.impl.load.java.lazy.descriptors.DeclaredMemberIndex.Empty
 
 
 @Service
@@ -94,7 +89,7 @@ class TaskServiceImpl(
     override fun showAllActiveTasksOfCurrentUser(): List<TaskEntity> {
         val currentUser = utils.getCurrentUser("userName")
         return taskRepo.findAllByAccountIdUsernameAndStatusEquals(currentUser, "a").ifEmpty {
-            val msg = "There are no active tasks found of ${currentUser}"
+            val msg = "There are no active tasks found of $currentUser"
             logger.error(msg)
             ArrayList()
         }
@@ -104,7 +99,7 @@ class TaskServiceImpl(
     override fun showAllClosedTasksOfCurrentUser(): List<TaskEntity> {
         val currentUser = utils.getCurrentUser("userName")
         return taskRepo.findAllByAccountIdUsernameAndStatusEquals(currentUser, "x").ifEmpty {
-            val msg = "There are no closed tasks found of ${currentUser}"
+            val msg = "There are no closed tasks found of $currentUser"
             logger.error(msg)
             ArrayList()
         }
@@ -365,86 +360,9 @@ class TaskServiceImpl(
         }
     }
 
-    private fun getAccountByUsername(userName: String?): AccountEntity {
-        try {
-            val accountEntity = accountRepo.findAccountEntityByUsername(userName)
-
-            if (accountEntity == null) {
-                val msg = "There is no account with username $userName"
-                throw AccountNotExistsException(msg)
-            } else {
-                return accountEntity
-            }
-        } catch (e: AccountNotExistsException) {
-            logger.error(e.message)
-            throw AccountNotExistsException(e.message)
-        } catch (e: Exception) {
-            val msg = "Failed to execute query in account table"
-            logger.error(msg)
-            logger.error(e.message)
-            throw AccountException(msg)
-        }
-    }
-
-    /** get all usernames from AccountEntity
-     * to provide them to frontend to choose a $userName
-     * to check if the account username exists before saving the task */
-    private fun getAllResponsiblesFromDb(): List<String> {
-        try {
-            val userNames = accountRepo.findAllResponsiblesFromDb()
-
-            if (userNames.isEmpty()) {
-                val msg = "Cannot get a list of users from DB"
-                throw Exception(msg)
-            } else {
-                logger.info("List of users $userNames")
-                return userNames
-            }
-        } catch (e: Exception) {
-            val msg = "Cannot get a list of users from DB"
-            logger.error(msg)
-            logger.error(e.message)
-            throw Exception(msg)
-        }
-    }
-
-    /** Parse date from widget week and date */
-    private fun parseDateFromFrontEnd(dateOrWeek: String): LocalDate {
-        val dueDateList: List<String>
-        val dueDate: LocalDate
-
-        // if no date is present then set the date to today
-        if(dateOrWeek.isBlank()) {
-            dueDate = LocalDate.now()
-            logger.error("Invalid date or week number format so set it to TODAY")
-        // if dueDateList is " , " then set the date to today
-        } else if(dateOrWeek == ",") {
-            dueDate = LocalDate.now()
-            logger.error("Invalid date or week number format so set it to TODAY")
-        // if there is date in the format "2023-07-17, " or " ,2023-W06"
-        } else {
-            dueDateList = dateOrWeek.split(",")
-            // if dueDateList has not 2 members
-            if (dueDateList.size != 2) {
-                dueDate = LocalDate.now()
-                logger.error("Invalid date or week number format so set it to TODAY")
-            } else {
-                // if comes the DATE data
-                dueDate = if (dueDateList[0].isNotBlank()) {
-                    LocalDate.parse(dueDateList[0], DateTimeFormatter.ISO_LOCAL_DATE)
-                    // if comes the WEEK data
-                } else {
-                    // get "06" from "2023-W06"
-                    utils.getDateFromWeekNumber(dueDateList[1].substring(6, 8).toInt())
-                }
-            }
-        }
-        return dueDate
-    }
-
     private fun addTagsToTask(tagNames: List<String>): Set<TagEntity> {
         var tagsToSave: Set<TagEntity> = HashSet()
-        var tagEntity: TagEntity
+        var tagEntity: TagEntity?
 
         logger.info("tagNames checked in frontend: $tagNames")
 
@@ -456,10 +374,8 @@ class TaskServiceImpl(
                     tagEntity = tagRepo.findByTagName(tagName)
                     logger.info("initial tagsToSave value: $tagsToSave")
 
-                    if (tagEntity != null) {
-                        tagsToSave = tagsToSave + tagEntity
-                        logger.info("tagsToSave after iteration: $tagsToSave")
-                    }
+                    tagsToSave = tagsToSave + tagEntity
+                    logger.info("tagsToSave after iteration: $tagsToSave")
                 }
             }
         return tagsToSave
