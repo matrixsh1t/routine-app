@@ -30,7 +30,8 @@ class TaskServiceImpl(
 
     // active tasks for today of current user
     override fun showTodaysTasks(): List<TaskEntity> {
-        return taskRepo.findAllTodaysTasksOfCurrentUser(utils.getCurrentUser("userName")).ifEmpty {
+        val currentUser = utils.getCurrentUser("userName")
+        return taskRepo.findAllTodaysTasksOfCurrentUser(currentUser).ifEmpty {
             val msg = "There are no tasks for today found"
             logger.error(msg)
             ArrayList()
@@ -149,15 +150,15 @@ class TaskServiceImpl(
 
                 //save entity with separate function of try-catch block
                 entitySaveTryCatchBlock(addTaskEntity,
-                    "Successfully created new task with ID ${addTaskEntity.taskId}",
-                    "Failed to create task id ${addTaskEntity.taskId}")
+                    "Successfully created new task ${addTaskEntity.task} for user ${account.username}",
+                    "Failed to create task ${addTaskEntity.task} for user ${account.username}")
             }
         } else {
             val account = accountRepo.findAccountEntityByUsername(addTaskDto.account
                 .ifEmpty { utils.getCurrentUser("userName") })!!
 
             logger.info("Account from frontend: ${addTaskDto.account}")
-            logger.info("Acc parsed ${account.username}")
+            logger.info("Account parsed ${account.username}")
 
             val addTaskEntity = TaskEntity(
                 taskId = 0,
@@ -173,8 +174,8 @@ class TaskServiceImpl(
             )
 
             entitySaveTryCatchBlock(addTaskEntity,
-                "Successfully created new task with ID ${addTaskEntity.taskId}",
-                "Failed to create task id ${addTaskEntity.taskId}")
+                "Successfully created new task ${addTaskEntity.task}",
+                "Failed to create task ${addTaskEntity.task}")
         }
 
     }
@@ -371,6 +372,7 @@ class TaskServiceImpl(
         } else {
                 for (tagName in tagNames) {
                     logger.info("adding tagEntity with tagName: $tagName")
+
                     tagEntity = tagRepo.findByTagName(tagName)
                     logger.info("initial tagsToSave value: $tagsToSave")
 
