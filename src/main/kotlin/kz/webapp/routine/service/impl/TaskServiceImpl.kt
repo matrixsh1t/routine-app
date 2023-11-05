@@ -294,10 +294,10 @@ class TaskServiceImpl(
         val currentUser = utils.getCurrentUser("userName")
         return if (currentUser == "admin") {
             taskRepo.findAllTasksAsSearchResult(searchString)
-                .ifEmpty { ArrayList() }.also { logger.info("Serchiing for results for prompt: $searchString")}
+                .ifEmpty { ArrayList() }.also { logger.info("Searching for prompt: $searchString")}
         } else {
             taskRepo.findAllTasksAsSearchResultOfCurrentUser(searchString, currentUser)
-                .ifEmpty { ArrayList() }
+                .ifEmpty { ArrayList() }.also { logger.info("Searching for prompt: $searchString")}
         }
 
     }
