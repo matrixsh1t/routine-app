@@ -1,0 +1,32 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/db?currentSchema=public
+    username: user
+    password: pass
+    driverClassName: org.postgresql.Driver
+  freemarker:
+    expose-request-attributes: true
+  flyway:
+    url: jdbc:postgresql://localhost:5432/db?currentSchema=public
+    user: user
+    password: pass
+    enabled: true
+    baseline-on-migrate: false
+    validate-on-migrate: true
+    out-of-order: false
+    placeholders:
+      application_user: user
+  jpa:
+    show-sql: true
+logging:
+  level:
+    root: info
+#    org:
+#      springframework:
+#        web: trace
+#      apache: trace
+
+#server:
+#  tomcat:
+#    native:
+#      enabled: false

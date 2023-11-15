@@ -1,0 +1,18 @@
+.container {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+.right {
+    float: right;
+}
+
+.b {
+    width: 80px;
+    height: 23px;
+    line-height: 1;
+    color: black;
+}
+.nav-link {
+    color: black;
+}
